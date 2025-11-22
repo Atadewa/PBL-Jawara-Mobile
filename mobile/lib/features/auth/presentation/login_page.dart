@@ -1,0 +1,284 @@
+import 'package:flutter/material.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_text_field.dart';
+import '../../auth/data/models/login_request.dart';
+import '../../auth/data/services/auth_service.dart';
+import 'register_page.dart';
+
+/// Login page with form validation and API integration
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _authService = AuthService();
+
+  bool _isLoading = false;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  /// Validate and submit login form
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final request = LoginRequest(
+        usernameOrEmail: _usernameController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      final response = await _authService.login(request);
+
+      if (!mounted) return;
+
+      if (response.success) {
+        _showSuccessMessage(response.message);
+        // TODO: Navigate to home page after successful login
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const HomePage()),
+        // );
+      } else {
+        _showErrorMessage(response.message);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _showErrorMessage(AppStrings.loginFailed);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _showSuccessMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.success,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _navigateToRegister() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 60),
+
+                // Logo
+                _buildLogo(),
+
+                const SizedBox(height: 32),
+
+                // Title and description
+                _buildHeader(),
+
+                const SizedBox(height: 32),
+
+                // Username/Email field
+                CustomTextField(
+                  controller: _usernameController,
+                  label: AppStrings.usernameOrEmail,
+                  hintText: AppStrings.enterUsernameOrEmail,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return AppStrings.fieldRequired;
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                // Password field
+                CustomTextField(
+                  controller: _passwordController,
+                  label: AppStrings.password,
+                  hintText: AppStrings.enterPassword,
+                  obscureText: _obscurePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AppStrings.fieldRequired;
+                    }
+                    if (value.length < 6) {
+                      return AppStrings.passwordTooShort;
+                    }
+                    return null;
+                  },
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: () {
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Login button
+                CustomButton(
+                  text: AppStrings.login,
+                  onPressed: _handleLogin,
+                  isLoading: _isLoading,
+                ),
+
+                const SizedBox(height: 24),
+
+                // Register link
+                _buildRegisterLink(),
+
+                const SizedBox(height: 40),
+
+                // Footer
+                _buildFooter(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Center(
+      child: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.primary, AppColors.primaryDark],
+          ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 10),
+              spreadRadius: -3,
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.home_work_rounded,
+          size: 48,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Text(
+          AppStrings.loginTitle,
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          AppStrings.appDescription,
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRegisterLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          AppStrings.dontHaveAccount,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(width: 4),
+        TextButton(
+          onPressed: _navigateToRegister,
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: Text(
+            AppStrings.registerLink,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    return Text(
+      'Aplikasi Manajemen RT/RW',
+      textAlign: TextAlign.center,
+      style: Theme.of(
+        context,
+      ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+    );
+  }
+}
