@@ -51,11 +51,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.success) {
         _showSuccessMessage(response.message);
-        // TODO: Navigate to home page after successful login
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const HomePage()),
-        // );
+        // Navigate to home page
+        Navigator.pushReplacementNamed(context, '/home');
       } else {
         _showErrorMessage(response.message);
       }
