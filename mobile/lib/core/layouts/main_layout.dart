@@ -22,21 +22,12 @@ class _MainLayoutState extends State<MainLayout> {
         break;
       case 1:
         // TODO: Navigate to Marketplace
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Marketplace - Segera Hadir')),
-        );
         break;
       case 2:
         // TODO: Navigate to Kegiatan
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Kegiatan - Segera Hadir')),
-        );
         break;
       case 3:
         // TODO: Navigate to Profil
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Profil - Segera Hadir')));
         break;
     }
   }
