@@ -2,20 +2,22 @@ import '../models/login_request.dart';
 import '../models/login_response.dart' as login_models;
 import '../models/register_request.dart';
 import '../models/register_response.dart' as register_models;
+import '../../../../core/config/api_config.dart';
 
 /// Authentication service for handling API calls
 class AuthService {
-  // TODO: Replace with your actual API base URL
-  // Example: static const String _baseUrl = 'https://api.jawara-pintar.com';
-  // static const String _baseUrl = 'https://dummy-api.example.com';
+  // Base URL diambil dari ApiConfig
+  // Untuk mengubah base URL, edit file: lib/core/config/api_config.dart
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   /// Login user
   ///
   /// TODO: When implementing real API:
-  /// 1. Replace the dummy endpoint with actual API endpoint
-  /// 2. Add proper error handling for network errors
-  /// 3. Add authentication token storage (e.g., using shared_preferences)
-  /// 4. Remove the dummy success response and parse actual API response
+  /// 1. Set ApiConfig.useDummyData = false di api_config.dart
+  /// 2. Update ApiConfig.baseUrl dengan URL production
+  /// 3. Add proper error handling for network errors
+  /// 4. Add authentication token storage (e.g., using shared_preferences)
+  /// 5. Remove the dummy success response and parse actual API response
   Future<login_models.LoginResponse> login(LoginRequest request) async {
     try {
       // TODO: Uncomment and modify when real API is ready
@@ -59,10 +61,11 @@ class AuthService {
   /// Register new user
   ///
   /// TODO: When implementing real API:
-  /// 1. Replace the dummy endpoint with actual API endpoint
-  /// 2. Add proper error handling for network errors
-  /// 3. Add validation for duplicate username/email
-  /// 4. Remove the dummy success response and parse actual API response
+  /// 1. Set ApiConfig.useDummyData = false di api_config.dart
+  /// 2. Update ApiConfig.baseUrl dengan URL production
+  /// 3. Add proper error handling for network errors
+  /// 4. Add validation for duplicate username/email
+  /// 5. Remove the dummy success response and parse actual API response
   Future<register_models.RegisterResponse> register(
     RegisterRequest request,
   ) async {
