@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/layouts/main_layout.dart';
+import '../../../core/routes/app_routes.dart';
 import '../widgets/simple_stat_card.dart';
 import '../widgets/dashboard_button.dart';
 import '../widgets/quick_menu_item.dart';
@@ -331,6 +332,10 @@ class _HomePageState extends State<HomePage> {
 
   /// Handle menu cepat tap
   void _handleMenuTap(String menu) {
-    // TODO: Navigate to menu page
+    if (menu == 'Pengeluaran') {
+      Navigator.pushNamed(context, AppRoutes.pengeluaran);
+    } else {
+      // TODO: Navigate to other menu pages
+    }
   }
 }
