@@ -6,6 +6,7 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../../auth/data/models/login_request.dart';
 import '../../auth/data/services/auth_service.dart';
 import 'register_page.dart';
+import '../../dashboard/pages/dashboard_page.dart';
 
 /// Login page with form validation and API integration
 class LoginPage extends StatefulWidget {
@@ -51,8 +52,10 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.success) {
         _showSuccessMessage(response.message);
-        // Navigate to home page
-        Navigator.pushReplacementNamed(context, '/home');
+        // Navigate to Dashboard page
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const DashboardPage()),
+        );
       } else {
         _showErrorMessage(response.message);
       }
@@ -240,8 +243,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildRegisterLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
       children: [
         Text(
           AppStrings.dontHaveAccount,
