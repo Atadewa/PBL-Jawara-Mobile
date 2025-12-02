@@ -5,6 +5,7 @@ import '../../../features/pengeluaran/presentation/pages/pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/detail_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/edit_pengeluaran_page.dart';
+import '../../../features/log_aktivitas/presentation/pages/log_aktivitas_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -16,6 +17,7 @@ class AppRoutes {
   static const String addPengeluaran = '/pengeluaran/add';
   static const String detailPengeluaran = '/pengeluaran/detail';
   static const String editPengeluaran = '/pengeluaran/edit';
+  static const String logAktivitas = '/log-aktivitas';
 
   // TODO: Add more routes as needed
   // static const String marketplace = '/marketplace';
@@ -28,6 +30,7 @@ class AppRoutes {
     home: (context) => const HomePage(),
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
+    logAktivitas: (context) => const LogAktivitasPage(),
     // Add more routes here when needed
   };
 

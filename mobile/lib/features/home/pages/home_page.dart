@@ -309,9 +309,9 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => _handleMenuTap('Pemasukan'),
               ),
               QuickMenuItem(
-                label: 'Transfer',
-                icon: Icons.swap_horiz,
-                onTap: () => _handleMenuTap('Transfer'),
+                label: 'Log Aktivitas',
+                icon: Icons.history,
+                onTap: () => _handleMenuTap('Log Aktivitas'),
               ),
             ],
           ),
@@ -334,6 +334,8 @@ class _HomePageState extends State<HomePage> {
   void _handleMenuTap(String menu) {
     if (menu == 'Pengeluaran') {
       Navigator.pushNamed(context, AppRoutes.pengeluaran);
+    } else if (menu == 'Log Aktivitas') {
+      Navigator.pushNamed(context, AppRoutes.logAktivitas);
     } else {
       // TODO: Navigate to other menu pages
     }
