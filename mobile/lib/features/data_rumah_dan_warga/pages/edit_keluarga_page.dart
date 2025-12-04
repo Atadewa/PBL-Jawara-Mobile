@@ -334,20 +334,14 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
               borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
             ),
           ),
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: Color(0xFF718096),
-          ),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),
           isExpanded: true,
           items: _daftarRumah.map((rumah) {
             return DropdownMenuItem(
               value: rumah['id'],
               child: Text(
                 rumah['nama']!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF2D3748),
-                ),
+                style: const TextStyle(fontSize: 14, color: Color(0xFF2D3748)),
               ),
             );
           }).toList(),
@@ -396,20 +390,14 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
               borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
             ),
           ),
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: Color(0xFF718096),
-          ),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),
           isExpanded: true,
           items: StatusKeluarga.values.map((status) {
             return DropdownMenuItem(
               value: status,
               child: Text(
                 status.label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF2D3748),
-                ),
+                style: const TextStyle(fontSize: 14, color: Color(0xFF2D3748)),
               ),
             );
           }).toList(),
