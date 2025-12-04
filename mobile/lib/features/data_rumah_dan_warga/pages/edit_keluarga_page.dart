@@ -308,48 +308,54 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+        DropdownButtonFormField<String>(
+          value: _selectedRumah,
+          hint: const Text(
+            'Pilih Rumah',
+            style: TextStyle(fontSize: 14, color: Color(0xFFA0AEC0)),
           ),
-          child: DropdownButtonFormField<String>(
-            value: _selectedRumah,
-            hint: const Text(
-              'Pilih Rumah',
-              style: TextStyle(fontSize: 14, color: Color(0xFFA0AEC0)),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
             ),
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              border: InputBorder.none,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
             ),
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: Color(0xFF718096),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
             ),
-            isExpanded: true,
-            items: _daftarRumah.map((rumah) {
-              return DropdownMenuItem(
-                value: rumah['id'],
-                child: Text(
-                  rumah['nama']!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF2D3748),
-                  ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+            ),
+          ),
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: Color(0xFF718096),
+          ),
+          isExpanded: true,
+          items: _daftarRumah.map((rumah) {
+            return DropdownMenuItem(
+              value: rumah['id'],
+              child: Text(
+                rumah['nama']!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF2D3748),
                 ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedRumah = value;
-              });
-            },
-          ),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedRumah = value;
+            });
+          },
         ),
       ],
     );
@@ -368,46 +374,52 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+        DropdownButtonFormField<StatusKeluarga>(
+          value: _selectedStatus,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+            ),
           ),
-          child: DropdownButtonFormField<StatusKeluarga>(
-            value: _selectedStatus,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              border: InputBorder.none,
-            ),
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: Color(0xFF718096),
-            ),
-            isExpanded: true,
-            items: StatusKeluarga.values.map((status) {
-              return DropdownMenuItem(
-                value: status,
-                child: Text(
-                  status.label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF2D3748),
-                  ),
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: Color(0xFF718096),
+          ),
+          isExpanded: true,
+          items: StatusKeluarga.values.map((status) {
+            return DropdownMenuItem(
+              value: status,
+              child: Text(
+                status.label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF2D3748),
                 ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  _selectedStatus = value;
-                });
-              }
-            },
-          ),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                _selectedStatus = value;
+              });
+            }
+          },
         ),
       ],
     );
