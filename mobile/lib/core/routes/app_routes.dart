@@ -6,6 +6,10 @@ import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.da
 import '../../../features/pengeluaran/presentation/pages/detail_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/edit_pengeluaran_page.dart';
 import '../../../features/log_aktivitas/presentation/pages/log_aktivitas_page.dart';
+import '../../features/data_rumah_dan_warga/pages/daftar_rumah_page.dart';
+import '../../features/data_rumah_dan_warga/pages/detail_rumah_page.dart';
+import '../../features/data_rumah_dan_warga/pages/edit_rumah_page.dart';
+import '../../features/data_rumah_dan_warga/pages/daftar_keluarga_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -18,6 +22,10 @@ class AppRoutes {
   static const String detailPengeluaran = '/pengeluaran/detail';
   static const String editPengeluaran = '/pengeluaran/edit';
   static const String logAktivitas = '/log-aktivitas';
+  static const String daftarRumah = '/data-rumah';
+  static const String detailRumah = '/data-rumah/detail';
+  static const String editRumah = '/data-rumah/edit';
+  static const String daftarKeluarga = '/data-rumah/keluarga';
 
   // TODO: Add more routes as needed
   // static const String marketplace = '/marketplace';
@@ -31,6 +39,7 @@ class AppRoutes {
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
+    daftarRumah: (context) => const DaftarRumahPage(),
     // Add more routes here when needed
   };
 
@@ -46,6 +55,21 @@ class AppRoutes {
         final expenseId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => EditPengeluaranPage(expenseId: expenseId),
+        );
+      case detailRumah:
+        final rumah = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => DetailRumahPage(rumah: rumah as dynamic),
+        );
+      case editRumah:
+        final rumah = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => EditRumahPage(rumah: rumah as dynamic),
+        );
+      case daftarKeluarga:
+        final rumah = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => DaftarKeluargaPage(rumah: rumah as dynamic),
         );
       default:
         return null;
