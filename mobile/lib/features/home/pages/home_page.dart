@@ -269,14 +269,14 @@ class _HomePageState extends State<HomePage> {
             crossAxisCount: 4,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 12,
-            childAspectRatio: 0.75,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.80, // Adjusted to accommodate fixed height
             children: [
               QuickMenuItem(
-                label: 'Data Warga',
-                icon: Icons.people,
-                onTap: () => _handleMenuTap('Data Warga'),
+                label: 'Verifikasi User',
+                icon: Icons.person_add,
+                onTap: () => _handleMenuTap('Verifikasi User'),
               ),
               QuickMenuItem(
                 label: 'Rumah',
@@ -284,19 +284,14 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => _handleMenuTap('Rumah'),
               ),
               QuickMenuItem(
-                label: 'Tagihan',
-                icon: Icons.receipt_long,
-                onTap: () => _handleMenuTap('Tagihan'),
+                label: 'Aspirasi Warga',
+                icon: Icons.feedback,
+                onTap: () => _handleMenuTap('Aspirasi Warga'),
               ),
               QuickMenuItem(
-                label: 'Kegiatan',
-                icon: Icons.event,
-                onTap: () => _handleMenuTap('Kegiatan'),
-              ),
-              QuickMenuItem(
-                label: 'Marketplace',
-                icon: Icons.shopping_bag,
-                onTap: () => _handleMenuTap('Marketplace'),
+                label: 'Log Aktivitas',
+                icon: Icons.history,
+                onTap: () => _handleMenuTap('Log Aktivitas'),
               ),
               QuickMenuItem(
                 label: 'Pengeluaran',
@@ -309,9 +304,9 @@ class _HomePageState extends State<HomePage> {
                 onTap: () => _handleMenuTap('Pemasukan'),
               ),
               QuickMenuItem(
-                label: 'Log Aktivitas',
-                icon: Icons.history,
-                onTap: () => _handleMenuTap('Log Aktivitas'),
+                label: 'Laporan',
+                icon: Icons.assignment,
+                onTap: () => _handleMenuTap('Laporan'),
               ),
             ],
           ),
