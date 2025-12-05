@@ -15,6 +15,11 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   void _onItemTapped(int index) {
+    // Jangan navigate jika sudah di halaman yang sama
+    if (index == widget.currentIndex) {
+      return;
+    }
+
     // Navigate berdasarkan index
     switch (index) {
       case 0:
@@ -35,6 +40,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // body: SafeArea(widget.child),
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
