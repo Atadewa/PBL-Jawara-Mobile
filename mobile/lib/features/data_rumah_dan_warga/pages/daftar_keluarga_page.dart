@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/rumah_model.dart';
 import '../models/keluarga_model.dart';
 import '../widgets/keluarga_card.dart';
+import 'tambah_keluarga_page.dart';
+import 'detail_keluarga_page.dart';
 
 class DaftarKeluargaPage extends StatefulWidget {
   final RumahModel rumah;
@@ -138,8 +140,15 @@ class _DaftarKeluargaPageState extends State<DaftarKeluargaPage> {
                       return KeluargaCard(
                         keluarga: keluarga,
                         onTap: () {
-                          // Aksi ketika card diklik
-                          // Bisa diarahkan ke detail keluarga
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailKeluargaPage(
+                                keluarga: keluarga,
+                                rumah: widget.rumah,
+                              ),
+                            ),
+                          );
                         },
                       );
                     },
@@ -150,7 +159,10 @@ class _DaftarKeluargaPageState extends State<DaftarKeluargaPage> {
       // Floating action button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Aksi tambah keluarga
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const TambahKeluargaPage()),
+          );
         },
         backgroundColor: const Color(0xFF6EE7B7),
         child: const Icon(Icons.add, color: Colors.white, size: 28),
