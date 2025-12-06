@@ -334,6 +334,8 @@ class _HomePageState extends State<HomePage> {
   void _handleMenuTap(String menu) {
     if (menu == 'Pengeluaran') {
       Navigator.pushNamed(context, AppRoutes.pengeluaran);
+    } else if (menu == 'Marketplace') {
+      Navigator.pushNamed(context, AppRoutes.marketplace);
     } else {
       // TODO: Navigate to other menu pages
     }
