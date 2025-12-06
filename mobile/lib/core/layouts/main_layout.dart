@@ -26,7 +26,7 @@ class _MainLayoutState extends State<MainLayout> {
         Navigator.pushReplacementNamed(context, '/home');
         break;
       case 1:
-        // TODO: Navigate to Marketplace
+        Navigator.pushReplacementNamed(context, '/marketplace');
         break;
       case 2:
         // TODO: Navigate to Kegiatan
@@ -39,6 +39,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = widget.currentIndex;
     return Scaffold(
       // body: SafeArea(widget.child),
       body: widget.child,
@@ -53,8 +54,11 @@ class _MainLayoutState extends State<MainLayout> {
           ],
         ),
         child: BottomNavigationBar(
-          currentIndex: widget.currentIndex,
-          onTap: _onItemTapped,
+          currentIndex: currentIndex,
+          onTap: (index) {
+            if (index == currentIndex) return;
+            _onItemTapped(index);
+          },
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: const Color(0xFF10B981),

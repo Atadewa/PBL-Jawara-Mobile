@@ -333,6 +333,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushNamed(context, AppRoutes.logAktivitas);
     } else if (menu == 'Rumah') {
       Navigator.pushNamed(context, AppRoutes.daftarRumah);
+    } else if (menu == 'Marketplace') {
+      Navigator.pushNamed(context, AppRoutes.marketplace);
     } else {
       // TODO: Navigate to other menu pages
     }
