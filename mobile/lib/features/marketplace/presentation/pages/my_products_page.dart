@@ -83,7 +83,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
                 width: double.infinity,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: AppColors.primaryDark,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(

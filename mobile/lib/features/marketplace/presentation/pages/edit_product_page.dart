@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/core/theme/app_colors.dart';
 import '../../data/models/product_model.dart';
 import '../../data/repositories/marketplace_repository.dart';
+import '../../data/services/product_media_service.dart';
 
 /// Halaman edit produk
 class EditProductPage extends StatefulWidget {
@@ -17,6 +21,7 @@ class EditProductPage extends StatefulWidget {
 class _EditProductPageState extends State<EditProductPage> {
   final _formKey = GlobalKey<FormState>();
   final MarketplaceRepository _repository = MarketplaceRepository();
+  final ProductMediaService _mediaService = ProductMediaService();
 
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
@@ -29,6 +34,7 @@ class _EditProductPageState extends State<EditProductPage> {
   List<String> _categories = [];
   bool _isLoadingCategories = true;
   String? _categoryError;
+  XFile? _pickedImage;
 
   @override
   void initState() {
@@ -46,6 +52,17 @@ class _EditProductPageState extends State<EditProductPage> {
     _imageUrlController = TextEditingController(text: widget.product.imageUrl);
     _selectedCategory = widget.product.category;
     _loadCategories();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final result = await picker.pickImage(source: source, imageQuality: 80);
+    if (result != null) {
+      setState(() {
+        _pickedImage = result;
+        _imageUrlController.text = '';
+      });
+    }
   }
 
   Future<void> _loadCategories() async {
@@ -125,6 +142,8 @@ class _EditProductPageState extends State<EditProductPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildImageSection(),
+          const SizedBox(height: 16),
           _buildTextField(
             controller: _nameController,
             label: 'Nama Produk',
@@ -352,6 +371,110 @@ class _EditProductPageState extends State<EditProductPage> {
     );
   }
 
+  Widget _buildImageSection() {
+    final preview = _pickedImage != null
+        ? Image.file(
+            File(_pickedImage!.path),
+            fit: BoxFit.cover,
+          )
+        : (widget.product.imageUrl.isNotEmpty
+            ? Image.network(
+                widget.product.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => _placeholder(),
+              )
+            : _placeholder());
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Foto Produk',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 180,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: AspectRatio(
+              aspectRatio: 4 / 3,
+              child: preview,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => _pickImage(ImageSource.gallery),
+                icon: const Icon(Icons.photo_library, color: AppColors.success),
+                label: const Text(
+                  'Pilih dari Galeri',
+                  style: TextStyle(color: AppColors.success),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.success),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => _pickImage(ImageSource.camera),
+                icon: const Icon(Icons.camera_alt, color: AppColors.success),
+                label: const Text(
+                  'Ambil Foto',
+                  style: TextStyle(color: AppColors.success),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.success),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: _imageUrlController,
+          decoration: const InputDecoration(
+            hintText: 'URL gambar (opsional)',
+            hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: AppColors.borderMuted),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: AppColors.borderMuted),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: AppColors.success, width: 2),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      color: AppColors.surface,
+      child: const Center(
+        child: Icon(Icons.image_not_supported, color: AppColors.textSecondary),
+      ),
+    );
+  }
+
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -362,11 +485,18 @@ class _EditProductPageState extends State<EditProductPage> {
     });
 
     try {
+      String imageUrl = _imageUrlController.text;
+      if (_pickedImage != null) {
+        imageUrl = await _mediaService.uploadProductImage(
+          File(_pickedImage!.path),
+        );
+      }
+
       final updatedProduct = widget.product.copyWith(
         name: _nameController.text,
         description: _descriptionController.text,
         price: double.parse(_priceController.text),
-        imageUrl: _imageUrlController.text,
+        imageUrl: imageUrl,
         category: _selectedCategory,
         stock: int.parse(_stockController.text),
         updatedAt: DateTime.now(),
