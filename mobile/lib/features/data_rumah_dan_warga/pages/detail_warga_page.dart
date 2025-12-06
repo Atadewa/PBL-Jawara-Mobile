@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import '../models/warga_model.dart';
 import '../models/keluarga_model.dart';
-import '../models/rumah_model.dart';
-import 'edit_keluarga_page.dart';
-import 'daftar_warga_page.dart';
+import 'edit_warga_page.dart';
 
-class DetailKeluargaPage extends StatelessWidget {
+class DetailWargaPage extends StatelessWidget {
+  final Map<String, dynamic> warga;
   final KeluargaModel keluarga;
-  final RumahModel rumah;
 
-  const DetailKeluargaPage({
+  const DetailWargaPage({
     super.key,
+    required this.warga,
     required this.keluarga,
-    required this.rumah,
   });
 
   Color _getStatusColor() {
-    switch (keluarga.status) {
-      case StatusKeluarga.aktif:
+    switch (warga['status']) {
+      case 'Aktif':
         return const Color(0xFF6EE7B7);
-      case StatusKeluarga.pindahMasuk:
-        return const Color(0xFF7B61FF);
-      case StatusKeluarga.tidakAktif:
+      case 'Pindah':
+        return const Color(0xFFFFA726);
+      case 'Meninggal':
         return const Color(0xFF9E9E9E);
+      default:
+        return const Color(0xFF6EE7B7);
     }
   }
 
@@ -70,7 +71,7 @@ class DetailKeluargaPage extends StatelessWidget {
                         const SizedBox(width: 12),
                         const Flexible(
                           child: Text(
-                            'Detail Keluarga',
+                            'Detail Warga',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
@@ -83,7 +84,7 @@ class DetailKeluargaPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      'Informasi lengkap data keluarga',
+                      'Informasi lengkap data warga',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -101,7 +102,7 @@ class DetailKeluargaPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // Card detail keluarga
+                  // Card detail warga
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -118,7 +119,7 @@ class DetailKeluargaPage extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        // Icon keluarga
+                        // Icon warga
                         Container(
                           width: 80,
                           height: 80,
@@ -127,36 +128,65 @@ class DetailKeluargaPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
-                            Icons.people_outline,
+                            Icons.person_outline,
                             color: Color(0xFF6EE7B7),
                             size: 40,
                           ),
                         ),
                         const SizedBox(height: 20),
                         // Info fields
-                        _buildInfoField('Nama Kepala Keluarga', keluarga.nama),
+                        _buildInfoField('Nama Lengkap', warga['nama'] ?? '-'),
                         const SizedBox(height: 16),
-                        _buildInfoField('Nomor KK', keluarga.kk),
+                        _buildInfoField('NIK', warga['nik'] ?? '-'),
+                        const SizedBox(height: 16),
+                        _buildInfoField(
+                          'Jenis Kelamin',
+                          warga['jenisKelamin'] ?? '-',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInfoField(
+                          'Tempat Lahir',
+                          warga['tempatLahir'] ?? '-',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInfoField(
+                          'Tanggal Lahir',
+                          warga['tanggalLahir'] ?? '-',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInfoField('Agama', warga['agama'] ?? '-'),
+                        const SizedBox(height: 16),
+                        _buildInfoField(
+                          'Pendidikan Terakhir',
+                          warga['pendidikan'] ?? '-',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInfoField('Pekerjaan', warga['pekerjaan'] ?? '-'),
+                        const SizedBox(height: 16),
+                        _buildInfoField(
+                          'Hubungan Keluarga',
+                          warga['hubungan'] ?? '-',
+                        ),
                         const SizedBox(height: 16),
                         _buildInfoFieldWithBadge(
-                          'Status Keluarga',
-                          keluarga.status.label,
+                          'Status',
+                          warga['status'] ?? 'Aktif',
                           _getStatusColor(),
                         ),
                         const SizedBox(height: 16),
-                        _buildInfoField('Rumah', rumah.nomorRumah),
-                        const SizedBox(height: 16),
-                        _buildInfoField('Alamat Lengkap', rumah.alamatLengkap),
-                        const SizedBox(height: 16),
                         _buildInfoField(
-                          'Jumlah Anggota',
-                          '${keluarga.jumlahAnggota} Anggota',
+                          'No. Telepon',
+                          warga['noTelepon'] ?? '-',
                         ),
+                        const SizedBox(height: 16),
+                        _buildInfoField('Keluarga', keluarga.nama),
+                        const SizedBox(height: 16),
+                        _buildInfoField('Nomor KK', keluarga.kk),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Tombol Edit Keluarga
+                  // Tombol Edit Warga
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -165,10 +195,8 @@ class DetailKeluargaPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditKeluargaPage(
-                              keluarga: keluarga,
-                              rumah: rumah,
-                            ),
+                            builder: (context) =>
+                                EditWargaPage(warga: warga, keluarga: keluarga),
                           ),
                         );
                       },
@@ -186,48 +214,7 @@ class DetailKeluargaPage extends StatelessWidget {
                           Icon(Icons.edit, size: 20),
                           SizedBox(width: 8),
                           Text(
-                            'Edit Data Keluarga',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Tombol Lihat Daftar Warga
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DaftarWargaPage(keluarga: keluarga),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF6EE7B7),
-                        side: const BorderSide(
-                          color: Color(0xFF6EE7B7),
-                          width: 1.5,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.people_outline, size: 20),
-                          SizedBox(width: 8),
-                          Text(
-                            'Lihat Daftar Warga',
+                            'Edit Data Warga',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
