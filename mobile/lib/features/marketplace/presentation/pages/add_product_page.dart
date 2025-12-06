@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/core/theme/app_colors.dart';
 import '../../data/models/product_model.dart';
 import '../../data/repositories/marketplace_repository.dart';
+import '../../data/services/product_media_service.dart';
 
 /// Halaman tambah produk baru
 class AddProductPage extends StatefulWidget {
@@ -15,6 +19,7 @@ class AddProductPage extends StatefulWidget {
 class _AddProductPageState extends State<AddProductPage> {
   final _formKey = GlobalKey<FormState>();
   final MarketplaceRepository _repository = MarketplaceRepository();
+  final ProductMediaService _mediaService = ProductMediaService();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -28,6 +33,7 @@ class _AddProductPageState extends State<AddProductPage> {
   List<String> _categories = [];
   bool _isLoadingCategories = true;
   String? _categoryError;
+  XFile? _pickedImage;
 
   @override
   void initState() {
@@ -51,6 +57,17 @@ class _AddProductPageState extends State<AddProductPage> {
       setState(() {
         _categoryError = e.toString();
         _isLoadingCategories = false;
+      });
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final result = await picker.pickImage(source: source, imageQuality: 80);
+    if (result != null) {
+      setState(() {
+        _pickedImage = result;
+        _imageUrlController.text = '';
       });
     }
   }
@@ -83,7 +100,7 @@ class _AddProductPageState extends State<AddProductPage> {
               gradient: LinearGradient(
                 begin: Alignment(0.50, 0.00),
                 end: Alignment(0.50, 1.00),
-                colors: [AppColors.primary, AppColors.primaryDark],
+                colors: [AppColors.success, AppColors.success],
               ),
             ),
             child: SafeArea(
@@ -209,32 +226,76 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          width: 89,
-          height: 89,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
+        SizedBox(
+          width: 170,
+          height: 170,
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderMuted),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.add_a_photo, color: AppColors.textTertiary, size: 32),
-              SizedBox(height: 4),
-              Text(
-                'Upload',
-                style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
-              ),
-            ],
+            child: _pickedImage != null
+                ? Image.file(
+                    File(_pickedImage!.path),
+                    fit: BoxFit.cover,
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.borderMuted),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.image_not_supported, color: AppColors.textSecondary, size: 32),
+                        SizedBox(height: 4),
+                        Text(
+                          'Tidak ada gambar',
+                          style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
         ),
         const SizedBox(height: 8),
-        // Temporary: URL input until image picker is implemented
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => _pickImage(ImageSource.gallery),
+                icon: const Icon(Icons.photo_library, color: AppColors.success),
+                label: const Text(
+                  'Pilih dari Galeri',
+                  style: TextStyle(color: AppColors.success),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.success),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => _pickImage(ImageSource.camera),
+                icon: const Icon(Icons.camera_alt, color: AppColors.success),
+                label: const Text(
+                  'Ambil Foto',
+                  style: TextStyle(color: AppColors.success),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.success),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        // URL input (fallback/manual)
         TextFormField(
           controller: _imageUrlController,
           decoration: const InputDecoration(
-            hintText: 'URL gambar (sementara)',
+            hintText: 'URL gambar (opsional)',
             hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -250,12 +311,6 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'URL gambar harus diisi';
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -430,12 +485,19 @@ class _AddProductPageState extends State<AddProductPage> {
       const currentUserId = 'user-1';
       const currentUserName = 'Seller 1';
 
+      String imageUrl = _imageUrlController.text;
+      if (_pickedImage != null) {
+        imageUrl = await _mediaService.uploadProductImage(
+          File(_pickedImage!.path),
+        );
+      }
+
       final product = ProductModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: _nameController.text,
         description: _descriptionController.text,
         price: double.parse(_priceController.text),
-        imageUrl: _imageUrlController.text,
+        imageUrl: imageUrl,
         category: _selectedCategory,
         stock: int.parse(_stockController.text),
         sellerId: currentUserId,
