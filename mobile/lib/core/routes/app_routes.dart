@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/home/pages/home_page.dart';
-import '../../features/pemasukan/pages/pemasukan_page.dart';
+import '../../features/pemasukan/pages/income_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -20,7 +20,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     login: (context) => const LoginPage(),
     home: (context) => const HomePage(),
-    pemasukan: (context) => const PemasukanPage(),
+    pemasukan: (context) => IncomePage(),
     // Add more routes here when needed
   };
 
