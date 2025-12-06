@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/keluarga_model.dart';
+import '../models/warga_model.dart';
+import 'tambah_warga_page.dart';
+import 'detail_warga_page.dart';
 
 class DaftarWargaPage extends StatefulWidget {
   final KeluargaModel keluarga;
@@ -151,11 +154,10 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
       // Floating action button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Navigasi ke halaman tambah warga
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Fitur tambah warga akan segera hadir'),
-              backgroundColor: Color(0xFF6EE7B7),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TambahWargaPage(keluarga: widget.keluarga),
             ),
           );
         },
@@ -183,8 +185,13 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            // Aksi ketika card diklik
-            // Bisa diarahkan ke detail warga
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    DetailWargaPage(warga: warga, keluarga: widget.keluarga),
+              ),
+            );
           },
           borderRadius: BorderRadius.circular(16),
           child: Padding(

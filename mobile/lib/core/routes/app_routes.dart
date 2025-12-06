@@ -13,6 +13,7 @@ import '../../features/data_rumah_dan_warga/pages/daftar_keluarga_page.dart';
 import '../../features/marketplace/presentation/pages/marketplace_page.dart';
 import '../../features/marketplace/presentation/pages/my_products_page.dart';
 import '../../features/marketplace/presentation/pages/my_purchases_page.dart';
+import '../../features/laporan/pages/laporan_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -38,6 +39,9 @@ class AppRoutes {
   static const String myProducts = '/marketplace/my-products';
   static const String myPurchases = '/marketplace/my-purchases';
 
+  // Laporan route
+  static const String laporan = '/laporan';
+
   // TODO: Add more routes as needed
   // static const String kegiatan = '/kegiatan';
   // static const String profil = '/profil';
@@ -53,6 +57,7 @@ class AppRoutes {
     marketplace: (context) => const MarketplacePage(),
     myProducts: (context) => const MyProductsPage(),
     myPurchases: (context) => const MyPurchasesPage(),
+    laporan: (context) => const LaporanPage(),
     // Add more routes here when needed
   };
 
