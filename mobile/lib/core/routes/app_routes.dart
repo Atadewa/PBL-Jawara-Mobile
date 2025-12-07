@@ -10,6 +10,14 @@ import '../../features/data_rumah_dan_warga/pages/daftar_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/detail_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/edit_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/daftar_keluarga_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/aktivitas_dan_broadcast_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/detail_kegiatan_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/edit_kegiatan_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/add_kegiatan_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/broadcast_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/broadcast_detail_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/edit_broadcast_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/add_broadcast_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -26,6 +34,15 @@ class AppRoutes {
   static const String detailRumah = '/data-rumah/detail';
   static const String editRumah = '/data-rumah/edit';
   static const String daftarKeluarga = '/data-rumah/keluarga';
+  static const String aktivitasDanBroadcast = '/aktivitas-dan-broadcast';
+  static const String addKegiatan = '/aktivitas-dan-broadcast/add';
+  static const String detailKegiatan = '/aktivitas-dan-broadcast/detail';
+  static const String editKegiatan = '/aktivitas-dan-broadcast/edit';
+  static const String broadcast = '/aktivitas-dan-broadcast/broadcast';
+  static const String broadcastDetail =
+      '/aktivitas-dan-broadcast/broadcast/detail';
+  static const String editBroadcast = '/aktivitas-dan-broadcast/broadcast/edit';
+  static const String addBroadcast = '/aktivitas-dan-broadcast/broadcast/add';
 
   // TODO: Add more routes as needed
   // static const String marketplace = '/marketplace';
@@ -40,6 +57,7 @@ class AppRoutes {
     addPengeluaran: (context) => const AddPengeluaranPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
     daftarRumah: (context) => const DaftarRumahPage(),
+    aktivitasDanBroadcast: (context) => const AktivitasDanBroadcastPage(),
     // Add more routes here when needed
   };
 
@@ -71,6 +89,32 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => DaftarKeluargaPage(rumah: rumah as dynamic),
         );
+      case detailKegiatan:
+        final kegiatanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => DetailKegiatanPage(kegiatanId: kegiatanId),
+        );
+      case editKegiatan:
+        final kegiatanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => EditKegiatanPage(kegiatanId: kegiatanId),
+        );
+      case addKegiatan:
+        return MaterialPageRoute(builder: (_) => const AddKegiatanPage());
+      case broadcast:
+        return MaterialPageRoute(builder: (_) => const BroadcastPage());
+      case broadcastDetail:
+        final broadcastId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BroadcastDetailPage(broadcastId: broadcastId),
+        );
+      case editBroadcast:
+        final broadcastId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => EditBroadcastPage(broadcastId: broadcastId),
+        );
+      case addBroadcast:
+        return MaterialPageRoute(builder: (_) => const AddBroadcastPage());
       default:
         return null;
     }
