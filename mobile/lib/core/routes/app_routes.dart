@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/home/pages/home_page.dart';
+import '../../features/dashboard/pages/finance_dashboard_page.dart';
+import '../../features/dashboard/pages/activity_dashboard_page.dart';
+import '../../features/dashboard/pages/population_dashboard_page.dart';
 import '../../features/pemasukan/pages/income_page.dart';
 import '../../../features/pengeluaran/presentation/pages/pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.dart';
@@ -61,6 +64,11 @@ class AppRoutes {
   // Laporan route
   static const String laporan = '/laporan';
 
+  // Dashboard routes
+  static const String financeDashboard = '/dashboard/finance';
+  static const String activityDashboard = '/dashboard/activity';
+  static const String populationDashboard = '/dashboard/population';
+
   // TODO: Add more routes as needed
   // static const String kegiatan = '/kegiatan';
   // static const String profil = '/profil';
@@ -72,6 +80,9 @@ class AppRoutes {
     pemasukan: (context) => IncomePage(),
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
+    financeDashboard: (context) => const FinanceDashboardPage(),
+    activityDashboard: (context) => const ActivityDashboardPage(),
+    populationDashboard: (context) => const PopulationDashboardPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
     daftarRumah: (context) => const DaftarRumahPage(),
     aktivitasDanBroadcast: (context) => const AktivitasDanBroadcastPage(),

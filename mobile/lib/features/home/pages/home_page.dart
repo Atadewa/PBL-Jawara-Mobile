@@ -322,11 +322,36 @@ class _HomePageState extends State<HomePage> {
 
   /// Handle dashboard button tap
   void _handleDashboardTap(String dashboard) {
-    // TODO: Navigate to dashboard page
+    switch (dashboard) {
+      case 'Keuangan':
+        Navigator.pushNamed(context, AppRoutes.financeDashboard);
+        break;
+      case 'Kegiatan':
+        Navigator.pushNamed(context, AppRoutes.activityDashboard);
+        break;
+      case 'Kependudukan':
+        Navigator.pushNamed(context, AppRoutes.populationDashboard);
+        break;
+    }
   }
 
   /// Handle menu cepat tap
   void _handleMenuTap(String menu) {
+    switch (menu) {
+      case 'Pengeluaran':
+        Navigator.pushNamed(context, AppRoutes.pengeluaran);
+        break;
+      case 'Kegiatan':
+        Navigator.pushNamed(context, '/aktivitas-dan-broadcast');
+        break;
+      case 'Rumah':
+        Navigator.pushNamed(context, '/data-rumah');
+        break;
+      default:
+        // TODO: Navigate to other menu pages
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$menu - Coming soon')));
     if (menu == 'Pemasukan') {
       Navigator.of(context).pushNamed(AppRoutes.pemasukan);
       return;
