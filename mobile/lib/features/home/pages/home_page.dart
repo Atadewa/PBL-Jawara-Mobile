@@ -371,6 +371,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushNamed(context, AppRoutes.marketplace);
     } else if (menu == 'Laporan') {
       Navigator.pushNamed(context, AppRoutes.laporan);
+    } else if (menu == 'Aspirasi Warga') {
+      Navigator.pushNamed(context, AppRoutes.aspirasi);
     } else {
       // TODO: Navigate to other menu pages
     }
