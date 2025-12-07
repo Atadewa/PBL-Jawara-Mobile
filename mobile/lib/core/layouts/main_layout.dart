@@ -24,7 +24,8 @@ class _MainLayoutState extends State<MainLayout> {
         // TODO: Navigate to Marketplace
         break;
       case 2:
-        // TODO: Navigate to Kegiatan
+        // Navigate to Aktivitas & Broadcast
+        Navigator.pushReplacementNamed(context, '/aktivitas-dan-broadcast');
         break;
       case 3:
         // TODO: Navigate to Profil
