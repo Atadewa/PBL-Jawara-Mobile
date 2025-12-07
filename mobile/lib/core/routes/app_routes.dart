@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/home/pages/home_page.dart';
+import '../../features/pemasukan/pages/income_page.dart';
 import '../../../features/pengeluaran/presentation/pages/pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/detail_pengeluaran_page.dart';
@@ -18,13 +19,21 @@ import '../../features/aktivitas_dan_broadcast/pages/broadcast_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/broadcast_detail_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/edit_broadcast_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/add_broadcast_page.dart';
+import '../../features/marketplace/presentation/pages/marketplace_page.dart';
+import '../../features/marketplace/presentation/pages/my_products_page.dart';
+import '../../features/marketplace/presentation/pages/my_purchases_page.dart';
+import '../../features/laporan/pages/laporan_page.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
 class AppRoutes {
+  // Initial route
+  static const String initialRoute = login;
+
   // Route names
   static const String login = '/';
   static const String home = '/home';
+  static const String pemasukan = '/pemasukan';
   static const String pengeluaran = '/pengeluaran';
   static const String addPengeluaran = '/pengeluaran/add';
   static const String detailPengeluaran = '/pengeluaran/detail';
@@ -44,8 +53,15 @@ class AppRoutes {
   static const String editBroadcast = '/aktivitas-dan-broadcast/broadcast/edit';
   static const String addBroadcast = '/aktivitas-dan-broadcast/broadcast/add';
 
+  // Marketplace routes
+  static const String marketplace = '/marketplace';
+  static const String myProducts = '/marketplace/my-products';
+  static const String myPurchases = '/marketplace/my-purchases';
+
+  // Laporan route
+  static const String laporan = '/laporan';
+
   // TODO: Add more routes as needed
-  // static const String marketplace = '/marketplace';
   // static const String kegiatan = '/kegiatan';
   // static const String profil = '/profil';
 
@@ -53,11 +69,16 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     login: (context) => const LoginPage(),
     home: (context) => const HomePage(),
+    pemasukan: (context) => IncomePage(),
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
     daftarRumah: (context) => const DaftarRumahPage(),
     aktivitasDanBroadcast: (context) => const AktivitasDanBroadcastPage(),
+    marketplace: (context) => const MarketplacePage(),
+    myProducts: (context) => const MyProductsPage(),
+    myPurchases: (context) => const MyPurchasesPage(),
+    laporan: (context) => const LaporanPage(),
     // Add more routes here when needed
   };
 
@@ -119,7 +140,4 @@ class AppRoutes {
         return null;
     }
   }
-
-  /// Initial route
-  static String get initialRoute => login;
 }

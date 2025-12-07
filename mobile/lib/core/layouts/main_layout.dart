@@ -15,13 +15,18 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   void _onItemTapped(int index) {
+    // Jangan navigate jika sudah di halaman yang sama
+    if (index == widget.currentIndex) {
+      return;
+    }
+
     // Navigate berdasarkan index
     switch (index) {
       case 0:
         Navigator.pushReplacementNamed(context, '/home');
         break;
       case 1:
-        // TODO: Navigate to Marketplace
+        Navigator.pushReplacementNamed(context, '/marketplace');
         break;
       case 2:
         // Navigate to Aktivitas & Broadcast
@@ -35,7 +40,9 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = widget.currentIndex;
     return Scaffold(
+      // body: SafeArea(widget.child),
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -48,8 +55,11 @@ class _MainLayoutState extends State<MainLayout> {
           ],
         ),
         child: BottomNavigationBar(
-          currentIndex: widget.currentIndex,
-          onTap: _onItemTapped,
+          currentIndex: currentIndex,
+          onTap: (index) {
+            if (index == currentIndex) return;
+            _onItemTapped(index);
+          },
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: const Color(0xFF10B981),
