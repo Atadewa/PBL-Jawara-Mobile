@@ -327,6 +327,13 @@ class _HomePageState extends State<HomePage> {
 
   /// Handle menu cepat tap
   void _handleMenuTap(String menu) {
+    if (menu == 'Pemasukan') {
+      Navigator.of(context).pushNamed(AppRoutes.pemasukan);
+      return;
+    }
+
+    // fallback / other menu navigation
+    // TODO: Navigate to other menu pages
     if (menu == 'Pengeluaran') {
       Navigator.pushNamed(context, AppRoutes.pengeluaran);
     } else if (menu == 'Log Aktivitas') {

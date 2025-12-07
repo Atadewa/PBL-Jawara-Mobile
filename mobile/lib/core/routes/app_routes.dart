@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/home/pages/home_page.dart';
+import '../../features/pemasukan/pages/income_page.dart';
 import '../../../features/pengeluaran/presentation/pages/pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/detail_pengeluaran_page.dart';
@@ -24,6 +25,7 @@ class AppRoutes {
   // Route names
   static const String login = '/';
   static const String home = '/home';
+  static const String pemasukan = '/pemasukan';
   static const String pengeluaran = '/pengeluaran';
   static const String addPengeluaran = '/pengeluaran/add';
   static const String detailPengeluaran = '/pengeluaran/detail';
@@ -50,6 +52,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     login: (context) => const LoginPage(),
     home: (context) => const HomePage(),
+    pemasukan: (context) => IncomePage(),
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
