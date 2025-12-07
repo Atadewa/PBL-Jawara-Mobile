@@ -6,7 +6,7 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../../auth/data/models/login_request.dart';
 import '../../auth/data/services/auth_service.dart';
 import 'register_page.dart';
-import '../../dashboard/pages/dashboard_page.dart';
+import '../../home/pages/home_page.dart';
 
 /// Login page with form validation and API integration
 class LoginPage extends StatefulWidget {
@@ -52,10 +52,10 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.success) {
         _showSuccessMessage(response.message);
-        // Navigate to Dashboard page
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const DashboardPage()),
-        );
+        // Navigate to Home page
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
       } else {
         _showErrorMessage(response.message);
       }

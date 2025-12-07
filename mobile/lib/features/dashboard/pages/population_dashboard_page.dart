@@ -133,18 +133,6 @@ class _PopulationDashboardPageState extends State<PopulationDashboardPage> {
                         PopulationChartCard(analysis: data.gender),
                         const SizedBox(height: 16),
 
-                        // Pekerjaan
-                        PopulationChartCard(analysis: data.occupation),
-                        const SizedBox(height: 16),
-
-                        // Agama
-                        PopulationChartCard(analysis: data.religion),
-                        const SizedBox(height: 16),
-
-                        // Peran dalam Keluarga
-                        PopulationChartCard(analysis: data.familyRole),
-                        const SizedBox(height: 16),
-
                         // Pendidikan
                         PopulationChartCard(analysis: data.education),
 

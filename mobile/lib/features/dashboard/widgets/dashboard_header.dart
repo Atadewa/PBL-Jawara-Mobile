@@ -3,68 +3,87 @@ import 'package:flutter/material.dart';
 class DashboardHeader extends StatelessWidget {
   final String title;
   final String subtitle;
+  final VoidCallback? onBackPressed;
+  final Widget? trailing;
 
   const DashboardHeader({
     super.key,
     required this.title,
     required this.subtitle,
+    this.onBackPressed,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [const Color(0xFF6EE7B7), const Color(0xFF34D399)],
         ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0x19000000),
-            blurRadius: 6,
-            offset: const Offset(0, 4),
-            spreadRadius: -4,
-          ),
-          BoxShadow(
-            color: const Color(0x19000000),
-            blurRadius: 15,
-            offset: const Offset(0, 10),
-            spreadRadius: -3,
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Color(0xFF0F172A),
-              fontSize: 24,
-              fontFamily: 'Arimo',
-              fontWeight: FontWeight.w600,
-              height: 1.50,
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top row with back button and trailing
+            Row(
+              children: [
+                // Back button
+                GestureDetector(
+                  onTap: onBackPressed ?? () => Navigator.pop(context),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Title
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontFamily: 'Arimo',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                // Trailing widget (optional)
+                if (trailing != null) trailing!,
+              ],
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              color: Color(0xE5FFFEFE),
-              fontSize: 16,
-              fontFamily: 'Arimo',
-              fontWeight: FontWeight.w400,
-              height: 1.50,
+            const SizedBox(height: 8),
+            // Subtitle with padding to align with title
+            Padding(
+              padding: const EdgeInsets.only(left: 56),
+              child: Text(
+                subtitle,
+                style: const TextStyle(
+                  color: Color(0xE5FFFEFE),
+                  fontSize: 14,
+                  fontFamily: 'Arimo',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
