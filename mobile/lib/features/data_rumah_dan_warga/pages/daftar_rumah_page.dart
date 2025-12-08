@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/rumah_model.dart';
 import '../widgets/rumah_card.dart';
 import 'detail_rumah_page.dart';
+import 'tambah_rumah_page.dart';
 
 class DaftarRumahPage extends StatefulWidget {
   const DaftarRumahPage({super.key});
@@ -139,7 +140,10 @@ class _DaftarRumahPageState extends State<DaftarRumahPage> {
       // Floating action button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Aksi tambah rumah
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const TambahRumahPage()),
+          );
         },
         backgroundColor: const Color(0xFF6EE7B7),
         child: const Icon(Icons.add, color: Colors.white, size: 28),

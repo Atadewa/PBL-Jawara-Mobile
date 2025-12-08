@@ -15,27 +15,29 @@ class QuickMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(12),
+    return SizedBox(
+      height: 88, // Fixed height for all cards
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Material(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 52,
+                height: 52,
+                alignment: Alignment.center,
+                child: Icon(icon, color: const Color(0xFF10B981), size: 26),
               ),
-              child: Icon(icon, color: const Color(0xFF10B981), size: 24),
             ),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 28,
+          ),
+          const SizedBox(height: 6),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Text(
@@ -48,12 +50,13 @@ class QuickMenuItem extends StatelessWidget {
                     fontSize: 10,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
+                    height: 1.2,
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
