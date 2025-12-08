@@ -352,29 +352,30 @@ class _HomePageState extends State<HomePage> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('$menu - Coming soon')));
-    if (menu == 'Pemasukan') {
-      Navigator.of(context).pushNamed(AppRoutes.pemasukan);
-      return;
-    }
+        if (menu == 'Pemasukan') {
+          Navigator.of(context).pushNamed(AppRoutes.pemasukan);
+          return;
+        }
 
-    // fallback / other menu navigation
-    // TODO: Navigate to other menu pages
-    if (menu == 'Pengeluaran') {
-      Navigator.pushNamed(context, AppRoutes.pengeluaran);
-    } else if (menu == 'Log Aktivitas') {
-      Navigator.pushNamed(context, AppRoutes.logAktivitas);
-    } else if (menu == 'Rumah') {
-      Navigator.pushNamed(context, AppRoutes.daftarRumah);
-    } else if (menu == 'Kegiatan') {
-      Navigator.pushNamed(context, AppRoutes.aktivitasDanBroadcast);
-    } else if (menu == 'Marketplace') {
-      Navigator.pushNamed(context, AppRoutes.marketplace);
-    } else if (menu == 'Laporan') {
-      Navigator.pushNamed(context, AppRoutes.laporan);
-    } else if (menu == 'Aspirasi Warga') {
-      Navigator.pushNamed(context, AppRoutes.aspirasi);
-    } else {
-      // TODO: Navigate to other menu pages
+        // fallback / other menu navigation
+        // TODO: Navigate to other menu pages
+        if (menu == 'Pengeluaran') {
+          Navigator.pushNamed(context, AppRoutes.pengeluaran);
+        } else if (menu == 'Log Aktivitas') {
+          Navigator.pushNamed(context, AppRoutes.logAktivitas);
+        } else if (menu == 'Rumah') {
+          Navigator.pushNamed(context, AppRoutes.daftarRumah);
+        } else if (menu == 'Kegiatan') {
+          Navigator.pushNamed(context, AppRoutes.aktivitasDanBroadcast);
+        } else if (menu == 'Marketplace') {
+          Navigator.pushNamed(context, AppRoutes.marketplace);
+        } else if (menu == 'Laporan') {
+          Navigator.pushNamed(context, AppRoutes.laporan);
+        } else if (menu == 'Aspirasi Warga') {
+          Navigator.pushNamed(context, AppRoutes.aspirasi);
+        } else {
+          // TODO: Navigate to other menu pages
+        }
     }
   }
 }
