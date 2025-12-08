@@ -373,6 +373,8 @@ class _HomePageState extends State<HomePage> {
           Navigator.pushNamed(context, AppRoutes.laporan);
         } else if (menu == 'Aspirasi Warga') {
           Navigator.pushNamed(context, AppRoutes.aspirasi);
+        } else if (menu == 'Verifikasi User') {
+          Navigator.pushNamed(context, AppRoutes.verifikasiWarga);
         } else {
           // TODO: Navigate to other menu pages
         }
