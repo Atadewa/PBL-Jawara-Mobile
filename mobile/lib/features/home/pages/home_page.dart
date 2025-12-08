@@ -274,9 +274,9 @@ class _HomePageState extends State<HomePage> {
             childAspectRatio: 0.75,
             children: [
               QuickMenuItem(
-                label: 'Data Warga',
+                label: 'Verifikasi Warga',
                 icon: Icons.people,
-                onTap: () => _handleMenuTap('Data Warga'),
+                onTap: () => _handleMenuTap('Verifikasi Warga'),
               ),
               QuickMenuItem(
                 label: 'Rumah',
@@ -338,6 +338,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushNamed(context, AppRoutes.logAktivitas);
     } else if (menu == 'Rumah') {
       Navigator.pushNamed(context, AppRoutes.daftarRumah);
+    } else if (menu == 'Verifikasi Warga') {
+      Navigator.pushNamed(context, AppRoutes.verifikasiWarga);
     } else {
       // TODO: Navigate to other menu pages
     }

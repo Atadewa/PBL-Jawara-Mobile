@@ -21,8 +21,9 @@ class QuickMenuItem extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const SizedBox(height: 8),
             Container(
               width: 48,
               height: 48,
@@ -33,16 +34,22 @@ class QuickMenuItem extends StatelessWidget {
               child: Icon(icon, color: const Color(0xFF10B981), size: 24),
             ),
             const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFF0F172A),
-                fontSize: 10,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
+            SizedBox(
+              height: 28,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFF0F172A),
+                    fontSize: 10,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ),
             ),
           ],

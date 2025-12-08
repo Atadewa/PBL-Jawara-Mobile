@@ -6,6 +6,7 @@ import '../../../features/pengeluaran/presentation/pages/add_pengeluaran_page.da
 import '../../../features/pengeluaran/presentation/pages/detail_pengeluaran_page.dart';
 import '../../../features/pengeluaran/presentation/pages/edit_pengeluaran_page.dart';
 import '../../../features/log_aktivitas/presentation/pages/log_aktivitas_page.dart';
+import '../../../features/verifikasi_warga/presentation/pages/verifikasi_warga_page.dart';
 import '../../features/data_rumah_dan_warga/pages/daftar_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/detail_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/edit_rumah_page.dart';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String detailPengeluaran = '/pengeluaran/detail';
   static const String editPengeluaran = '/pengeluaran/edit';
   static const String logAktivitas = '/log-aktivitas';
+  static const String verifikasiWarga = '/verifikasi-warga';
   static const String daftarRumah = '/data-rumah';
   static const String detailRumah = '/data-rumah/detail';
   static const String editRumah = '/data-rumah/edit';
@@ -39,6 +41,7 @@ class AppRoutes {
     pengeluaran: (context) => const PengeluaranPage(),
     addPengeluaran: (context) => const AddPengeluaranPage(),
     logAktivitas: (context) => const LogAktivitasPage(),
+    verifikasiWarga: (context) => const VerifikasiWargaPage(),
     daftarRumah: (context) => const DaftarRumahPage(),
     // Add more routes here when needed
   };
