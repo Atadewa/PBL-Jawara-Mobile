@@ -101,6 +101,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       pinned: true,
       backgroundColor: AppColors.success,
       leading: IconButton(
+        key: const Key('product_detail_back_button'),
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
