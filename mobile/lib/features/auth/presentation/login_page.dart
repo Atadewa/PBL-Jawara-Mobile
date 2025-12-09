@@ -122,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Username/Email field
                 CustomTextField(
+                  textFieldKey: const Key('login_username_field'),
                   controller: _usernameController,
                   label: AppStrings.usernameOrEmail,
                   hintText: AppStrings.enterUsernameOrEmail,
@@ -138,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Password field
                 CustomTextField(
+                  textFieldKey: const Key('login_password_field'),
                   controller: _passwordController,
                   label: AppStrings.password,
                   hintText: AppStrings.enterPassword,
@@ -168,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Login button
                 CustomButton(
+                  key: const Key('login_submit_button'),
                   text: AppStrings.login,
                   onPressed: _handleLogin,
                   isLoading: _isLoading,
@@ -254,6 +257,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(width: 4),
         TextButton(
+          key: const Key('login_register_link'),
           onPressed: _navigateToRegister,
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
