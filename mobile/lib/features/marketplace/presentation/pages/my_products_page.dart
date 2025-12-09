@@ -59,69 +59,21 @@ class _MyProductsPageState extends State<MyProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.background,
-      child: Column(
-        children: [
-          // Tambah Batik Button
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: InkWell(
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddProductPage(),
-                  ),
-                );
-                if (result == true) {
-                  _loadProducts();
-                }
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: double.infinity,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryDark,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadowMedium,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                      spreadRadius: -2,
-                    ),
-                    BoxShadow(
-                      color: AppColors.shadowMedium,
-                      blurRadius: 6,
-                      offset: const Offset(0, 4),
-                      spreadRadius: -1,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.add, color: AppColors.background, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      'Tambah Batik Saya',
-                      style: TextStyle(
-                        color: AppColors.background,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Products List
-          Expanded(child: _buildProductsTab()),
-        ],
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: _buildProductsTab(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddProductPage()),
+          );
+          if (result == true) {
+            _loadProducts();
+          }
+        },
+        backgroundColor: AppColors.primaryDark,
+        child: const Icon(Icons.add, color: AppColors.background),
       ),
     );
   }
@@ -165,7 +117,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
       onRefresh: _loadProducts,
       color: AppColors.success,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
         itemCount: _products.length,
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
@@ -416,4 +368,3 @@ class _MyProductsPageState extends State<MyProductsPage> {
     return formatter.format(amount);
   }
 }
-
