@@ -14,9 +14,10 @@ class AspirasiService {
 
   final Duration delay;
   final String _aspirasiEndpoint = '${ApiConfig.baseUrl}/aspirasi';
+  static final Map<String, String> _rejectionReasons = {};
 
   // Dummy data untuk simulasi API
-  static final List<Aspirasi> _dummyAspirasi = [
+  static final List<Aspirasi> _initialData = [
     Aspirasi(
       id: 'asp-1',
       title: 'Perbaikan Jalan RT 01',
@@ -76,6 +77,12 @@ class AspirasiService {
       createdAt: DateTime(2024, 11, 19),
     ),
   ];
+  static List<Aspirasi> _dummyAspirasi = List<Aspirasi>.from(_initialData);
+
+  static void resetDummyData() {
+    _dummyAspirasi = List<Aspirasi>.from(_initialData);
+    _rejectionReasons.clear();
+  }
 
   /// Ambil semua aspirasi (bisa difilter status & search di UI)
   Future<List<Aspirasi>> getAllAspirasi() async {
@@ -147,8 +154,9 @@ class AspirasiService {
   /// Update status aspirasi (Diterima/Ditolak/Pending)
   Future<Aspirasi> updateAspirasiStatus(
     String id,
-    AspirasiStatus status,
-  ) async {
+    AspirasiStatus status, {
+    String? reason,
+  }) async {
     await Future.delayed(delay);
 
     final index = _dummyAspirasi.indexWhere((item) => item.id == id);
@@ -158,6 +166,11 @@ class AspirasiService {
 
     final updated = _dummyAspirasi[index].copyWith(status: status);
     _dummyAspirasi[index] = updated;
+    if (status == AspirasiStatus.ditolak && reason != null) {
+      _rejectionReasons[id] = reason;
+    } else if (status != AspirasiStatus.ditolak) {
+      _rejectionReasons.remove(id);
+    }
     return updated;
   }
 
@@ -165,5 +178,10 @@ class AspirasiService {
   Future<void> deleteAspirasi(String id) async {
     await Future.delayed(delay);
     _dummyAspirasi.removeWhere((item) => item.id == id);
+    _rejectionReasons.remove(id);
+  }
+
+  String? getRejectionReason(String id) {
+    return _rejectionReasons[id];
   }
 }

@@ -122,6 +122,7 @@ class _AspirasiPageState extends State<AspirasiPage>
         backgroundColor: AppColors.cardBackground,
         floatingActionButton: showFab
             ? FloatingActionButton(
+                key: const Key('aspirasi_add_fab'),
                 backgroundColor: AppColors.primaryDark,
                 foregroundColor: Colors.white,
                 onPressed: _openCreate,
@@ -203,8 +204,8 @@ class _AspirasiPageState extends State<AspirasiPage>
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 tabs: const [
-                  Tab(text: 'Semua Aspirasi'),
-                  Tab(text: 'Aspirasi Saya'),
+                  Tab(key: Key('aspirasi_tab_semua'), text: 'Semua Aspirasi'),
+                  Tab(key: Key('aspirasi_tab_saya'), text: 'Aspirasi Saya'),
                 ],
               ),
             ],

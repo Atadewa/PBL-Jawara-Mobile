@@ -27,11 +27,13 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
   late Future<Aspirasi> _futureDetail;
   bool _isProcessing = false;
   bool _hasChanges = false;
+  String? _rejectionReason;
 
   @override
   void initState() {
     super.initState();
     _futureDetail = widget.service.getAspirasiDetail(widget.aspirasiId);
+    _rejectionReason = widget.service.getRejectionReason(widget.aspirasiId);
   }
 
   Future<void> _refresh() async {
@@ -46,11 +48,17 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
       final updated = await widget.service.updateAspirasiStatus(
         widget.aspirasiId,
         status,
+        reason: status == AspirasiStatus.ditolak ? _rejectionReason : null,
       );
       if (!mounted) return;
       setState(() {
         _futureDetail = Future.value(updated);
         _hasChanges = true;
+        if (status == AspirasiStatus.ditolak) {
+          _rejectionReason ??= 'Tidak ada keterangan';
+        } else {
+          _rejectionReason = null;
+        }
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Status diubah menjadi ${status.label}')),
@@ -64,6 +72,39 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
       if (mounted) {
         setState(() => _isProcessing = false);
       }
+    }
+  }
+
+  Future<void> _promptRejectReason() async {
+    final controller = TextEditingController(text: _rejectionReason ?? '');
+    final reason = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Alasan Penolakan'),
+          content: TextField(
+            key: const Key('aspirasi_reject_reason_field'),
+            controller: controller,
+            decoration: const InputDecoration(hintText: 'Masukkan alasan penolakan'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              key: const Key('aspirasi_reject_confirm_button'),
+              onPressed: () => Navigator.pop(context, controller.text.trim()),
+              child: const Text('Kirim'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (reason != null && reason.isNotEmpty) {
+      setState(() => _rejectionReason = reason);
+      await _updateStatus(AspirasiStatus.ditolak);
     }
   }
 
@@ -381,6 +422,25 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
               height: 1.5,
             ),
           ),
+          if (_rejectionReason != null) ...[
+            const SizedBox(height: 12),
+            const Text(
+              'Alasan Penolakan',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              _rejectionReason!,
+              style: const TextStyle(
+                color: AppColors.errorDark,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -392,6 +452,7 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
         children: [
           Expanded(
             child: ElevatedButton.icon(
+              key: const Key('aspirasi_reject_button'),
               icon: const Icon(Icons.close),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,
@@ -401,17 +462,17 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed:
-                  _isProcessing ? null : () => _updateStatus(AspirasiStatus.ditolak),
-            label: const Text(
-              'Tolak',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              onPressed: _isProcessing ? null : _promptRejectReason,
+              label: const Text(
+                'Tolak',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
-        ),
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton.icon(
+              key: const Key('aspirasi_approve_button'),
               icon: const Icon(Icons.check_circle_outline),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -439,6 +500,7 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
         children: [
           Expanded(
             child: ElevatedButton.icon(
+              key: const Key('aspirasi_delete_button'),
               icon: const Icon(Icons.delete, color: Colors.white),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,
@@ -461,6 +523,7 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton.icon(
+              key: const Key('aspirasi_edit_button'),
               icon: const Icon(Icons.edit, color: Colors.white),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,

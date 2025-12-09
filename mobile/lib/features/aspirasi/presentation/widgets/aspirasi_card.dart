@@ -15,6 +15,7 @@ class AspirasiCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final formatter = DateFormat('dd MMM yyyy');
     return InkWell(
+      key: Key('aspirasi_card_${aspirasi.id}'),
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
