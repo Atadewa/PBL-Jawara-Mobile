@@ -28,6 +28,8 @@ import '../../features/marketplace/presentation/pages/my_products_page.dart';
 import '../../features/marketplace/presentation/pages/my_purchases_page.dart';
 import '../../features/laporan/pages/laporan_page.dart';
 import '../../features/aspirasi/presentation/pages/aspirasi_page.dart';
+import '../../features/profile/pages/profile_page.dart';
+import '../layouts/main_layout.dart';
 
 /// Centralized route management
 /// Memudahkan maintenance dan menghindari hardcoded route strings
@@ -54,8 +56,7 @@ class AppRoutes {
   static const String detailKegiatan = '/aktivitas-dan-broadcast/detail';
   static const String editKegiatan = '/aktivitas-dan-broadcast/edit';
   static const String broadcast = '/aktivitas-dan-broadcast/broadcast';
-  static const String broadcastDetail =
-      '/aktivitas-dan-broadcast/broadcast/detail';
+  static const String broadcastDetail = '/aktivitas-dan-broadcast/broadcast/detail';
   static const String editBroadcast = '/aktivitas-dan-broadcast/broadcast/edit';
   static const String addBroadcast = '/aktivitas-dan-broadcast/broadcast/add';
 
@@ -63,6 +64,9 @@ class AppRoutes {
   static const String marketplace = '/marketplace';
   static const String myProducts = '/marketplace/my-products';
   static const String myPurchases = '/marketplace/my-purchases';
+
+  // Profile route
+  static const String profile = '/profile';
 
   // Laporan route
   static const String laporan = '/laporan';
@@ -98,6 +102,7 @@ class AppRoutes {
     myPurchases: (context) => const MyPurchasesPage(),
     laporan: (context) => const LaporanPage(),
     aspirasi: (context) => const AspirasiPage(),
+    profile: (context) => MainLayout(currentIndex: 3, child: ProfilePage()),
     // Add more routes here when needed
   };
 
