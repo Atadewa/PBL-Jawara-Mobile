@@ -157,9 +157,9 @@ class _MarketplacePageState extends State<MarketplacePage>
                         ),
                         indicatorSize: TabBarIndicatorSize.tab,
                         tabs: const [
-                          Tab(text: 'Marketplace'),
-                          Tab(text: 'Batik Saya'),
-                          Tab(text: 'Pembelian Saya'),
+                          Tab(key: Key('marketplace_tab_marketplace'), text: 'Marketplace'),
+                          Tab(key: Key('marketplace_tab_batik_saya'), text: 'Batik Saya'),
+                          Tab(key: Key('marketplace_tab_pembelian_saya'), text: 'Pembelian Saya'),
                         ],
                       ),
                     ],
