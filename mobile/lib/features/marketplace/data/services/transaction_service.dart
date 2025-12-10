@@ -18,8 +18,6 @@ class TransactionService {
   // final Dio _httpClient;
 
   Future<List<TransactionModel>> getMyPurchases(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 700));
-
     return [
       TransactionModel(
         id: 'trx-1',
@@ -85,8 +83,6 @@ class TransactionService {
   }
 
   Future<List<TransactionModel>> getMySales(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 700));
-
     return [
       TransactionModel(
         id: 'trx-4',
@@ -193,8 +189,6 @@ class TransactionService {
   }
 
   Future<TransactionModel> getTransactionById(String id) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
     final purchases = await getMyPurchases('current-user');
     return purchases.firstWhere(
       (trx) => trx.id == id,
@@ -207,8 +201,6 @@ class TransactionService {
     required int quantity,
     String? notes,
   }) async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-
     return TransactionModel(
       id: 'trx-new-${DateTime.now().millisecondsSinceEpoch}',
       productId: productId,
@@ -232,8 +224,6 @@ class TransactionService {
     String id,
     TransactionStatus status,
   ) async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
     final transaction = await getTransactionById(id);
     return transaction.copyWith(
       status: status,

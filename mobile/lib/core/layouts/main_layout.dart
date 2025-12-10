@@ -33,7 +33,7 @@ class _MainLayoutState extends State<MainLayout> {
         Navigator.pushReplacementNamed(context, '/aktivitas-dan-broadcast');
         break;
       case 3:
-        // TODO: Navigate to Profil
+        Navigator.pushReplacementNamed(context, '/profile');
         break;
     }
   }
@@ -85,7 +85,7 @@ class _MainLayoutState extends State<MainLayout> {
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person),
-              label: 'Profil',
+              label: 'Profile',
             ),
           ],
         ),
