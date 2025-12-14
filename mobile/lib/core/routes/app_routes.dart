@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../auth/auth_session.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/home/pages/home_page.dart';
 import '../../features/dashboard/pages/finance_dashboard_page.dart';
@@ -35,10 +36,11 @@ import '../layouts/main_layout.dart';
 /// Memudahkan maintenance dan menghindari hardcoded route strings
 class AppRoutes {
   // Initial route
-  static const String initialRoute = login;
+  static String get initialRoute => AuthSession.isLoggedIn ? home : login;
 
   // Route names
-  static const String login = '/';
+  static const String login = '/login';
+  static const String root = '/';
   static const String home = '/home';
   static const String pemasukan = '/pemasukan';
   static const String pengeluaran = '/pengeluaran';
@@ -86,6 +88,7 @@ class AppRoutes {
   /// Route definitions
   static Map<String, WidgetBuilder> get routes => {
     login: (context) => const LoginPage(),
+    root: (context) => const LoginPage(),
     home: (context) => const HomePage(),
     pemasukan: (context) => IncomePage(),
     pengeluaran: (context) => const PengeluaranPage(),
