@@ -108,12 +108,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 60),
+                const SizedBox(height: 15),
 
                 // Logo
                 _buildLogo(),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 15),
 
                 // Title and description
                 _buildHeader(),
@@ -196,28 +196,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLogo() {
     return Center(
       child: Container(
-        width: 80,
-        height: 80,
+        width: 170,
+        height: 170,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.primary, AppColors.primaryDark],
-          ),
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 10),
-              spreadRadius: -3,
-            ),
-          ],
+          // boxShadow: []  // hapus ini
         ),
-        child: const Icon(
-          Icons.home_work_rounded,
-          size: 48,
-          color: Colors.white,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Image.asset('assets/logoo.png', fit: BoxFit.contain),
         ),
       ),
     );
