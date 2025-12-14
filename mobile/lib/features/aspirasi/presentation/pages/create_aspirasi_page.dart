@@ -124,13 +124,14 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTextField(
-                          label: 'Judul Aspirasi',
-                          hint: 'Masukkan judul aspirasi',
-                          controller: _titleController,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildDescriptionField(),
+        _buildTextField(
+          label: 'Judul Aspirasi',
+          hint: 'Masukkan judul aspirasi',
+          controller: _titleController,
+          fieldKey: const Key('aspirasi_form_title'),
+        ),
+        const SizedBox(height: 16),
+        _buildDescriptionField(),
                         const SizedBox(height: 16),
                         _buildStatusDropdown(),
                         const SizedBox(height: 24),
@@ -197,6 +198,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
     required String label,
     required String hint,
     required TextEditingController controller,
+    Key? fieldKey,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,6 +213,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          key: fieldKey,
           controller: controller,
           validator: (value) =>
               (value == null || value.trim().isEmpty) ? 'Harus diisi' : null,
@@ -254,6 +257,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          key: const Key('aspirasi_form_description'),
           controller: _descriptionController,
           minLines: 5,
           maxLines: 6,
@@ -302,6 +306,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<AspirasiStatus>(
+          key: const Key('aspirasi_form_status'),
           value: _selectedStatus,
           decoration: InputDecoration(
             filled: true,
@@ -344,6 +349,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
+            key: const Key('aspirasi_form_save'),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
