@@ -3,10 +3,11 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
-import '../../auth/data/models/login_request.dart';
-import '../../auth/data/services/auth_service.dart';
+import '../../../core/auth/dummy_auth_service.dart';
+import '../../../core/auth/auth_session.dart';
+import '../../../core/auth/user_role.dart';
+import '../../../core/routes/app_routes.dart';
 import 'register_page.dart';
-import '../../home/pages/home_page.dart';
 
 /// Login page with form validation and API integration
 class LoginPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = AuthService();
+  final _authService = DummyAuthService();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -40,32 +41,23 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = true);
 
-    try {
-      final request = LoginRequest(
-        usernameOrEmail: _usernameController.text.trim(),
-        password: _passwordController.text,
-      );
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
 
-      final response = await _authService.login(request);
+    final user = await _authService.login(username, password);
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      if (response.success) {
-        _showSuccessMessage(response.message);
-        // Navigate to Home page
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
-      } else {
-        _showErrorMessage(response.message);
-      }
-    } catch (e) {
-      if (!mounted) return;
-      _showErrorMessage(AppStrings.loginFailed);
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+    if (user != null) {
+      AuthSession.user.value = user;
+      _showSuccessMessage('Login berhasil sebagai ${user.role.label}');
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
+    } else {
+      _showErrorMessage('Username atau password salah');
+    }
+
+    if (mounted) {
+      setState(() => _isLoading = false);
     }
   }
 
