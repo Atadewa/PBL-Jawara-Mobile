@@ -5,6 +5,8 @@ import '../widgets/profile_header.dart';
 import '../widgets/profile_card.dart';
 import '../widgets/profile_info_section.dart';
 import '../widgets/profile_action_buttons.dart';
+import 'change_password_page.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -26,16 +28,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _handleEditProfile(UserProfile profile) {
-    // TODO: Navigate to edit profile page
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Edit profile feature coming soon')),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(profile: profile),
+      ),
     );
   }
 
   void _handleChangePassword() {
-    // TODO: Navigate to change password page
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Change password feature coming soon')),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
     );
   }
 
@@ -72,9 +76,9 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $e')));
         }
       } finally {
         if (mounted) {
@@ -93,9 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF6EE7B7),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFF6EE7B7)),
             );
           }
 
@@ -104,19 +106,14 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
                   Text('Error: ${snapshot.error}'),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _userProfileFuture =
-                            _profileService.fetchUserProfile();
+                        _userProfileFuture = _profileService.fetchUserProfile();
                       });
                     },
                     child: const Text('Coba Lagi'),
@@ -127,9 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
           }
 
           if (!snapshot.hasData) {
-            return const Center(
-              child: Text('Data tidak ditemukan'),
-            );
+            return const Center(child: Text('Data tidak ditemukan'));
           }
 
           final profile = snapshot.data!;
@@ -158,40 +153,35 @@ class _ProfilePageState extends State<ProfilePage> {
                             ProfileInfoItem(
                               icon: Icons.person,
                               iconColor: const Color(0xFF10B981),
-                              iconBackgroundColor:
-                                  const Color(0xFF10B981),
+                              iconBackgroundColor: const Color(0xFF10B981),
                               label: 'Nama Lengkap',
                               value: profile.fullName,
                             ),
                             ProfileInfoItem(
                               icon: Icons.phone,
                               iconColor: const Color(0xFF3B82F6),
-                              iconBackgroundColor:
-                                  const Color(0xFF3B82F6),
+                              iconBackgroundColor: const Color(0xFF3B82F6),
                               label: 'Nomor HP',
                               value: profile.phoneNumber,
                             ),
                             ProfileInfoItem(
                               icon: Icons.email,
                               iconColor: const Color(0xFF8B5CF6),
-                              iconBackgroundColor:
-                                  const Color(0xFF8B5CF6),
+                              iconBackgroundColor: const Color(0xFF8B5CF6),
                               label: 'Email',
                               value: profile.email,
                             ),
                             ProfileInfoItem(
                               icon: Icons.person_outline,
                               iconColor: const Color(0xFFF59E0B),
-                              iconBackgroundColor:
-                                  const Color(0xFFF59E0B),
+                              iconBackgroundColor: const Color(0xFFF59E0B),
                               label: 'Username',
                               value: profile.username,
                             ),
                             ProfileInfoItem(
                               icon: Icons.location_on,
                               iconColor: const Color(0xFFEF4444),
-                              iconBackgroundColor:
-                                  const Color(0xFFEF4444),
+                              iconBackgroundColor: const Color(0xFFEF4444),
                               label: 'Alamat',
                               value: profile.address,
                             ),
@@ -199,8 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         // Action Buttons
                         ProfileActionButtons(
-                          onEditProfile: () =>
-                              _handleEditProfile(profile),
+                          onEditProfile: () => _handleEditProfile(profile),
                           onChangePassword: _handleChangePassword,
                           onLogout: _handleLogout,
                           isLoading: _isLoading,
