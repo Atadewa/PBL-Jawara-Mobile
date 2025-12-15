@@ -46,7 +46,7 @@ class AppStrings {
   // Validation messages
   static const String fieldRequired = 'Field ini wajib diisi';
   static const String invalidEmail = 'Email tidak valid';
-  static const String passwordTooShort = 'Password minimal 6 karakter';
+  static const String passwordTooShort = 'Password minimal 2 karakter';
   static const String passwordNotMatch = 'Password tidak sama';
   static const String invalidPhoneNumber = 'Nomor telepon tidak valid';
 

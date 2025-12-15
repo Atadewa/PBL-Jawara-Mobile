@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (value == null || value.isEmpty) {
                       return AppStrings.fieldRequired;
                     }
-                    if (value.length < 6) {
+                    if (value.length < 2) {
                       return AppStrings.passwordTooShort;
                     }
                     return null;

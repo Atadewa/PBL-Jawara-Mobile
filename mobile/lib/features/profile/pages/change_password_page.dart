@@ -254,15 +254,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             if (value == null || value.isEmpty) {
                               return 'Password baru harus diisi';
                             }
-                            if (value.length < 6) {
-                              return 'Password minimal 6 karakter';
+                            if (value.length < 2) {
+                              return 'Password minimal 2 karakter';
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Password minimal 6 karakter',
+                          'Password minimal 2 karakter',
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 12,

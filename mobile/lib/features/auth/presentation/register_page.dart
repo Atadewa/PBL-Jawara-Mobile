@@ -315,7 +315,7 @@ class _RegisterPageState extends State<RegisterPage> {
               if (value == null || value.isEmpty) {
                 return AppStrings.fieldRequired;
               }
-              if (value.length < 6) {
+              if (value.length < 2) {
                 return AppStrings.passwordTooShort;
               }
               return null;
