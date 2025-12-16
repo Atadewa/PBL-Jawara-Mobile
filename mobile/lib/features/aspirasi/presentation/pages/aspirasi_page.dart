@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mobile/core/layouts/main_layout.dart';
 import 'package:mobile/core/theme/app_colors.dart';
+import 'package:mobile/core/providers/user_context_provider.dart';
 
 import '../../data/models/aspirasi_model.dart';
-import '../../data/services/aspirasi_service.dart';
+import '../providers/aspiration_provider.dart';
 import '../widgets/aspirasi_card.dart';
 import 'aspirasi_detail_page.dart';
 import 'create_aspirasi_page.dart';
@@ -15,45 +17,50 @@ class AspirasiPage extends StatefulWidget {
   State<AspirasiPage> createState() => _AspirasiPageState();
 }
 
-class _AspirasiPageState extends State<AspirasiPage>
-    with SingleTickerProviderStateMixin {
-  final AspirasiService _aspirasiService = AspirasiService();
+class _AspirasiPageState extends State<AspirasiPage> {
   final TextEditingController _searchController = TextEditingController();
-
-  AspirasiStatus? _selectedStatus;
-  late TabController _tabController;
-  late Future<List<Aspirasi>> _futureAll;
-  late Future<List<Aspirasi>> _futureMine;
-
-  static const String _currentUserId = 'user-1';
+  AspirationStatus? _selectedStatus;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() => setState(() {}));
     _searchController.addListener(() => setState(() {}));
-    _futureAll = _aspirasiService.getAllAspirasi();
-    _futureMine = _aspirasiService.getAspirasiByUser(_currentUserId);
+    
+    // Load data after frame is built to ensure provider is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_isInitialized) {
+        _loadData();
+        _isInitialized = true;
+      }
+    });
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
-  Future<void> _refresh() async {
-    setState(() {
-      _futureAll = _aspirasiService.getAllAspirasi();
-      _futureMine = _aspirasiService.getAspirasiByUser(_currentUserId);
-    });
-    await Future.wait([_futureAll, _futureMine]);
+  Future<void> _loadData() async {
+    final provider = context.read<AspirationProvider>();
+    try {
+      await provider.fetchList();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memuat data: $e')),
+        );
+      }
+    }
   }
 
-  List<Aspirasi> _applyFilters(List<Aspirasi> data, {required bool onlyMine}) {
-    var result = List<Aspirasi>.from(data);
+  Future<void> _refresh() async {
+    await _loadData();
+  }
+
+  List<AspirationModel> _applyFilters(List<AspirationModel> data) {
+    var result = List<AspirationModel>.from(data);
 
     if (_selectedStatus != null) {
       result = result.where((item) => item.status == _selectedStatus).toList();
@@ -66,16 +73,7 @@ class _AspirasiPageState extends State<AspirasiPage>
             (item) =>
                 item.title.toLowerCase().contains(query) ||
                 item.description.toLowerCase().contains(query) ||
-                item.createdBy.toLowerCase().contains(query),
-          )
-          .toList();
-    }
-
-    if (onlyMine) {
-      result = result
-          .where(
-            (item) =>
-                item.createdById.toLowerCase() == _currentUserId.toLowerCase(),
+                (item.creatorName?.toLowerCase().contains(query) ?? false),
           )
           .toList();
     }
@@ -84,26 +82,24 @@ class _AspirasiPageState extends State<AspirasiPage>
   }
 
   Future<void> _openCreate() async {
-    final result = await Navigator.push<Aspirasi>(
+    final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => CreateAspirasiPage(service: _aspirasiService),
+        builder: (_) => const CreateAspirasiPage(),
       ),
     );
 
-    if (result != null) {
+    if (result == true) {
       _refresh();
     }
   }
 
-  Future<void> _openDetail(Aspirasi aspirasi, {required bool fromMyTab}) async {
+  Future<void> _openDetail(AspirationModel aspiration) async {
     final updated = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (_) => AspirasiDetailPage(
-          aspirasiId: aspirasi.id,
-          service: _aspirasiService,
-          isFromMyAspirasiTab: fromMyTab,
+          aspirationId: aspiration.id,
         ),
       ),
     );
@@ -115,12 +111,22 @@ class _AspirasiPageState extends State<AspirasiPage>
 
   @override
   Widget build(BuildContext context) {
-    final showFab = _tabController.index == 1;
+    final userContext = context.watch<UserContextProvider>();
+    final roles = userContext.roles;
+    
+    // Check if user is moderator
+    final isModerator = roles.any((role) => 
+      ['admin', 'ketua_rw', 'ketua_rt', 'sekretaris'].contains(role.toLowerCase())
+    );
+    
+    // Warga-only: warga AND NOT moderator
+    final isWargaOnly = roles.any((r) => r.toLowerCase() == 'warga') && !isModerator;
+
     return MainLayout(
       currentIndex: 0,
       child: Scaffold(
         backgroundColor: AppColors.cardBackground,
-        floatingActionButton: showFab
+        floatingActionButton: isWargaOnly
             ? FloatingActionButton(
                 key: const Key('aspirasi_add_fab'),
                 backgroundColor: AppColors.primaryDark,
@@ -131,15 +137,9 @@ class _AspirasiPageState extends State<AspirasiPage>
             : null,
         body: Column(
           children: [
-            _buildHeader(),
+            _buildHeader(isWargaOnly: isWargaOnly, isModerator: isModerator),
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildAspirasiTab(future: _futureAll, onlyMine: false),
-                  _buildAspirasiTab(future: _futureMine, onlyMine: true),
-                ],
-              ),
+              child: _buildAspirasiList(),
             ),
           ],
         ),
@@ -147,7 +147,12 @@ class _AspirasiPageState extends State<AspirasiPage>
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader({required bool isWargaOnly, required bool isModerator}) {
+    final title = isModerator ? 'Semua Aspirasi' : 'Aspirasi Saya';
+    final subtitle = isModerator 
+        ? 'Kelola dan moderasi aspirasi warga'
+        : 'Daftar aspirasi yang Anda kirimkan';
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -159,7 +164,7 @@ class _AspirasiPageState extends State<AspirasiPage>
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.only(top: 12, left: 24, right: 24),
+          padding: const EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -170,9 +175,9 @@ class _AspirasiPageState extends State<AspirasiPage>
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Aspirasi Warga',
-                    style: TextStyle(
+                  Text(
+                    title,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -181,32 +186,16 @@ class _AspirasiPageState extends State<AspirasiPage>
                 ],
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Daftar aspirasi yang dikirimkan oleh warga',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.only(left: 56),
+                child: Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              TabBar(
-                controller: _tabController,
-                indicatorColor: AppColors.background,
-                indicatorWeight: 4,
-                labelColor: AppColors.background,
-                unselectedLabelColor: AppColors.background.withValues(
-                  alpha: 0.6,
-                ),
-                labelStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: const [
-                  Tab(key: Key('aspirasi_tab_semua'), text: 'Semua Aspirasi'),
-                  Tab(key: Key('aspirasi_tab_saya'), text: 'Aspirasi Saya'),
-                ],
               ),
             ],
           ),
@@ -215,18 +204,14 @@ class _AspirasiPageState extends State<AspirasiPage>
     );
   }
 
-  Widget _buildAspirasiTab({
-    required Future<List<Aspirasi>> future,
-    required bool onlyMine,
-  }) {
-    return FutureBuilder<List<Aspirasi>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+  Widget _buildAspirasiList() {
+    return Consumer<AspirationProvider>(
+      builder: (context, provider, _) {
+        if (provider.loading && provider.items.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (snapshot.hasError) {
+        if (provider.error != null && provider.items.isEmpty) {
           return RefreshIndicator(
             onRefresh: _refresh,
             child: ListView(
@@ -251,9 +236,14 @@ class _AspirasiPageState extends State<AspirasiPage>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${snapshot.error}',
+                      provider.error ?? 'Unknown error',
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _refresh,
+                      child: const Text('Coba Lagi'),
                     ),
                   ],
                 ),
@@ -262,18 +252,7 @@ class _AspirasiPageState extends State<AspirasiPage>
           );
         }
 
-        if (!snapshot.hasData) {
-          return const SizedBox.shrink();
-        }
-
-        final data = snapshot.data!;
-        if (onlyMine) {
-          debugPrint('Aspirasi Saya loaded: ${data.length} items');
-        } else {
-          debugPrint('Semua Aspirasi loaded: ${data.length} items');
-        }
-
-        final aspirasiList = _applyFilters(data, onlyMine: onlyMine);
+        final aspirasiList = _applyFilters(provider.items);
 
         if (aspirasiList.isEmpty) {
           return RefreshIndicator(
@@ -330,15 +309,15 @@ class _AspirasiPageState extends State<AspirasiPage>
               }
 
               final aspirasiIndex = index - 2;
-              final aspirasi = aspirasiList[aspirasiIndex];
+              final aspiration = aspirasiList[aspirasiIndex];
 
               return Padding(
                 padding: EdgeInsets.only(
                   bottom: aspirasiIndex < aspirasiList.length - 1 ? 12 : 0,
                 ),
                 child: AspirasiCard(
-                  aspirasi: aspirasi,
-                  onTap: () => _openDetail(aspirasi, fromMyTab: onlyMine),
+                  aspirasi: aspiration,
+                  onTap: () => _openDetail(aspiration),
                 ),
               );
             },
@@ -379,11 +358,12 @@ class _AspirasiPageState extends State<AspirasiPage>
   }
 
   Widget _buildFilterSection() {
-    final statuses = <AspirasiStatus?>[
+    final statuses = <AspirationStatus?>[
       null,
-      AspirasiStatus.pending,
-      AspirasiStatus.diterima,
-      AspirasiStatus.ditolak,
+      AspirationStatus.pending,
+      AspirationStatus.inProgress,
+      AspirationStatus.resolved,
+      AspirationStatus.rejected,
     ];
 
     return Column(

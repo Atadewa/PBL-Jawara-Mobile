@@ -1,73 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/core/theme/app_colors.dart';
+import 'package:mobile/core/providers/user_context_provider.dart';
 
 import '../../data/models/aspirasi_model.dart';
-import '../../data/services/aspirasi_service.dart';
+import '../providers/aspiration_provider.dart';
 import '../widgets/aspirasi_status_chip.dart';
 import 'create_aspirasi_page.dart';
 
 class AspirasiDetailPage extends StatefulWidget {
-  const AspirasiDetailPage({
-    super.key,
-    required this.aspirasiId,
-    required this.service,
-    required this.isFromMyAspirasiTab,
-  });
+  const AspirasiDetailPage({super.key, required this.aspirationId});
 
-  final String aspirasiId;
-  final AspirasiService service;
-  final bool isFromMyAspirasiTab;
+  final int aspirationId;
 
   @override
   State<AspirasiDetailPage> createState() => _AspirasiDetailPageState();
 }
 
 class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
-  late Future<Aspirasi> _futureDetail;
   bool _isProcessing = false;
   bool _hasChanges = false;
-  String? _rejectionReason;
+  AspirationModel? _aspiration;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _futureDetail = widget.service.getAspirasiDetail(widget.aspirasiId);
-    _rejectionReason = widget.service.getRejectionReason(widget.aspirasiId);
-  }
-
-  Future<void> _refresh() async {
-    setState(() {
-      _futureDetail = widget.service.getAspirasiDetail(widget.aspirasiId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadDetail();
     });
   }
 
-  Future<void> _updateStatus(AspirasiStatus status) async {
-    setState(() => _isProcessing = true);
+  Future<void> _loadDetail() async {
+    final provider = context.read<AspirationProvider>();
     try {
-      final updated = await widget.service.updateAspirasiStatus(
-        widget.aspirasiId,
-        status,
-        reason: status == AspirasiStatus.ditolak ? _rejectionReason : null,
+      final item = await provider.fetchById(widget.aspirationId);
+      if (mounted) {
+        setState(() {
+          _aspiration = item;
+          _error = null;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+        });
+      }
+    }
+  }
+
+  Future<void> _refresh() async {
+    await _loadDetail();
+  }
+
+  Future<void> _updateStatus(
+    AspirationStatus status, {
+    String? decisionNote,
+  }) async {
+    setState(() => _isProcessing = true);
+    final provider = context.read<AspirationProvider>();
+
+    try {
+      final updated = await provider.moderateStatus(
+        id: widget.aspirationId,
+        status: status,
+        decisionNote: decisionNote,
       );
+
       if (!mounted) return;
       setState(() {
-        _futureDetail = Future.value(updated);
+        _aspiration = updated;
         _hasChanges = true;
-        if (status == AspirasiStatus.ditolak) {
-          _rejectionReason ??= 'Tidak ada keterangan';
-        } else {
-          _rejectionReason = null;
-        }
       });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Status diubah menjadi ${status.label}')),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal memperbarui status: $e')),
-      );
+
+      String errorMessage = 'Gagal memperbarui status';
+      if (e.toString().contains('403') || e.toString().contains('Forbidden')) {
+        errorMessage = 'Tidak punya akses untuk melakukan aksi ini';
+      } else if (e.toString().contains('401')) {
+        errorMessage = 'Sesi Anda telah berakhir, silakan login kembali';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$errorMessage: $e')));
     } finally {
       if (mounted) {
         setState(() => _isProcessing = false);
@@ -76,7 +99,7 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
   }
 
   Future<void> _promptRejectReason() async {
-    final controller = TextEditingController(text: _rejectionReason ?? '');
+    final controller = TextEditingController();
     final reason = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -85,7 +108,11 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
           content: TextField(
             key: const Key('aspirasi_reject_reason_field'),
             controller: controller,
-            decoration: const InputDecoration(hintText: 'Masukkan alasan penolakan'),
+            maxLines: 3,
+            decoration: const InputDecoration(
+              hintText: 'Masukkan alasan penolakan',
+              border: OutlineInputBorder(),
+            ),
           ),
           actions: [
             TextButton(
@@ -103,23 +130,53 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
     );
 
     if (reason != null && reason.isNotEmpty) {
-      setState(() => _rejectionReason = reason);
-      await _updateStatus(AspirasiStatus.ditolak);
+      await _updateStatus(AspirationStatus.rejected, decisionNote: reason);
     }
   }
 
-  Future<void> _deleteAspirasi() async {
+  Future<void> _deleteAspiration() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Aspirasi'),
+        content: const Text('Apakah Anda yakin ingin menghapus aspirasi ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
     setState(() => _isProcessing = true);
+    final provider = context.read<AspirationProvider>();
+
     try {
-      await widget.service.deleteAspirasi(widget.aspirasiId);
+      await provider.deleteMyAspiration(widget.aspirationId);
       if (!mounted) return;
       _hasChanges = true;
       Navigator.pop(context, true);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus aspirasi: $e')),
-      );
+
+      String errorMessage = 'Gagal menghapus aspirasi';
+      if (e.toString().contains('403') || e.toString().contains('Forbidden')) {
+        errorMessage = 'Tidak punya akses untuk melakukan aksi ini';
+      } else if (e.toString().contains('401')) {
+        errorMessage = 'Sesi Anda telah berakhir, silakan login kembali';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$errorMessage: $e')));
     } finally {
       if (mounted) {
         setState(() => _isProcessing = false);
@@ -127,28 +184,37 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
     }
   }
 
-  Future<void> _editAspirasi(Aspirasi aspirasi) async {
-    final result = await Navigator.push<Aspirasi>(
+  Future<void> _editAspiration(AspirationModel aspiration) async {
+    final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => CreateAspirasiPage(
-          service: widget.service,
-          initialAspirasi: aspirasi,
-        ),
+        builder: (_) => CreateAspirasiPage(initialAspiration: aspiration),
       ),
     );
 
-    if (result != null) {
-      setState(() {
-        _futureDetail = Future.value(result);
-        _hasChanges = true;
-      });
+    if (result == true) {
+      await _refresh();
+      _hasChanges = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final formatter = DateFormat('dd MMMM yyyy');
+    final userContext = context.watch<UserContextProvider>();
+    final roles = userContext.roles;
+
+    // Check roles
+    final isModerator = roles.any(
+      (role) => [
+        'admin',
+        'ketua_rw',
+        'ketua_rt',
+        'sekretaris',
+      ].contains(role.toLowerCase()),
+    );
+    final isWargaOnly =
+        roles.any((r) => r.toLowerCase() == 'warga') && !isModerator;
 
     return WillPopScope(
       onWillPop: () async {
@@ -160,85 +226,127 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
         body: SafeArea(
           child: RefreshIndicator(
             onRefresh: _refresh,
-            child: FutureBuilder<Aspirasi>(
-              future: _futureDetail,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return ListView(
+            child: _aspiration == null
+                ? (_error != null
+                      ? ListView(
+                          children: [
+                            _buildHeader(),
+                            Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    color: AppColors.error,
+                                    size: 48,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Gagal memuat detail aspirasi',
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    _error!,
+                                    style: const TextStyle(
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: _refresh,
+                                    child: const Text('Coba Lagi'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : const Center(child: CircularProgressIndicator()))
+                : ListView(
+                    padding: EdgeInsets.zero,
                     children: [
                       _buildHeader(),
                       Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.error_outline, color: AppColors.error),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Gagal memuat detail aspirasi',
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            _buildTitleCard(_aspiration!),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildInfoCard(
+                                    'Dibuat Oleh',
+                                    _aspiration!.creatorName ?? '-',
+                                    Icons.person,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildInfoCard(
+                                    'Tanggal',
+                                    formatter.format(_aspiration!.createdAt),
+                                    Icons.calendar_today_outlined,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '${snapshot.error}',
-                              style: const TextStyle(color: AppColors.textSecondary),
+                            if (_aspiration!.category != null) ...[
+                              const SizedBox(height: 12),
+                              _buildInfoCard(
+                                'Kategori',
+                                _aspiration!.category!,
+                                Icons.category,
+                              ),
+                            ],
+                            if (isModerator &&
+                                _aspiration!.creatorRw != null) ...[
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildInfoCard(
+                                      'RW',
+                                      'RW ${_aspiration!.creatorRw}',
+                                      Icons.location_city,
+                                    ),
+                                  ),
+                                  if (_aspiration!.creatorRt != null) ...[
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: _buildInfoCard(
+                                        'RT',
+                                        'RT ${_aspiration!.creatorRt}',
+                                        Icons.home,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ],
+                            const SizedBox(height: 16),
+                            _buildDescription(_aspiration!.description),
+                            if (_aspiration!.decisionNote != null &&
+                                _aspiration!.decisionNote!.isNotEmpty) ...[
+                              const SizedBox(height: 16),
+                              _buildDecisionNote(_aspiration!.decisionNote!),
+                            ],
+                            const SizedBox(height: 24),
+                            _buildActionButtons(
+                              _aspiration!,
+                              isWargaOnly: isWargaOnly,
+                              isModerator: isModerator,
                             ),
                           ],
                         ),
                       ),
                     ],
-                  );
-                }
-
-                final aspirasi = snapshot.data!;
-
-                return ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    _buildHeader(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildTitleCard(aspirasi),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildInfoCard(
-                                  'Dibuat Oleh',
-                                  aspirasi.createdBy,
-                                  Icons.person,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _buildInfoCard(
-                                  'Tanggal',
-                                  formatter.format(aspirasi.createdAt),
-                                  Icons.calendar_today_outlined,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          _buildDescription(aspirasi.description),
-                          const SizedBox(height: 24),
-                          _buildActionButtons(aspirasi),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                  ),
           ),
         ),
       ),
@@ -287,7 +395,7 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
     );
   }
 
-  Widget _buildTitleCard(Aspirasi aspirasi) {
+  Widget _buildTitleCard(AspirationModel aspiration) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -298,31 +406,99 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
         boxShadow: const [
           BoxShadow(
             color: AppColors.shadowMedium,
-            blurRadius: 6,
+            blurRadius: 10,
             offset: Offset(0, 4),
-            spreadRadius: -2,
+            spreadRadius: -3,
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              aspirasi.title,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                height: 1.5,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  aspiration.title,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
+              const SizedBox(width: 8),
+              AspirasiStatusChip(status: aspiration.status),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDescription(String description) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.borderMuted, width: 1.1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Deskripsi',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(width: 12),
-          AspirasiStatusChip(
-            status: aspirasi.status,
-            compact: false,
+          const SizedBox(height: 8),
+          Text(
+            description.isEmpty ? 'Tidak ada deskripsi' : description,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 15,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDecisionNote(String note) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.borderMuted, width: 1.1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Catatan Keputusan',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            note,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 15,
+              height: 1.5,
+            ),
           ),
         ],
       ),
@@ -361,16 +537,16 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
             title,
             style: const TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             value,
             style: const TextStyle(
               color: AppColors.textPrimary,
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -379,78 +555,79 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
     );
   }
 
-  Widget _buildDescription(String description) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderMuted, width: 1.1),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.shadowMedium,
-            blurRadius: 6,
-            offset: Offset(0, 4),
-            spreadRadius: -2,
-          ),
-        ],
-      ),
-      child: Column(
+  Widget _buildActionButtons(
+    AspirationModel aspiration, {
+    required bool isWargaOnly,
+    required bool isModerator,
+  }) {
+    // Moderators can update status
+    if (isModerator) {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Text(
+            'Aksi Moderator',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
           Row(
-            children: const [
-              Icon(Icons.notes_outlined, color: AppColors.primary),
-              SizedBox(width: 8),
-              Text(
-                'Deskripsi Lengkap',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  key: const Key('aspirasi_in_progress_button'),
+                  icon: const Icon(Icons.pending_actions),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.warning,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed:
+                      _isProcessing ||
+                          aspiration.status == AspirationStatus.inProgress
+                      ? null
+                      : () => _updateStatus(AspirationStatus.inProgress),
+                  label: const Text(
+                    'Proses',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  key: const Key('aspirasi_resolve_button'),
+                  icon: const Icon(Icons.check_circle_outline),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed:
+                      _isProcessing ||
+                          aspiration.status == AspirationStatus.resolved
+                      ? null
+                      : () => _updateStatus(AspirationStatus.resolved),
+                  label: const Text(
+                    'Terima',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            description,
-            style: const TextStyle(
-              color: AppColors.textTertiary,
-              fontSize: 16,
-              height: 1.5,
-            ),
-          ),
-          if (_rejectionReason != null) ...[
-            const SizedBox(height: 12),
-            const Text(
-              'Alasan Penolakan',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              _rejectionReason!,
-              style: const TextStyle(
-                color: AppColors.errorDark,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButtons(Aspirasi aspirasi) {
-    if (!widget.isFromMyAspirasiTab) {
-      return Row(
-        children: [
-          Expanded(
+          SizedBox(
+            width: double.infinity,
             child: ElevatedButton.icon(
               key: const Key('aspirasi_reject_button'),
               icon: const Icon(Icons.close),
@@ -462,40 +639,23 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: _isProcessing ? null : _promptRejectReason,
+              onPressed:
+                  _isProcessing ||
+                      aspiration.status == AspirationStatus.rejected
+                  ? null
+                  : _promptRejectReason,
               label: const Text(
                 'Tolak',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton.icon(
-              key: const Key('aspirasi_approve_button'),
-              icon: const Icon(Icons.check_circle_outline),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              onPressed: _isProcessing
-                  ? null
-                  : () => _updateStatus(AspirasiStatus.diterima),
-              label: const Text(
-                'Setujui',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-      ],
-    );
+        ],
+      );
     }
 
-    if (widget.isFromMyAspirasiTab) {
+    // Warga-only can edit and delete their own aspirations
+    if (isWargaOnly) {
       return Row(
         children: [
           Expanded(
@@ -510,13 +670,10 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: _isProcessing ? null : _deleteAspirasi,
+              onPressed: _isProcessing ? null : _deleteAspiration,
               label: const Text(
                 'Hapus',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -533,13 +690,12 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: _isProcessing ? null : () => _editAspirasi(aspirasi),
+              onPressed: _isProcessing
+                  ? null
+                  : () => _editAspiration(aspiration),
               label: const Text(
                 'Edit',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
