@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/layouts/main_layout.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/auth/auth_session.dart';
@@ -25,7 +26,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeService _homeService = HomeService();
-  final UserContextProvider _userContextProvider = UserContextProvider();
   bool _isLoading = true;
   HomeStats? _stats;
   String? _errorMessage;
@@ -36,11 +36,14 @@ class _HomePageState extends State<HomePage> {
     _loadData();
 
     // Debug: print scope from user context
-    if (_userContextProvider.context != null) {
-      print(
-        '[HomePage] Scope from /auth/me: ${_userContextProvider.context!.scope}',
-      );
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userContextProvider = context.read<UserContextProvider>();
+      if (userContextProvider.context != null) {
+        print(
+          '[HomePage] Scope from /auth/me: ${userContextProvider.context!.scope}',
+        );
+      }
+    });
   }
 
   /// Load data dari API
@@ -159,7 +162,9 @@ class _HomePageState extends State<HomePage> {
   /// Build header section dengan gradient hijau
   Widget _buildHeader(UserRole role) {
     final sessionUser = AuthSession.user.value;
-    final userContext = _userContextProvider.context;
+    final userContextProvider = context.watch<UserContextProvider>();
+
+    final userContext = userContextProvider.context;
     final userName = userContext?.name ?? sessionUser?.username ?? 'User';
     final userRoleLabel = userContext != null
         ? getRoleLabel(userContext.roles)

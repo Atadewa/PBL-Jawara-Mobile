@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
@@ -23,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _userContextProvider = UserContextProvider();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -58,19 +58,19 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       // Step 2: Load user context from backend
-      final success = await _userContextProvider.loadContextAfterLogin();
+      final userContextProvider = context.read<UserContextProvider>();
+      final success = await userContextProvider.loadContextAfterLogin();
 
       if (!mounted) return;
 
-      if (success && _userContextProvider.context != null) {
+      if (success && userContextProvider.context != null) {
         // Successfully loaded context - convert backend role to UserRole enum
-        final backendRole =
-            _userContextProvider.context!.primaryRole ?? 'warga';
+        final backendRole = userContextProvider.context!.primaryRole ?? 'warga';
         final userRole = _mapBackendRoleToUserRole(backendRole);
 
         // Set auth session with user info
         AuthSession.user.value = AppUser(
-          username: _userContextProvider.context!.name ?? email,
+          username: userContextProvider.context!.name ?? email,
           role: userRole,
         );
 
@@ -78,15 +78,15 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
         // Check if waiting for approval
-        if (_userContextProvider.error == 'WAITING_APPROVAL') {
+        if (userContextProvider.error == 'WAITING_APPROVAL') {
           Navigator.pushReplacementNamed(context, AppRoutes.verifikasiWarga);
-        } else if (_userContextProvider.error == 'UNAUTHORIZED') {
+        } else if (userContextProvider.error == 'UNAUTHORIZED') {
           // Token invalid - sign out
           await Supabase.instance.client.auth.signOut();
           _showErrorMessage('Token tidak valid. Silakan login ulang.');
         } else {
           _showErrorMessage(
-            'Gagal memuat data pengguna: ${_userContextProvider.error}',
+            'Gagal memuat data pengguna: ${userContextProvider.error}',
           );
         }
       }
