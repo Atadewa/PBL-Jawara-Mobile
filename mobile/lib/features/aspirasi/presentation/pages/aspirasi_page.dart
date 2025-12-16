@@ -26,7 +26,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
   void initState() {
     super.initState();
     _searchController.addListener(() => setState(() {}));
-    
+
     // Load data after frame is built to ensure provider is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && !_isInitialized) {
@@ -48,9 +48,9 @@ class _AspirasiPageState extends State<AspirasiPage> {
       await provider.fetchList();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memuat data: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal memuat data: $e')));
       }
     }
   }
@@ -84,9 +84,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
   Future<void> _openCreate() async {
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => const CreateAspirasiPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const CreateAspirasiPage()),
     );
 
     if (result == true) {
@@ -98,9 +96,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
     final updated = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => AspirasiDetailPage(
-          aspirationId: aspiration.id,
-        ),
+        builder: (_) => AspirasiDetailPage(aspirationId: aspiration.id),
       ),
     );
 
@@ -109,19 +105,84 @@ class _AspirasiPageState extends State<AspirasiPage> {
     }
   }
 
+  Future<void> _editAspiration(AspirationModel aspiration) async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CreateAspirasiPage(initialAspiration: aspiration),
+      ),
+    );
+
+    if (result == true) {
+      _refresh();
+    }
+  }
+
+  Future<void> _deleteAspiration(AspirationModel aspiration) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Aspirasi'),
+        content: const Text('Apakah Anda yakin ingin menghapus aspirasi ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final provider = context.read<AspirationProvider>();
+    try {
+      await provider.deleteMyAspiration(aspiration.id);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Aspirasi berhasil dihapus')),
+        );
+        _refresh();
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMessage = 'Gagal menghapus aspirasi';
+        if (e.toString().contains('403') ||
+            e.toString().contains('Forbidden')) {
+          errorMessage = 'Tidak punya akses untuk melakukan aksi ini';
+        } else if (e.toString().contains('401')) {
+          errorMessage = 'Sesi Anda telah berakhir, silakan login kembali';
+        }
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$errorMessage: $e')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userContext = context.watch<UserContextProvider>();
     final roles = userContext.roles;
-    
-    // Check if user is moderator
-    final isModerator = roles.any((role) => 
-      ['admin', 'ketua_rw', 'ketua_rt', 'sekretaris'].contains(role.toLowerCase())
-    );
-    
-    // Warga-only: warga AND NOT moderator
-    final isWargaOnly = roles.any((r) => r.toLowerCase() == 'warga') && !isModerator;
 
+    // Check if user is moderator
+    final isModerator = roles.any(
+      (role) => [
+        'admin',
+        'ketua_rw',
+        'ketua_rt',
+        'sekretaris',
+      ].contains(role.toLowerCase()),
+    );
+
+    // Warga-only: warga AND NOT moderator
+    final isWargaOnly =
+        roles.any((r) => r.toLowerCase() == 'warga') && !isModerator;
     return MainLayout(
       currentIndex: 0,
       child: Scaffold(
@@ -138,9 +199,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
         body: Column(
           children: [
             _buildHeader(isWargaOnly: isWargaOnly, isModerator: isModerator),
-            Expanded(
-              child: _buildAspirasiList(),
-            ),
+            Expanded(child: _buildAspirasiList()),
           ],
         ),
       ),
@@ -149,7 +208,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
 
   Widget _buildHeader({required bool isWargaOnly, required bool isModerator}) {
     final title = isModerator ? 'Semua Aspirasi' : 'Aspirasi Saya';
-    final subtitle = isModerator 
+    final subtitle = isModerator
         ? 'Kelola dan moderasi aspirasi warga'
         : 'Daftar aspirasi yang Anda kirimkan';
 
@@ -164,7 +223,12 @@ class _AspirasiPageState extends State<AspirasiPage> {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 16),
+          padding: const EdgeInsets.only(
+            top: 12,
+            left: 24,
+            right: 24,
+            bottom: 16,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -311,6 +375,19 @@ class _AspirasiPageState extends State<AspirasiPage> {
               final aspirasiIndex = index - 2;
               final aspiration = aspirasiList[aspirasiIndex];
 
+              final userContext = context.watch<UserContextProvider>();
+              final roles = userContext.roles;
+              final isModerator = roles.any(
+                (role) => [
+                  'admin',
+                  'ketua_rw',
+                  'ketua_rt',
+                  'sekretaris',
+                ].contains(role.toLowerCase()),
+              );
+              final isWargaOnly =
+                  roles.any((r) => r.toLowerCase() == 'warga') && !isModerator;
+
               return Padding(
                 padding: EdgeInsets.only(
                   bottom: aspirasiIndex < aspirasiList.length - 1 ? 12 : 0,
@@ -318,6 +395,13 @@ class _AspirasiPageState extends State<AspirasiPage> {
                 child: AspirasiCard(
                   aspirasi: aspiration,
                   onTap: () => _openDetail(aspiration),
+                  showActions: isWargaOnly,
+                  onEdit: isWargaOnly
+                      ? () => _editAspiration(aspiration)
+                      : null,
+                  onDelete: isWargaOnly
+                      ? () => _deleteAspiration(aspiration)
+                      : null,
                 ),
               );
             },
@@ -403,7 +487,9 @@ class _AspirasiPageState extends State<AspirasiPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
                 side: BorderSide(
-                  color: isSelected ? AppColors.primaryDark : AppColors.borderMuted,
+                  color: isSelected
+                      ? AppColors.primaryDark
+                      : AppColors.borderMuted,
                 ),
               ),
             );

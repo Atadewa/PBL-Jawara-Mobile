@@ -6,10 +6,20 @@ import '../../data/models/aspirasi_model.dart';
 import 'aspirasi_status_chip.dart';
 
 class AspirasiCard extends StatelessWidget {
-  const AspirasiCard({super.key, required this.aspirasi, this.onTap});
+  const AspirasiCard({
+    super.key,
+    required this.aspirasi,
+    this.onTap,
+    this.onEdit,
+    this.onDelete,
+    this.showActions = false,
+  });
 
   final Aspirasi aspirasi;
   final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final bool showActions;
 
   @override
   Widget build(BuildContext context) {
@@ -76,32 +86,73 @@ class AspirasiCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Text(
-                  'Oleh: ${aspirasi.creatorName ?? 'Warga'}',
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        'Oleh: ${aspirasi.creatorName ?? 'Warga'}',
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '|',
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        formatter.format(aspirasi.createdAt),
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    '|',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 12,
-                    ),
+                if (showActions) ...[
+                  IconButton(
+                    key: Key('aspirasi_card_edit_${aspirasi.id}'),
+                    icon: const Icon(Icons.edit, size: 20),
+                    color:
+                        aspirasi.status == AspirationStatus.inProgress ||
+                            aspirasi.status == AspirationStatus.resolved
+                        ? AppColors.iconMuted
+                        : AppColors.primary,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed:
+                        aspirasi.status == AspirationStatus.inProgress ||
+                            aspirasi.status == AspirationStatus.resolved
+                        ? null
+                        : onEdit,
                   ),
-                ),
-                Text(
-                  formatter.format(aspirasi.createdAt),
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                  const SizedBox(width: 8),
+                  IconButton(
+                    key: Key('aspirasi_card_delete_${aspirasi.id}'),
+                    icon: const Icon(Icons.delete, size: 20),
+                    color:
+                        aspirasi.status == AspirationStatus.inProgress ||
+                            aspirasi.status == AspirationStatus.resolved
+                        ? AppColors.iconMuted
+                        : AppColors.error,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed:
+                        aspirasi.status == AspirationStatus.inProgress ||
+                            aspirasi.status == AspirationStatus.resolved
+                        ? null
+                        : onDelete,
                   ),
-                ),
+                ],
               ],
             ),
           ],
