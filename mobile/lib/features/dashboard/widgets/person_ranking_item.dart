@@ -72,7 +72,7 @@ class PersonRankingItem extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF6EE7B7),
+                  color: Color(0xFF10B981),
                   fontFamily: 'Arimo',
                 ),
               ),

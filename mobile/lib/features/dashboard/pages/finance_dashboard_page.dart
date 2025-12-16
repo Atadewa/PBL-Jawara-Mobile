@@ -71,7 +71,7 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
                             provider.loadFinance();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6EE7B7),
+                            backgroundColor: const Color(0xFF10B981),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,
                               vertical: 12,
@@ -110,7 +110,7 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF6EE7B7),
+                        Color(0xFF10B981),
                       ),
                     ),
                   ),
@@ -124,7 +124,7 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
           // Loaded state
           return RefreshIndicator(
             onRefresh: () => provider.refreshFinance(),
-            color: const Color(0xFF6EE7B7),
+            color: const Color(0xFF10B981),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
@@ -175,7 +175,7 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
                                 label: 'Transaksi',
                                 value: '0',
                                 icon: Icons.receipt_long_rounded,
-                                color: const Color(0xFF6EE7B7),
+                                color: const Color(0xFF10B981),
                               ),
                             ),
                           ],

@@ -235,7 +235,7 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
           return SafeArea(
             child: RefreshIndicator(
               onRefresh: _onRefresh,
-              color: const Color(0xFF6EE7B7),
+              color: const Color(0xFF10B981),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
@@ -248,94 +248,7 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        // Title, Date, dan Description dalam satu card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: const Color(0xFFF2F4F6),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0x19000000),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                                spreadRadius: -2,
-                              ),
-                              BoxShadow(
-                                color: const Color(0x19000000),
-                                blurRadius: 6,
-                                offset: const Offset(0, 4),
-                                spreadRadius: -1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Title
-                              Text(
-                                broadcast.title,
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(
-                                      color: const Color(0xFF0F172A),
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                    ),
-                              ),
-                              const SizedBox(height: 8),
-
-                              // Date with calendar icon
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today_outlined,
-                                    size: 14,
-                                    color: const Color(0xFF94A3B8),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    _formatDate(broadcast.createdAt),
-                                    style: Theme.of(context).textTheme.bodySmall
-                                        ?.copyWith(
-                                          color: const Color(0xFF94A3B8),
-                                          fontSize: 13,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Divider
-                              Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: const Color(0xFFF2F4F6),
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Description
-                              Text(
-                                broadcast.description,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: const Color(0xFF475569),
-                                      height: 1.7,
-                                      fontSize: 14,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Photo card
-                        if (broadcast.imageUrl != null)
+                          // Title, Date, dan Description dalam satu card
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
@@ -364,212 +277,305 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Title
                                 Text(
-                                  'Foto',
+                                  broadcast.title,
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(
+                                        color: const Color(0xFF0F172A),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18,
+                                      ),
+                                ),
+                                const SizedBox(height: 8),
+
+                                // Date with calendar icon
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today_outlined,
+                                      size: 14,
+                                      color: const Color(0xFF94A3B8),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      _formatDate(broadcast.createdAt),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: const Color(0xFF94A3B8),
+                                            fontSize: 13,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+
+                                // Divider
+                                Container(
+                                  width: double.infinity,
+                                  height: 1,
+                                  color: const Color(0xFFF2F4F6),
+                                ),
+                                const SizedBox(height: 16),
+
+                                // Description
+                                Text(
+                                  broadcast.description,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: const Color(0xFF475569),
+                                        height: 1.7,
+                                        fontSize: 14,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Photo card
+                          if (broadcast.imageUrl != null)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: const Color(0xFFF2F4F6),
+                                  width: 1,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0x19000000),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                    spreadRadius: -2,
+                                  ),
+                                  BoxShadow(
+                                    color: const Color(0x19000000),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 4),
+                                    spreadRadius: -1,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Foto',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                          color: const Color(0xFF0F172A),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: const Color(0xFFF3F4F6),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        broadcast.imageUrl!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, _) =>
+                                            Container(
+                                              color: Colors.grey[300],
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Colors.grey,
+                                                  size: 48,
+                                                ),
+                                              ),
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          if (broadcast.imageUrl != null)
+                            const SizedBox(height: 16),
+
+                          // Document card
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: const Color(0xFFF2F4F6),
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0x19000000),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                  spreadRadius: -2,
+                                ),
+                                BoxShadow(
+                                  color: const Color(0x19000000),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 4),
+                                  spreadRadius: -1,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Title
+                                Text(
+                                  'Dokumen Terlampir',
                                   style: Theme.of(context).textTheme.titleSmall
                                       ?.copyWith(
                                         color: const Color(0xFF0F172A),
                                         fontWeight: FontWeight.w600,
+                                        fontSize: 14,
                                       ),
                                 ),
                                 const SizedBox(height: 12),
+
+                                // Document row with background
                                 Container(
-                                  width: double.infinity,
-                                  height: 200,
+                                  padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
+                                    color: const Color(0xFFF8FAFC),
                                     borderRadius: BorderRadius.circular(12),
-                                    color: const Color(0xFFF3F4F6),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      broadcast.imageUrl!,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, _) =>
-                                          Container(
-                                            color: Colors.grey[300],
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.image_not_supported,
-                                                color: Colors.grey,
-                                                size: 48,
+                                  child: Row(
+                                    children: [
+                                      // PDF Icon
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: const Color(
+                                            0xFF10B981,
+                                          ).withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.description_outlined,
+                                            color: Color(0xFF10B981),
+                                            size: 22,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+
+                                      // Document info
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Daftar_Iuran_November_20...',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    color: const Color(
+                                                      0xFF0F172A,
+                                                    ),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 13,
+                                                  ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              'Dokumen PDF',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    color: const Color(
+                                                      0xFF94A3B8,
+                                                    ),
+                                                    fontSize: 11,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // Download button
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Download document - coming soon',
                                               ),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(
+                                            0xFF10B981,
+                                          ),
+                                          elevation: 0,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 8,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
                                             ),
                                           ),
-                                    ),
+                                        ),
+                                        child: const Text(
+                                          'Unduh',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
 
-                        if (broadcast.imageUrl != null)
                           const SizedBox(height: 16),
 
-                        // Document card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: const Color(0xFFF2F4F6),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0x19000000),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                                spreadRadius: -2,
-                              ),
-                              BoxShadow(
-                                color: const Color(0x19000000),
-                                blurRadius: 6,
-                                offset: const Offset(0, 4),
-                                spreadRadius: -1,
-                              ),
-                            ],
+                          // Action buttons
+                          BroadcastDetailActions(
+                            broadcast: broadcast,
+                            onEditPressed: () => _onEditPressed(broadcast),
+                            onDeletePressed: () => _onDeletePressed(broadcast),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Title
-                              Text(
-                                'Dokumen Terlampir',
-                                style: Theme.of(context).textTheme.titleSmall
-                                    ?.copyWith(
-                                      color: const Color(0xFF0F172A),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                              ),
-                              const SizedBox(height: 12),
 
-                              // Document row with background
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF8FAFC),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  children: [
-                                    // PDF Icon
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: const Color(
-                                          0xFF6EE7B7,
-                                        ).withOpacity(0.15),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.description_outlined,
-                                          color: Color(0xFF6EE7B7),
-                                          size: 22,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-
-                                    // Document info
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Daftar_Iuran_November_20...',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall
-                                                ?.copyWith(
-                                                  color: const Color(
-                                                    0xFF0F172A,
-                                                  ),
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 13,
-                                                ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            'Dokumen PDF',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall
-                                                ?.copyWith(
-                                                  color: const Color(
-                                                    0xFF94A3B8,
-                                                  ),
-                                                  fontSize: 11,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    // Download button
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Download document - coming soon',
-                                            ),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(
-                                          0xFF6EE7B7,
-                                        ),
-                                        elevation: 0,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 8,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Unduh',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Action buttons
-                        BroadcastDetailActions(
-                          broadcast: broadcast,
-                          onEditPressed: () => _onEditPressed(broadcast),
-                          onDeletePressed: () => _onDeletePressed(broadcast),
-                        ),
-
-                        const SizedBox(height: 32),
-                      ],
+                          const SizedBox(height: 32),
+                        ],
                       ),
                     ),
                   ],
@@ -591,7 +597,7 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+          colors: [Color(0xFF10B981), Color(0xFF34D399)],
         ),
       ),
       child: Row(
@@ -705,7 +711,11 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.notifications_none, size: 64, color: Colors.grey[400]),
+                  Icon(
+                    Icons.notifications_none,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Broadcast tidak ditemukan',

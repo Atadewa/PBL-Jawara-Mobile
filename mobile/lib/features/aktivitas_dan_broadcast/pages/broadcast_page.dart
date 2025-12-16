@@ -80,7 +80,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
                 final broadcasts = snapshot.data!;
                 return RefreshIndicator(
                   onRefresh: _onRefresh,
-                  color: const Color(0xFF6EE7B7),
+                  color: const Color(0xFF10B981),
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: broadcasts.length,

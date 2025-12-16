@@ -85,7 +85,7 @@ class ActivityService {
         ActivityCategory(
           category: 'Sosial',
           count: 25,
-          color: '0xFF6EE7B7',
+          color: '0xFF10B981',
           percentage: 35,
         ),
         ActivityCategory(
@@ -131,7 +131,7 @@ class ActivityService {
           rank: 4,
           name: 'Dewi Kusuma',
           activityCount: 18,
-          color: '0xFF6EE7B7', // Teal
+          color: '0xFF10B981', // Teal
         ),
       ],
       lastUpdated: DateTime.now(),

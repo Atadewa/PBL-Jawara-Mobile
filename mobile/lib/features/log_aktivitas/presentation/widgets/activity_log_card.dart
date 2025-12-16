@@ -5,10 +5,7 @@ import '../../data/models/activity_log_item.dart';
 class ActivityLogCard extends StatelessWidget {
   final ActivityLogItem activity;
 
-  const ActivityLogCard({
-    super.key,
-    required this.activity,
-  });
+  const ActivityLogCard({super.key, required this.activity});
 
   String _formatDate(DateTime date) {
     return DateFormat('dd MMM yyyy').format(date);
@@ -27,10 +24,7 @@ class ActivityLogCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border(
-          left: BorderSide(
-            width: 3.74,
-            color: const Color(0xFF6EE7B7),
-          ),
+          left: BorderSide(width: 3.74, color: const Color(0xFF10B981)),
         ),
         boxShadow: [
           BoxShadow(
@@ -57,15 +51,18 @@ class ActivityLogCard extends StatelessWidget {
             children: [
               // Role badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: const Color(0x196EE7B7),
+                  color: const Color(0x1910B981),
                   borderRadius: BorderRadius.circular(41877300),
                 ),
                 child: Text(
                   activity.role.displayName,
                   style: const TextStyle(
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     fontSize: 14,
                     fontFamily: 'Arimo',
                     fontWeight: FontWeight.w400,

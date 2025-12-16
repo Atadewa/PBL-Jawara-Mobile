@@ -15,10 +15,7 @@ class IncomeItem extends StatelessWidget {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 3.40,
-            color: const Color(0xFF6EE7B7),
-          ),
+          side: BorderSide(width: 3.40, color: const Color(0xFF10B981)),
           borderRadius: BorderRadius.circular(16),
         ),
         shadows: [
@@ -47,7 +44,7 @@ class IncomeItem extends StatelessWidget {
                   width: 47.99,
                   height: 47.99,
                   decoration: ShapeDecoration(
-                    color: const Color(0x196EE7B7),
+                    color: const Color(0x1910B981),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -75,7 +72,10 @@ class IncomeItem extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 2,
+                      ),
                       decoration: ShapeDecoration(
                         color: income.categoryColor,
                         shape: RoundedRectangleBorder(

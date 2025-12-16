@@ -41,9 +41,9 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading activities: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error loading activities: $e')));
       }
     }
   }
@@ -87,7 +87,7 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
                 gradient: LinearGradient(
                   begin: Alignment(0.50, 0.00),
                   end: Alignment(0.50, 1.00),
-                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 ),
               ),
               child: Padding(
@@ -140,7 +140,9 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
                           ),
                           child: IconButton(
                             icon: Icon(
-                              _hasActiveFilters ? Icons.filter_alt : Icons.filter_list,
+                              _hasActiveFilters
+                                  ? Icons.filter_alt
+                                  : Icons.filter_list,
                               color: Colors.white,
                               size: 20,
                             ),
@@ -200,9 +202,7 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
   Widget _buildContent() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF6EE7B7),
-        ),
+        child: CircularProgressIndicator(color: Color(0xFF10B981)),
       );
     }
 
@@ -211,18 +211,11 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.history,
-              size: 64,
-              color: Color(0xFF94A3B8),
-            ),
+            Icon(Icons.history, size: 64, color: Color(0xFF94A3B8)),
             SizedBox(height: 16),
             Text(
               'Belum ada aktivitas',
-              style: TextStyle(
-                color: Color(0xFF94A3B8),
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 16),
             ),
           ],
         ),
@@ -231,14 +224,12 @@ class _LogAktivitasPageState extends State<LogAktivitasPage> {
 
     return RefreshIndicator(
       onRefresh: _loadActivities,
-      color: const Color(0xFF6EE7B7),
+      color: const Color(0xFF10B981),
       child: ListView.builder(
         padding: const EdgeInsets.all(24),
         itemCount: _filteredActivities.length,
         itemBuilder: (context, index) {
-          return ActivityLogCard(
-            activity: _filteredActivities[index],
-          );
+          return ActivityLogCard(activity: _filteredActivities[index]);
         },
       ),
     );

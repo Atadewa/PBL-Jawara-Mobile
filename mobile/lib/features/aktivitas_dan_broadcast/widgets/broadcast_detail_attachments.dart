@@ -147,13 +147,13 @@ class BroadcastDetailAttachments extends StatelessWidget {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                        color: const Color(0xFF10B981).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(
                         child: Icon(
                           Icons.picture_as_pdf,
-                          color: Color(0xFF6EE7B7),
+                          color: Color(0xFF10B981),
                           size: 24,
                         ),
                       ),
@@ -197,7 +197,7 @@ class BroadcastDetailAttachments extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6EE7B7),
+                        backgroundColor: const Color(0xFF10B981),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,

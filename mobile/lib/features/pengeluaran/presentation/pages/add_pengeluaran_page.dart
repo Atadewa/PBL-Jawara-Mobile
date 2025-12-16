@@ -41,7 +41,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -63,7 +63,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
     setState(() {
       _uploadedFileName = 'bukti_pengeluaran.jpg';
     });
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -76,23 +76,33 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
 
   String _formatCurrency(String value) {
     if (value.isEmpty) return '';
-    
+
     // Remove non-digit characters
     final number = int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
-    
+
     // Format with thousand separator (using dot as separator)
     final formatted = number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
       (Match m) => '${m[1]}.',
     );
-    
+
     return formatted;
   }
 
   String _formatDate(DateTime date) {
     final months = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -123,8 +133,8 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
         'category': _selectedCategory!.label,
         'amount': amount,
         'date': _selectedDate.toIso8601String(),
-        'description': _descriptionController.text.isEmpty 
-            ? null 
+        'description': _descriptionController.text.isEmpty
+            ? null
             : _descriptionController.text,
       };
 
@@ -141,9 +151,9 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal menyimpan: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal menyimpan: $e')));
       }
     } finally {
       if (mounted) {
@@ -168,7 +178,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
                 gradient: LinearGradient(
                   begin: Alignment(0.50, 0.00),
                   end: Alignment(0.50, 1.00),
-                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 ),
               ),
               child: Padding(
@@ -232,7 +242,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF6EE7B7),
+                          color: Color(0xFF10B981),
                         ),
                       )
                     : _buildForm(),
@@ -283,7 +293,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFF6EE7B7),
+                  color: Color(0xFF10B981),
                   width: 1.09,
                 ),
               ),
@@ -324,7 +334,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFF6EE7B7),
+                  color: Color(0xFF10B981),
                   width: 1.09,
                 ),
               ),
@@ -372,10 +382,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFFE1E8F0),
-                  width: 1.09,
-                ),
+                border: Border.all(color: const Color(0xFFE1E8F0), width: 1.09),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -391,7 +398,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
                   ),
                   const Icon(
                     Icons.calendar_today,
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     size: 20,
                   ),
                 ],
@@ -454,7 +461,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFF6EE7B7),
+                  color: Color(0xFF10B981),
                   width: 1.09,
                 ),
               ),
@@ -470,7 +477,9 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
               if (value == null || value.isEmpty) {
                 return 'Nominal harus diisi';
               }
-              final amount = int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), ''));
+              final amount = int.tryParse(
+                value.replaceAll(RegExp(r'[^0-9]'), ''),
+              );
               if (amount == null || amount <= 0) {
                 return 'Nominal tidak valid';
               }
@@ -514,7 +523,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFF6EE7B7),
+                  color: Color(0xFF10B981),
                   width: 1.09,
                 ),
               ),
@@ -530,10 +539,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
             child: Container(
               height: 192,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFFE1E8F0),
-                  width: 1.09,
-                ),
+                border: Border.all(color: const Color(0xFFE1E8F0), width: 1.09),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: _uploadedFileName == null
@@ -544,12 +550,12 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
                           width: 64,
                           height: 64,
                           decoration: BoxDecoration(
-                            color: const Color(0x196EE7B7),
+                            color: const Color(0x1910B981),
                             borderRadius: BorderRadius.circular(36410900),
                           ),
                           child: const Icon(
                             Icons.cloud_upload_outlined,
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             size: 32,
                           ),
                         ),
@@ -620,7 +626,7 @@ class _AddPengeluaranPageState extends State<AddPengeluaranPage> {
             child: ElevatedButton(
               onPressed: _isLoading ? null : _saveExpense,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6EE7B7),
+                backgroundColor: const Color(0xFF10B981),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),

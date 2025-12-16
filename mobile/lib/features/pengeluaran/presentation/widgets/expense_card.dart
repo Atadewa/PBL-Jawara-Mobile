@@ -7,11 +7,7 @@ class ExpenseCard extends StatelessWidget {
   final ExpenseItem expense;
   final VoidCallback? onTap;
 
-  const ExpenseCard({
-    super.key,
-    required this.expense,
-    this.onTap,
-  });
+  const ExpenseCard({super.key, required this.expense, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +18,7 @@ class ExpenseCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
-            left: BorderSide(
-              width: 4,
-              color: Color(0xFF6EE7B7),
-            ),
+            left: BorderSide(width: 4, color: Color(0xFF10B981)),
           ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
@@ -56,12 +49,12 @@ class ExpenseCard extends StatelessWidget {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: const Color(0x196EE7B7),
+                        color: const Color(0x1910B981),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: const Icon(
                         Icons.receipt_long,
-                        color: Color(0xFF6EE7B7),
+                        color: Color(0xFF10B981),
                         size: 24,
                       ),
                     ),
@@ -120,7 +113,7 @@ class ExpenseCard extends StatelessWidget {
                       width: 40,
                       child: Icon(
                         Icons.chevron_right,
-                        color: Color(0xFF6EE7B7),
+                        color: Color(0xFF10B981),
                         size: 32,
                       ),
                     ),

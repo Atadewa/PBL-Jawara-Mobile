@@ -59,7 +59,7 @@ class _IncomePageState extends State<IncomePage> {
               padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 ),
               ),
               child: Row(
@@ -78,7 +78,11 @@ class _IncomePageState extends State<IncomePage> {
                   const SizedBox(width: 12),
                   const Text(
                     'Pemasukan',
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -92,7 +96,11 @@ class _IncomePageState extends State<IncomePage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: const [
-                    BoxShadow(color: Color(0x19000000), blurRadius: 20, offset: Offset(0, 10)),
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 20,
+                      offset: Offset(0, 10),
+                    ),
                   ],
                 ),
                 child: Column(

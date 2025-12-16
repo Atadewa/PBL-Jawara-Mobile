@@ -187,7 +187,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Colors.black,
@@ -213,7 +213,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data warga berhasil diperbarui'),
-          backgroundColor: Color(0xFF6EE7B7),
+          backgroundColor: Color(0xFF10B981),
         ),
       );
       Navigator.pop(context);
@@ -231,7 +231,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -315,7 +315,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -363,7 +363,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -407,7 +407,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -457,7 +457,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -491,7 +491,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         fillColor: Colors.white,
                         suffixIcon: const Icon(
                           Icons.calendar_today,
-                          color: Color(0xFF6EE7B7),
+                          color: Color(0xFF10B981),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -508,7 +508,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -552,7 +552,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -601,7 +601,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -651,7 +651,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -695,7 +695,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -744,7 +744,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -796,7 +796,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             width: 2,
                           ),
                         ),
@@ -817,7 +817,7 @@ class _EditWargaPageState extends State<EditWargaPage> {
                       child: ElevatedButton(
                         onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6EE7B7),
+                          backgroundColor: const Color(0xFF10B981),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

@@ -49,7 +49,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               onSurface: Color(0xFF2D3748),
             ),
@@ -85,7 +85,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data warga berhasil ditambahkan'),
-          backgroundColor: Color(0xFF6EE7B7),
+          backgroundColor: Color(0xFF10B981),
         ),
       );
     }
@@ -102,7 +102,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -294,7 +294,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
                       child: ElevatedButton(
                         onPressed: _simpanWarga,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6EE7B7),
+                          backgroundColor: const Color(0xFF10B981),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -367,7 +367,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -407,7 +407,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
             fillColor: Colors.white,
             suffixIcon: const Icon(
               Icons.calendar_today,
-              color: Color(0xFF6EE7B7),
+              color: Color(0xFF10B981),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -423,7 +423,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
           ),
         ),
@@ -468,7 +468,7 @@ class _TambahWargaPageState extends State<TambahWargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
           ),
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),

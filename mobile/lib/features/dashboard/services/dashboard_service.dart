@@ -82,7 +82,7 @@ class DashboardService {
         title: 'Total Warga',
         value: 1248,
         icon: 'people',
-        color: '0xFF6EE7B7',
+        color: '0xFF10B981',
       ),
       DashboardWidget(
         id: 'stat_2',
@@ -90,7 +90,7 @@ class DashboardService {
         title: 'Total Keluarga',
         value: 342,
         icon: 'home',
-        color: '0xFF6EE7B7',
+        color: '0xFF10B981',
       ),
       DashboardWidget(
         id: 'stat_3',

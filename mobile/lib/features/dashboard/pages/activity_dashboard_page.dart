@@ -80,7 +80,7 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
                             provider.loadActivity();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6EE7B7),
+                            backgroundColor: const Color(0xFF10B981),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,
                               vertical: 12,
@@ -119,7 +119,7 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF6EE7B7),
+                        Color(0xFF10B981),
                       ),
                     ),
                   ),
@@ -133,7 +133,7 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
           // Loaded state
           return RefreshIndicator(
             onRefresh: () => provider.refreshActivity(),
-            color: const Color(0xFF6EE7B7),
+            color: const Color(0xFF10B981),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
@@ -160,7 +160,7 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
                             borderRadius: BorderRadius.circular(12),
                             border: const Border(
                               top: BorderSide(
-                                color: Color(0xFF6EE7B7),
+                                color: Color(0xFF10B981),
                                 width: 3,
                               ),
                             ),
@@ -182,13 +182,13 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
                                     height: 48,
                                     decoration: BoxDecoration(
                                       color: const Color(
-                                        0xFF6EE7B7,
+                                        0xFF10B981,
                                       ).withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Icon(
                                       Icons.calendar_month_outlined,
-                                      color: Color(0xFF6EE7B7),
+                                      color: Color(0xFF10B981),
                                       size: 24,
                                     ),
                                   ),
@@ -239,8 +239,8 @@ class _ActivityDashboardPageState extends State<ActivityDashboardPage> {
                               label: 'Hari Ini',
                               value: data?.summary.today ?? '0',
                               icon: Icons.event_available,
-                              color: const Color(0xFF6EE7B7),
-                              borderColor: const Color(0xFF6EE7B7),
+                              color: const Color(0xFF10B981),
+                              borderColor: const Color(0xFF10B981),
                             ),
                             ActivityStatCard(
                               label: 'Mendatang',

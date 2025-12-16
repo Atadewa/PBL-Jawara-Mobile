@@ -100,7 +100,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Color(0xFF0F172A),
@@ -290,7 +290,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+          colors: [Color(0xFF10B981), Color(0xFF34D399)],
         ),
       ),
       child: Row(
@@ -393,7 +393,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -463,7 +463,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -521,7 +521,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -669,7 +669,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
                         width: 60,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6EE7B7).withOpacity(0.15),
+                          color: const Color(0xFF10B981).withOpacity(0.15),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             bottomLeft: Radius.circular(12),
@@ -678,7 +678,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
                         child: const Center(
                           child: Icon(
                             Icons.picture_as_pdf,
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             size: 28,
                           ),
                         ),
@@ -770,7 +770,7 @@ class _AddBroadcastPageState extends State<AddBroadcastPage> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _onSaveBroadcast,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6EE7B7),
+          backgroundColor: const Color(0xFF10B981),
           disabledBackgroundColor: const Color(0xFFCBD5E1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

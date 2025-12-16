@@ -13,7 +13,7 @@ class EditKegiatanHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment(0.50, 0.00),
           end: Alignment(0.50, 1.00),
-          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+          colors: [Color(0xFF10B981), Color(0xFF34D399)],
         ),
       ),
       child: Row(

@@ -85,7 +85,7 @@ class PopulationService {
           PopulationCategory(
             name: 'Laki-laki',
             count: 620,
-            color: '0xFF6EE7B7',
+            color: '0xFF10B981',
             percentage: 49.7,
           ),
           PopulationCategory(
@@ -102,7 +102,7 @@ class PopulationService {
           PopulationCategory(
             name: 'Pegawai Swasta',
             count: 374,
-            color: '0xFF6EE7B7',
+            color: '0xFF10B981',
             percentage: 30.0,
           ),
           PopulationCategory(
@@ -137,7 +137,7 @@ class PopulationService {
           PopulationCategory(
             name: 'Islam',
             count: 986,
-            color: '0xFF6EE7B7',
+            color: '0xFF10B981',
             percentage: 79.0,
           ),
           PopulationCategory(
@@ -172,7 +172,7 @@ class PopulationService {
           PopulationCategory(
             name: 'Kepala Keluarga',
             count: 337,
-            color: '0xFF6EE7B7',
+            color: '0xFF10B981',
             percentage: 27.0,
           ),
           PopulationCategory(
@@ -201,7 +201,7 @@ class PopulationService {
           PopulationCategory(
             name: 'SD',
             count: 175,
-            color: '0xFF6EE7B7',
+            color: '0xFF10B981',
             percentage: 14.0,
           ),
           PopulationCategory(

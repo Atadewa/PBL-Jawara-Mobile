@@ -19,7 +19,7 @@ class PopulationStatCard extends StatelessWidget {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 3, color: Color(0xFF6EE7B7)),
+          side: const BorderSide(width: 3, color: Color(0xFF10B981)),
           borderRadius: BorderRadius.circular(16),
         ),
         shadows: [
@@ -45,12 +45,12 @@ class PopulationStatCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: ShapeDecoration(
-              color: const Color(0xFF6EE7B7).withValues(alpha: 0.1),
+              color: const Color(0xFF10B981).withValues(alpha: 0.1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: Icon(icon, color: const Color(0xFF6EE7B7), size: 24),
+            child: Icon(icon, color: const Color(0xFF10B981), size: 24),
           ),
           const SizedBox(height: 12),
 
