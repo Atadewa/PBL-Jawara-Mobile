@@ -188,29 +188,45 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
     );
   }
 
-  void _handleDelete(Broadcast broadcast) {
-    // TODO: Call API to delete broadcast
-    // _aktivitasService.deleteBroadcast(broadcast.id).then((_) {
-    //   // Navigate back to aktivitas page and refresh
-    //   Navigator.popUntil(context, (route) => route.isFirst);
-    //   ScaffoldMessenger.of(context).showSnackBar(...);
-    // });
+  void _handleDelete(Broadcast broadcast) async {
+    try {
+      // Parse broadcast ID to int
+      int id;
+      if (broadcast.id is String) {
+        id = int.parse(broadcast.id);
+      } else {
+        id = broadcast.id as int;
+      }
 
-    // DUMMY: Simulate API call then navigate
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Broadcast berhasil dihapus'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ),
-    );
+      // Call real backend API to delete broadcast
+      await _broadcastService.deleteBroadcast(id);
 
-    // Navigate back to previous page (Broadcast List)
-    // This will return to the BroadcastPage or AktivitasDanBroadcastPage
-    Future.delayed(const Duration(milliseconds: 500), () {
       if (!mounted) return;
-      Navigator.pop(context, true); // Pop detail page, return to broadcast list
-    });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Broadcast berhasil dihapus'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Navigate back to previous page (Broadcast List)
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
+        Navigator.pop(context, true); // Pop detail page, return to list
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal menghapus broadcast: $e'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override

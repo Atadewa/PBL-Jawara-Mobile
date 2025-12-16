@@ -4,13 +4,10 @@ import '../../../core/layouts/main_layout.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/auth/permissions.dart';
 import '../../../core/providers/user_context_provider.dart';
-import '../models/kegiatan.dart';
 import '../models/broadcast.dart';
 import '../models/event_model.dart';
-import '../services/aktivitas_service.dart';
 import '../services/broadcast_service.dart';
 import '../services/event_service.dart';
-import '../widgets/kegiatan_card.dart';
 import '../widgets/broadcast_card.dart';
 
 /// Halaman Aktivitas & Broadcast
@@ -25,29 +22,31 @@ class AktivitasDanBroadcastPage extends StatefulWidget {
 
 class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
     with SingleTickerProviderStateMixin {
-  final AktivitasService _aktivitasService = AktivitasService();
   final BroadcastService _broadcastService = BroadcastService();
   final EventService _eventService = EventService();
   late TabController _tabController;
 
   bool _isLoading = true;
-  List<Kegiatan> _kegiatanList = [];
   List<Broadcast> _broadcastList = [];
   List<EventModel> _eventList = [];
   String? _errorMessage;
-
-  // Filter
-  String? _selectedCategory;
-  List<String> _categories = [];
-  TextEditingController _searchController = TextEditingController();
+  int _currentTabIndex = 0; // Track active tab: 0=Kegiatan, 1=Broadcast
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    // Listen to tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {
+          _currentTabIndex = _tabController.index;
+        });
+      }
+    });
+
     _loadData();
-    _loadCategories();
-    _searchController.addListener(_onSearchChanged);
 
     // Debug log
     print('[AktivitasDanBroadcastPage] Initialized');
@@ -56,20 +55,16 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
   @override
   void dispose() {
     _tabController.dispose();
-    _searchController.dispose();
     super.dispose();
   }
 
-  /// Load data dari API
+  /// Load data dari API - NO DUMMY DATA
   Future<void> _loadData() async {
     try {
       setState(() {
         _isLoading = true;
         _errorMessage = null;
       });
-
-      // Load kegiatan (dummy for now, can use event service later)
-      final data = await _aktivitasService.loadActivityData();
 
       // Load broadcasts from backend
       final broadcasts = await _broadcastService.getBroadcastList();
@@ -80,7 +75,6 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
       if (!mounted) return;
 
       setState(() {
-        _kegiatanList = data['kegiatan'] as List<Kegiatan>;
         _broadcastList = broadcasts;
         _eventList = events;
         _isLoading = false;
@@ -99,62 +93,6 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
       });
 
       print('[AktivitasDanBroadcastPage] Error loading data: $e');
-    }
-  }
-
-  /// Load kategori kegiatan untuk filter
-  Future<void> _loadCategories() async {
-    try {
-      final categories = await _aktivitasService.getKategoriKegiatan();
-      if (!mounted) return;
-
-      setState(() {
-        _categories = categories;
-      });
-    } catch (e) {
-      // Ignore error loading categories
-    }
-  }
-
-  /// Handle search
-  Future<void> _onSearchChanged() async {
-    // Debounce search untuk menghindari terlalu banyak API call
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    try {
-      final results = await _aktivitasService.searchKegiatan(
-        _searchController.text,
-      );
-
-      if (!mounted) return;
-
-      setState(() {
-        _kegiatanList = results;
-      });
-    } catch (e) {
-      // Handle error
-    }
-  }
-
-  /// Handle filter kategori
-  Future<void> _onCategoryChanged(String? category) async {
-    setState(() {
-      _selectedCategory = category;
-    });
-
-    try {
-      final results = await _aktivitasService.getKegiatanList(
-        category: category,
-        search: _searchController.text.isEmpty ? null : _searchController.text,
-      );
-
-      if (!mounted) return;
-
-      setState(() {
-        _kegiatanList = results;
-      });
-    } catch (e) {
-      // Handle error
     }
   }
 
@@ -229,20 +167,23 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
                   ),
           ),
           // FAB - Only show for authorized roles
+          // Action depends on active tab
           if (_canManage())
             Positioned(
               bottom: 80,
               right: 16,
               child: FloatingActionButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.addKegiatan).then((
-                    result,
-                  ) {
-                    // Refresh list jika ada kegiatan baru
+                  // Route based on current tab
+                  final routeName = _currentTabIndex == 0
+                      ? AppRoutes
+                            .addKegiatan // Tab Kegiatan
+                      : AppRoutes.addBroadcast; // Tab Broadcast
+
+                  Navigator.pushNamed(context, routeName).then((result) {
+                    // Refresh list after create/edit
                     if (result == true) {
-                      setState(() {
-                        // Reload kegiatan list
-                      });
+                      _loadData();
                     }
                   });
                 },
@@ -276,23 +217,6 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
                   color: Color(0xFF0F172A),
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Search bar
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Cari kegiatan...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
                 ),
               ),
             ],
@@ -579,60 +503,6 @@ class _AktivitasDanBroadcastPageState extends State<AktivitasDanBroadcastPage>
                   );
                 },
               ),
-      ),
-    );
-  }
-
-  /// Handle kegiatan tap - Navigate to detail page
-  void _handleKegiatanTap(Kegiatan kegiatan) {
-    Navigator.pushNamed(
-      context,
-      AppRoutes.detailKegiatan,
-      arguments: kegiatan.id,
-    ).then((refreshList) {
-      // If delete button was pressed and kegiatan was deleted, refresh the list
-      if (refreshList == true) {
-        _loadData();
-      }
-    });
-  }
-
-  /// Handle more options tap
-  void _handleMoreTap(Kegiatan kegiatan) {
-    // TODO: Show bottom sheet with options (edit, delete, share, etc)
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('Edit'),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: Navigate to edit kegiatan page
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete, color: Colors.red),
-              title: const Text('Hapus', style: TextStyle(color: Colors.red)),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: Delete kegiatan with confirmation
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share),
-              title: const Text('Bagikan'),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: Share kegiatan
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -6,15 +6,16 @@
 /// Check if the user has permission to manage broadcasts and events
 ///
 /// Returns true if user has any of these roles:
+/// - admin
 /// - ketua_rw
 /// - ketua_rt
 /// - sekretaris
 ///
-/// All other roles (warga, bendahara, admin, etc.) return false
+/// All other roles (warga, bendahara, etc.) return false
 bool canManageBroadcastAndEvent(List<String> roles) {
   if (roles.isEmpty) return false;
 
-  const allowedRoles = ['ketua_rw', 'ketua_rt', 'sekretaris'];
+  const allowedRoles = ['admin', 'ketua_rw', 'ketua_rt', 'sekretaris'];
 
   // Check if user has any of the allowed roles
   return roles.any((role) => allowedRoles.contains(role.toLowerCase()));
