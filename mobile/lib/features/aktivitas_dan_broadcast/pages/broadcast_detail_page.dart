@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/auth/permissions.dart';
+import '../../../core/providers/user_context_provider.dart';
 import '../models/broadcast.dart';
-import '../services/aktivitas_service.dart';
+import '../services/broadcast_service.dart';
 import '../widgets/broadcast_detail_header.dart';
 import '../widgets/broadcast_detail_content.dart';
 import '../widgets/broadcast_detail_attachments.dart';
@@ -25,7 +28,7 @@ import '../widgets/broadcast_detail_actions.dart';
 /// 5. Response structure: {"data": {broadcast item detail}}
 class BroadcastDetailPage extends StatefulWidget {
   /// Broadcast ID yang akan ditampilkan
-  final String broadcastId;
+  final int broadcastId;
 
   const BroadcastDetailPage({Key? key, required this.broadcastId})
     : super(key: key);
@@ -35,17 +38,18 @@ class BroadcastDetailPage extends StatefulWidget {
 }
 
 class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
-  final AktivitasService _aktivitasService = AktivitasService();
+  final BroadcastService _broadcastService = BroadcastService();
   late Future<Broadcast> _broadcastFuture;
 
   @override
   void initState() {
     super.initState();
     _loadBroadcastDetail();
+    print('[BroadcastDetailPage] Loading broadcast id: ${widget.broadcastId}');
   }
 
   void _loadBroadcastDetail() {
-    _broadcastFuture = _aktivitasService.getBroadcastDetail(widget.broadcastId);
+    _broadcastFuture = _broadcastService.getBroadcastById(widget.broadcastId);
   }
 
   Future<void> _onRefresh() async {
@@ -750,5 +754,12 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
       'December',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  /// Check if current user can manage broadcasts
+  bool _canManage() {
+    final userContext = context.read<UserContextProvider>().userContext;
+    if (userContext == null) return false;
+    return canManageBroadcastAndEvent(userContext.roles);
   }
 }

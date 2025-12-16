@@ -67,6 +67,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
           Padding(
             padding: const EdgeInsets.all(24),
             child: InkWell(
+              key: const Key('batik_saya_add_button'),
               onTap: () async {
                 final result = await Navigator.push(
                   context,
@@ -177,6 +178,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
 
   Widget _buildProductCard(ProductModel product) {
     return Container(
+      key: Key('my_product_card_${product.id}'),
       padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
         color: AppColors.background,
@@ -324,6 +326,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
               children: [
                 Expanded(
                   child: InkWell(
+                    key: Key('my_product_detail_${product.id}'),
                     onTap: () => _handleViewDetail(product),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -352,6 +355,7 @@ class _MyProductsPageState extends State<MyProductsPage> {
                 Container(width: 1, height: 40, color: AppColors.borderMuted),
                 Expanded(
                   child: InkWell(
+                    key: Key('my_product_buyers_${product.id}'),
                     onTap: () => _handleViewBuyers(product),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),

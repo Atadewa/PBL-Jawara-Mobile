@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/layouts/main_layout.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/auth/auth_session.dart';
+import '../../../core/auth/user_role.dart';
+import '../../../core/auth/role_helper.dart';
+import '../../../core/providers/user_context_provider.dart';
 import '../widgets/simple_stat_card.dart';
 import '../widgets/dashboard_button.dart';
 import '../widgets/quick_menu_item.dart';
 import '../models/home_stats.dart';
 import '../models/user_info.dart';
 import '../services/home_service.dart';
+import '../presentation/models/quick_menu_model.dart';
+import '../presentation/registry/quick_menu_registry.dart';
 
 /// Halaman Home/Dashboard
 /// Menampilkan statistik utama, tombol dashboard, dan menu cepat
@@ -20,7 +27,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomeService _homeService = HomeService();
   bool _isLoading = true;
-  UserInfo? _userInfo;
   HomeStats? _stats;
   String? _errorMessage;
 
@@ -28,6 +34,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
+
+    // Debug: print scope from user context
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userContextProvider = context.read<UserContextProvider>();
+      if (userContextProvider.context != null) {
+        print(
+          '[HomePage] Scope from /auth/me: ${userContextProvider.context!.scope}',
+        );
+      }
+    });
   }
 
   /// Load data dari API
@@ -43,7 +59,6 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
 
       setState(() {
-        _userInfo = data['userInfo'] as UserInfo;
         _stats = data['stats'] as HomeStats;
         _isLoading = false;
       });
@@ -59,6 +74,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final sessionUser = AuthSession.user.value;
+
+    if (sessionUser == null) {
+      return MainLayout(
+        currentIndex: 0,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Anda belum login'),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, AppRoutes.login),
+                child: const Text('Ke Halaman Login'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final menus = getQuickMenusForRole(sessionUser.role);
+
     return MainLayout(
       currentIndex: 0,
       child: Container(
@@ -92,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header dengan gradient hijau
-                    _buildHeader(),
+                    _buildHeader(sessionUser.role),
 
                     // Content dengan padding
                     Padding(
@@ -109,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 24),
 
                           // Menu Cepat
-                          _buildQuickMenu(),
+                          _buildQuickMenu(menus),
                         ],
                       ),
                     ),
@@ -121,7 +160,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Build header section dengan gradient hijau
-  Widget _buildHeader() {
+  Widget _buildHeader(UserRole role) {
+    final sessionUser = AuthSession.user.value;
+    final userContextProvider = context.watch<UserContextProvider>();
+
+    final userContext = userContextProvider.context;
+    final userName = userContext?.name ?? sessionUser?.username ?? 'User';
+    final userRoleLabel = userContext != null
+        ? getRoleLabel(userContext.roles)
+        : role.label;
+    final scopeText = userContext != null
+        ? getScopeText(userContext.scope)
+        : 'RT 01 / RW 05';
+
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -135,34 +186,55 @@ class _HomePageState extends State<HomePage> {
         bottom: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Selamat Datang,',
-                style: TextStyle(
-                  color: Color(0xE5FFFEFE),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Selamat Datang,',
+                      style: TextStyle(
+                        color: Color(0xE5FFFEFE),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      scopeText,
+                      style: const TextStyle(
+                        color: Color(0xE5FFFEFE),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Role: $userRoleLabel',
+                      style: const TextStyle(
+                        color: Color(0xE5FFFEFE),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                _userInfo?.role ?? 'Pengurus RT/RW',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                _userInfo?.rtRw ?? 'RT 01 / RW 05',
-                style: const TextStyle(
-                  color: Color(0xE5FFFEFE),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
+              IconButton(
+                icon: const Icon(Icons.logout, color: Colors.white),
+                onPressed: _handleLogout,
+                tooltip: 'Logout',
               ),
             ],
           ),
@@ -238,7 +310,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Build menu cepat section
-  Widget _buildQuickMenu() {
+  Widget _buildQuickMenu(List<QuickMenuModel> menus) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -265,51 +337,26 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 8),
-          GridView.count(
-            crossAxisCount: 4,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 8,
-            childAspectRatio: 0.80, // Adjusted to accommodate fixed height
-            children: [
-              QuickMenuItem(
-                label: 'Verifikasi User',
-                icon: Icons.person_add,
-                onTap: () => _handleMenuTap('Verifikasi User'),
-              ),
-              QuickMenuItem(
-                label: 'Rumah',
-                icon: Icons.home,
-                onTap: () => _handleMenuTap('Rumah'),
-              ),
-              QuickMenuItem(
-                label: 'Aspirasi Warga',
-                icon: Icons.feedback,
-                onTap: () => _handleMenuTap('Aspirasi Warga'),
-              ),
-              QuickMenuItem(
-                label: 'Log Aktivitas',
-                icon: Icons.history,
-                onTap: () => _handleMenuTap('Log Aktivitas'),
-              ),
-              QuickMenuItem(
-                label: 'Pengeluaran',
-                icon: Icons.trending_down,
-                onTap: () => _handleMenuTap('Pengeluaran'),
-              ),
-              QuickMenuItem(
-                label: 'Pemasukan',
-                icon: Icons.trending_up,
-                onTap: () => _handleMenuTap('Pemasukan'),
-              ),
-              QuickMenuItem(
-                label: 'Laporan',
-                icon: Icons.assignment,
-                onTap: () => _handleMenuTap('Laporan'),
-              ),
-            ],
-          ),
+          if (menus.isEmpty)
+            const Text('Belum ada menu untuk role ini.')
+          else
+            GridView.count(
+              crossAxisCount: 4,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 8,
+              childAspectRatio: 0.80, // Adjusted to accommodate fixed height
+              children: menus
+                  .map(
+                    (menu) => QuickMenuItem(
+                      label: menu.title,
+                      icon: menu.icon,
+                      onTap: () => Navigator.pushNamed(context, menu.route),
+                    ),
+                  )
+                  .toList(),
+            ),
         ],
       ),
     );
@@ -335,44 +382,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /// Handle menu cepat tap
-  void _handleMenuTap(String menu) {
-    switch (menu) {
-      case 'Pengeluaran':
-        Navigator.pushNamed(context, AppRoutes.pengeluaran);
-        break;
-      case 'Kegiatan':
-        Navigator.pushNamed(context, '/aktivitas-dan-broadcast');
-        break;
-      case 'Rumah':
-        Navigator.pushNamed(context, '/data-rumah');
-        break;
-      default:
-        // TODO: Navigate to other menu pages
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('$menu - Coming soon')));
-    if (menu == 'Pemasukan') {
-      Navigator.of(context).pushNamed(AppRoutes.pemasukan);
-      return;
-    }
-
-    // fallback / other menu navigation
-    // TODO: Navigate to other menu pages
-    if (menu == 'Pengeluaran') {
-      Navigator.pushNamed(context, AppRoutes.pengeluaran);
-    } else if (menu == 'Log Aktivitas') {
-      Navigator.pushNamed(context, AppRoutes.logAktivitas);
-    } else if (menu == 'Rumah') {
-      Navigator.pushNamed(context, AppRoutes.daftarRumah);
-    } else if (menu == 'Kegiatan') {
-      Navigator.pushNamed(context, AppRoutes.aktivitasDanBroadcast);
-    } else if (menu == 'Marketplace') {
-      Navigator.pushNamed(context, AppRoutes.marketplace);
-    } else if (menu == 'Laporan') {
-      Navigator.pushNamed(context, AppRoutes.laporan);
-    } else {
-      // TODO: Navigate to other menu pages
-    }
+  void _handleLogout() {
+    AuthSession.logout();
+    Navigator.pushReplacementNamed(context, AppRoutes.login);
   }
 }

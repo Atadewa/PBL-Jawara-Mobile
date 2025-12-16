@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
-import '../../auth/data/models/login_request.dart';
-import '../../auth/data/services/auth_service.dart';
+import '../../../core/auth/auth_session.dart';
+import '../../../core/auth/user_role.dart';
+import '../../../core/auth/app_user.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../../core/providers/user_context_provider.dart';
 import 'register_page.dart';
-import '../../home/pages/home_page.dart';
 
 /// Login page with form validation and API integration
 class LoginPage extends StatefulWidget {
@@ -20,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = AuthService();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -40,32 +43,82 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = true);
 
-    try {
-      final request = LoginRequest(
-        usernameOrEmail: _usernameController.text.trim(),
-        password: _passwordController.text,
-      );
+    final email = _usernameController.text.trim();
+    final password = _passwordController.text;
 
-      final response = await _authService.login(request);
+    try {
+      // Step 1: Sign in with Supabase
+      final authResponse = await Supabase.instance.client.auth
+          .signInWithPassword(email: email, password: password);
+
+      if (authResponse.user == null) {
+        throw Exception('Login gagal');
+      }
 
       if (!mounted) return;
 
-      if (response.success) {
-        _showSuccessMessage(response.message);
-        // Navigate to Home page
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+      // Step 2: Load user context from backend
+      final userContextProvider = context.read<UserContextProvider>();
+      final success = await userContextProvider.loadContextAfterLogin();
+
+      if (!mounted) return;
+
+      if (success && userContextProvider.context != null) {
+        // Successfully loaded context - convert backend role to UserRole enum
+        final backendRole = userContextProvider.context!.primaryRole ?? 'warga';
+        final userRole = _mapBackendRoleToUserRole(backendRole);
+
+        // Set auth session with user info
+        AuthSession.user.value = AppUser(
+          username: userContextProvider.context!.name ?? email,
+          role: userRole,
+        );
+
+        _showSuccessMessage('Login berhasil sebagai ${userRole.label}');
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
-        _showErrorMessage(response.message);
+        // Check if waiting for approval
+        if (userContextProvider.error == 'WAITING_APPROVAL') {
+          Navigator.pushReplacementNamed(context, AppRoutes.verifikasiWarga);
+        } else if (userContextProvider.error == 'UNAUTHORIZED') {
+          // Token invalid - sign out
+          await Supabase.instance.client.auth.signOut();
+          _showErrorMessage('Token tidak valid. Silakan login ulang.');
+        } else {
+          _showErrorMessage(
+            'Gagal memuat data pengguna: ${userContextProvider.error}',
+          );
+        }
       }
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      _showErrorMessage('Login gagal: ${e.message}');
     } catch (e) {
       if (!mounted) return;
-      _showErrorMessage(AppStrings.loginFailed);
+      _showErrorMessage('Terjadi kesalahan: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
       }
+    }
+  }
+
+  /// Map backend role string to UserRole enum
+  UserRole _mapBackendRoleToUserRole(String backendRole) {
+    switch (backendRole.toLowerCase()) {
+      case 'admin':
+        return UserRole.admin;
+      case 'ketua_rw':
+        return UserRole.ketuaRw;
+      case 'ketua_rt':
+        return UserRole.ketuaRt;
+      case 'sekretaris':
+        return UserRole.sekretaris;
+      case 'bendahara':
+        return UserRole.bendahara;
+      case 'warga':
+      default:
+        return UserRole.warga;
     }
   }
 
@@ -108,12 +161,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 60),
+                const SizedBox(height: 15),
 
                 // Logo
                 _buildLogo(),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 15),
 
                 // Title and description
                 _buildHeader(),
@@ -122,6 +175,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Username/Email field
                 CustomTextField(
+                  textFieldKey: const Key('login_username_field'),
                   controller: _usernameController,
                   label: AppStrings.usernameOrEmail,
                   hintText: AppStrings.enterUsernameOrEmail,
@@ -138,6 +192,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Password field
                 CustomTextField(
+                  textFieldKey: const Key('login_password_field'),
                   controller: _passwordController,
                   label: AppStrings.password,
                   hintText: AppStrings.enterPassword,
@@ -146,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (value == null || value.isEmpty) {
                       return AppStrings.fieldRequired;
                     }
-                    if (value.length < 6) {
+                    if (value.length < 2) {
                       return AppStrings.passwordTooShort;
                     }
                     return null;
@@ -168,6 +223,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Login button
                 CustomButton(
+                  key: const Key('login_submit_button'),
                   text: AppStrings.login,
                   onPressed: _handleLogin,
                   isLoading: _isLoading,
@@ -193,28 +249,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLogo() {
     return Center(
       child: Container(
-        width: 80,
-        height: 80,
+        width: 170,
+        height: 170,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.primary, AppColors.primaryDark],
-          ),
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 10),
-              spreadRadius: -3,
-            ),
-          ],
+          // boxShadow: []  // hapus ini
         ),
-        child: const Icon(
-          Icons.home_work_rounded,
-          size: 48,
-          color: Colors.white,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Image.asset('assets/logoo.png', fit: BoxFit.contain),
         ),
       ),
     );
@@ -254,6 +297,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(width: 4),
         TextButton(
+          key: const Key('login_register_link'),
           onPressed: _navigateToRegister,
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
