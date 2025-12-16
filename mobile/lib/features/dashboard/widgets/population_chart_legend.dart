@@ -12,7 +12,7 @@ class PopulationChartLegend extends StatelessWidget {
         int.parse(colorString.replaceFirst('0xFF', '0xFF'), radix: 16),
       );
     } catch (e) {
-      return const Color(0xFF6EE7B7);
+      return const Color(0xFF10B981);
     }
   }
 

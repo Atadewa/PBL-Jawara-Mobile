@@ -93,7 +93,7 @@ class FinanceService {
         CategoryBreakdown(
           category: 'Iuran Kebersihan',
           amount: 24000000,
-          color: '0xFF6EE7B7',
+          color: '0xFF10B981',
         ),
         CategoryBreakdown(
           category: 'Iuran Satpam',
@@ -116,7 +116,7 @@ class FinanceService {
         CategoryBreakdown(
           category: 'Gaji Satpam',
           amount: 24000000,
-          color: '0xFF6EE7B7',
+          color: '0xFF10B981',
         ),
         CategoryBreakdown(
           category: 'Kebersihan',

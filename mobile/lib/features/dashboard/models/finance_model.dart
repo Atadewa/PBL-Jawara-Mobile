@@ -47,7 +47,7 @@ class CategoryBreakdown {
     return CategoryBreakdown(
       category: json['category'] ?? '',
       amount: json['amount'] ?? 0,
-      color: json['color'] ?? '0xFF6EE7B7',
+      color: json['color'] ?? '0xFF10B981',
     );
   }
 

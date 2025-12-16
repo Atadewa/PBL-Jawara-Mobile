@@ -38,7 +38,7 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data rumah berhasil ditambahkan'),
-          backgroundColor: Color(0xFF6EE7B7),
+          backgroundColor: Color(0xFF10B981),
         ),
       );
     }
@@ -55,7 +55,7 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -112,12 +112,12 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                        color: const Color(0xFF10B981).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.home_outlined,
-                        color: Color(0xFF6EE7B7),
+                        color: Color(0xFF10B981),
                         size: 40,
                       ),
                     ),
@@ -170,7 +170,7 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
                       child: ElevatedButton(
                         onPressed: _simpanRumah,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6EE7B7),
+                          backgroundColor: const Color(0xFF10B981),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -240,7 +240,7 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -288,7 +288,7 @@ class _TambahRumahPageState extends State<TambahRumahPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
           ),
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),

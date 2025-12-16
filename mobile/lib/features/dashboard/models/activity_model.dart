@@ -53,7 +53,7 @@ class ActivityCategory {
     return ActivityCategory(
       category: json['category'] ?? '',
       count: json['count'] ?? 0,
-      color: json['color'] ?? '0xFF6EE7B7',
+      color: json['color'] ?? '0xFF10B981',
       percentage: (json['percentage'] ?? 0).toDouble(),
     );
   }
@@ -87,7 +87,7 @@ class PersonRanking {
       rank: json['rank'] ?? 0,
       name: json['name'] ?? '',
       activityCount: json['activityCount'] ?? 0,
-      color: json['color'] ?? '0xFF6EE7B7',
+      color: json['color'] ?? '0xFF10B981',
     );
   }
 

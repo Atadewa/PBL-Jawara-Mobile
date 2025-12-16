@@ -61,7 +61,7 @@ class _IncomePageState extends State<IncomePage> {
               padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 ),
               ),
               child: Row(

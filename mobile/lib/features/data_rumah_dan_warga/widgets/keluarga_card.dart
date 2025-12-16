@@ -10,7 +10,7 @@ class KeluargaCard extends StatelessWidget {
   Color _getStatusColor() {
     switch (keluarga.status) {
       case StatusKeluarga.aktif:
-        return const Color(0xFF6EE7B7);
+        return const Color(0xFF10B981);
       case StatusKeluarga.pindahMasuk:
         return const Color(0xFF7B61FF);
       case StatusKeluarga.tidakAktif:
@@ -47,12 +47,12 @@ class KeluargaCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                    color: const Color(0xFF10B981).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.people_outline,
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     size: 28,
                   ),
                 ),

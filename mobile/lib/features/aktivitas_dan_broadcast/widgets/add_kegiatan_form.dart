@@ -280,7 +280,7 @@ class _AddKegiatanFormState extends State<AddKegiatanForm> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 14),
             decoration: ShapeDecoration(
-              color: const Color(0xFF6EE7B7),
+              color: const Color(0xFF10B981),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

@@ -48,7 +48,7 @@ class _DaftarKeluargaPageState extends State<DaftarKeluargaPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -164,7 +164,7 @@ class _DaftarKeluargaPageState extends State<DaftarKeluargaPage> {
             MaterialPageRoute(builder: (context) => const TambahKeluargaPage()),
           );
         },
-        backgroundColor: const Color(0xFF6EE7B7),
+        backgroundColor: const Color(0xFF10B981),
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );

@@ -23,7 +23,7 @@ class DashboardHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [const Color(0xFF6EE7B7), const Color(0xFF34D399)],
+          colors: [const Color(0xFF10B981), const Color(0xFF34D399)],
         ),
       ),
       child: SafeArea(

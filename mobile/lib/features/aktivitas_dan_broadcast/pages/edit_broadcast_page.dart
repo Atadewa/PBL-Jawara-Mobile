@@ -148,7 +148,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Color(0xFF0F172A),
@@ -303,7 +303,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircularProgressIndicator(color: Color(0xFF6EE7B7)),
+          const CircularProgressIndicator(color: Color(0xFF10B981)),
           const SizedBox(height: 16),
           const Text('Memuat data broadcast...'),
         ],
@@ -355,7 +355,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+          colors: [Color(0xFF10B981), Color(0xFF34D399)],
         ),
       ),
       child: Row(
@@ -458,7 +458,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -528,7 +528,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -586,7 +586,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 1),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -744,13 +744,13 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6EE7B7).withOpacity(0.15),
+                          color: const Color(0xFF10B981).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.picture_as_pdf,
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             size: 20,
                           ),
                         ),
@@ -809,13 +809,13 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6EE7B7).withOpacity(0.15),
+                          color: const Color(0xFF10B981).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.note_add_outlined,
-                            color: Color(0xFF6EE7B7),
+                            color: Color(0xFF10B981),
                             size: 20,
                           ),
                         ),
@@ -860,7 +860,7 @@ class _EditBroadcastPageState extends State<EditBroadcastPage> {
       child: ElevatedButton(
         onPressed: _isSaving ? null : _onSaveChanges,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6EE7B7),
+          backgroundColor: const Color(0xFF10B981),
           disabledBackgroundColor: const Color(0xFFCBD5E1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
