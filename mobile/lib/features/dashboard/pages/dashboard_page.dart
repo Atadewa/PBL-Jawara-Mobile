@@ -35,7 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6EE7B7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
               ),
             );
           }
@@ -58,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       provider.refreshDashboard();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6EE7B7),
+                      backgroundColor: const Color(0xFF10B981),
                     ),
                     child: const Text(
                       'Coba Lagi',
@@ -78,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
           return RefreshIndicator(
             onRefresh: () => provider.refreshDashboard(),
-            color: const Color(0xFF6EE7B7),
+            color: const Color(0xFF10B981),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
@@ -109,7 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               StatCardWidget(
                                 label: widget.title,
                                 value: widget.value,
-                                borderColor: widget.color ?? '0xFF6EE7B7',
+                                borderColor: widget.color ?? '0xFF10B981',
                                 icon: _getIconData(widget.icon ?? 'info'),
                               ),
                           ],

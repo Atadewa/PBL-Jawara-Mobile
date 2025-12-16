@@ -255,7 +255,7 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
           return SafeArea(
             child: RefreshIndicator(
               onRefresh: _onRefresh,
-              color: const Color(0xFF6EE7B7),
+              color: const Color(0xFF10B981),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
@@ -430,209 +430,169 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
                           if (broadcast.imageUrl != null)
                             const SizedBox(height: 16),
 
-                          // Document card - only show if document exists
-                          if (broadcast.documentUrl != null &&
-                              broadcast.documentUrl!.trim().isNotEmpty)
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFFF2F4F6),
-                                  width: 1,
+                          // Document card
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: const Color(0xFFF2F4F6),
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0x19000000),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                  spreadRadius: -2,
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0x19000000),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                    spreadRadius: -2,
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0x19000000),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 4),
-                                    spreadRadius: -1,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Title
-                                  Text(
-                                    'Dokumen Terlampir',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(
-                                          color: const Color(0xFF0F172A),
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 12),
-
-                                  // Document row with background
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF8FAFC),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        // PDF Icon
-                                        Container(
-                                          width: 40,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color: const Color(
-                                              0xFF6EE7B7,
-                                            ).withOpacity(0.15),
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.description_outlined,
-                                              color: Color(0xFF6EE7B7),
-                                              size: 22,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 12),
-
-                                        // Document info
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                broadcast.documentUrl!
-                                                    .split('/')
-                                                    .last,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall
-                                                    ?.copyWith(
-                                                      color: const Color(
-                                                        0xFF0F172A,
-                                                      ),
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 13,
-                                                    ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              const SizedBox(height: 2),
-                                              Text(
-                                                'Dokumen',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall
-                                                    ?.copyWith(
-                                                      color: const Color(
-                                                        0xFF94A3B8,
-                                                      ),
-                                                      fontSize: 11,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        // Download button
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // TODO: Open document URL
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Membuka dokumen: ${broadcast.documentUrl}',
-                                                ),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(
-                                              0xFF6EE7B7,
-                                            ),
-                                            elevation: 0,
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 8,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'Unduh',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          else
-                            // No document message
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFFF2F4F6),
-                                  width: 1,
+                                BoxShadow(
+                                  color: const Color(0x19000000),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 4),
+                                  spreadRadius: -1,
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: Color(0xFF94A3B8),
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    'Tidak ada dokumen terlampir',
-                                    style: TextStyle(
-                                      color: Color(0xFF94A3B8),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              ],
                             ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Title
+                                Text(
+                                  'Dokumen Terlampir',
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
+                                        color: const Color(0xFF0F172A),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                ),
+                                const SizedBox(height: 12),
+
+                                // Document row with background
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF8FAFC),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      // PDF Icon
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: const Color(
+                                            0xFF10B981,
+                                          ).withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.description_outlined,
+                                            color: Color(0xFF10B981),
+                                            size: 22,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+
+                                      // Document info
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Daftar_Iuran_November_20...',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    color: const Color(
+                                                      0xFF0F172A,
+                                                    ),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 13,
+                                                  ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              'Dokumen PDF',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    color: const Color(
+                                                      0xFF94A3B8,
+                                                    ),
+                                                    fontSize: 11,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // Download button
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Download document - coming soon',
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(
+                                            0xFF10B981,
+                                          ),
+                                          elevation: 0,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 8,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Unduh',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
                           const SizedBox(height: 16),
 
-                          // Action buttons - Only show for authorized users
-                          if (_canManage())
-                            BroadcastDetailActions(
-                              broadcast: broadcast,
-                              onEditPressed: () => _onEditPressed(broadcast),
-                              onDeletePressed: () =>
-                                  _onDeletePressed(broadcast),
-                            ),
+                          // Action buttons
+                          BroadcastDetailActions(
+                            broadcast: broadcast,
+                            onEditPressed: () => _onEditPressed(broadcast),
+                            onDeletePressed: () => _onDeletePressed(broadcast),
+                          ),
 
                           const SizedBox(height: 32),
                         ],
@@ -657,7 +617,7 @@ class _BroadcastDetailPageState extends State<BroadcastDetailPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+          colors: [Color(0xFF10B981), Color(0xFF34D399)],
         ),
       ),
       child: Row(

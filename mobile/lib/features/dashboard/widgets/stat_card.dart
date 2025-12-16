@@ -22,9 +22,9 @@ class StatCardWidget extends StatelessWidget {
       } else if (hex.length == 8) {
         return Color(int.parse('0x$hex'));
       }
-      return const Color(0xFF6EE7B7);
+      return const Color(0xFF10B981);
     } catch (e) {
-      return const Color(0xFF6EE7B7);
+      return const Color(0xFF10B981);
     }
   }
 

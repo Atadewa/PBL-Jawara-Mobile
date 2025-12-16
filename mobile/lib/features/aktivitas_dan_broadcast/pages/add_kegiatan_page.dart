@@ -62,7 +62,7 @@ class _AddKegiatanPageState extends State<AddKegiatanPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Kegiatan berhasil dibuat'),
-            backgroundColor: Color(0xFF6EE7B7),
+            backgroundColor: Color(0xFF10B981),
             duration: Duration(seconds: 2),
           ),
         );

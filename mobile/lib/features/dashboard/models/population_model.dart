@@ -40,7 +40,7 @@ class PopulationCategory {
     return PopulationCategory(
       name: json['name'] ?? '',
       count: json['count'] ?? 0,
-      color: json['color'] ?? '0xFF6EE7B7',
+      color: json['color'] ?? '0xFF10B981',
       percentage: (json['percentage'] ?? 0).toDouble(),
     );
   }

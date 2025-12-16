@@ -65,7 +65,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data keluarga berhasil diperbarui'),
-          backgroundColor: Color(0xFF6EE7B7),
+          backgroundColor: Color(0xFF10B981),
         ),
       );
     }
@@ -82,7 +82,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -154,12 +154,12 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                        color: const Color(0xFF10B981).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.people_outline,
-                        color: Color(0xFF6EE7B7),
+                        color: Color(0xFF10B981),
                         size: 40,
                       ),
                     ),
@@ -206,7 +206,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
                       child: ElevatedButton(
                         onPressed: _simpanPerubahan,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6EE7B7),
+                          backgroundColor: const Color(0xFF10B981),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -279,7 +279,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -331,7 +331,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
           ),
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),
@@ -387,7 +387,7 @@ class _EditKeluargaPageState extends State<EditKeluargaPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF10B981), width: 2),
             ),
           ),
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF718096)),

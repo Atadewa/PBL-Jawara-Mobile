@@ -32,7 +32,7 @@ class _PopulationDashboardPageState extends State<PopulationDashboardPage> {
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6EE7B7)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
               ),
             );
           }
@@ -55,7 +55,7 @@ class _PopulationDashboardPageState extends State<PopulationDashboardPage> {
                       provider.refreshPopulationDashboard();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6EE7B7),
+                      backgroundColor: const Color(0xFF10B981),
                     ),
                     child: const Text(
                       'Coba Lagi',
@@ -75,7 +75,7 @@ class _PopulationDashboardPageState extends State<PopulationDashboardPage> {
 
           return RefreshIndicator(
             onRefresh: () => provider.refreshPopulationDashboard(),
-            color: const Color(0xFF6EE7B7),
+            color: const Color(0xFF10B981),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(

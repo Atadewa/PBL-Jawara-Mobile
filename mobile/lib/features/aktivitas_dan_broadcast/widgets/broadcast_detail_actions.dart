@@ -23,7 +23,7 @@ class BroadcastDetailActions extends StatelessWidget {
         ElevatedButton(
           onPressed: onEditPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF6EE7B7),
+            backgroundColor: const Color(0xFF10B981),
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),

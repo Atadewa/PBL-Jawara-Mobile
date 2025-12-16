@@ -10,7 +10,7 @@ class RumahCard extends StatelessWidget {
   Color _getStatusColor() {
     switch (rumah.status) {
       case StatusRumah.dihuni:
-        return const Color(0xFF6EE7B7);
+        return const Color(0xFF10B981);
       case StatusRumah.kosong:
         return const Color(0xFF9E9E9E);
       case StatusRumah.dalamRenovasi:
@@ -47,12 +47,12 @@ class RumahCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                    color: const Color(0xFF10B981).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.home_outlined,
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     size: 28,
                   ),
                 ),

@@ -20,21 +20,21 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
       'nama': 'Budi Santoso',
       'nik': '3201010101850001',
       'status': 'Aktif',
-      'statusColor': const Color(0xFF6EE7B7),
+      'statusColor': const Color(0xFF10B981),
       'hubungan': 'Kepala Keluarga',
     },
     {
       'nama': 'Siti Nurjanah',
       'nik': '3201010101880002',
       'status': 'Aktif',
-      'statusColor': const Color(0xFF6EE7B7),
+      'statusColor': const Color(0xFF10B981),
       'hubungan': 'Istri',
     },
     {
       'nama': 'Ahmad Santoso',
       'nik': '3201011011100003',
       'status': 'Aktif',
-      'statusColor': const Color(0xFF6EE7B7),
+      'statusColor': const Color(0xFF10B981),
       'hubungan': 'Anak',
     },
     {
@@ -57,7 +57,7 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
+                colors: [Color(0xFF10B981), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -161,7 +161,7 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
             ),
           );
         },
-        backgroundColor: const Color(0xFF6EE7B7),
+        backgroundColor: const Color(0xFF10B981),
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
@@ -203,12 +203,12 @@ class _DaftarWargaPageState extends State<DaftarWargaPage> {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6EE7B7).withOpacity(0.1),
+                    color: const Color(0xFF10B981).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.person_outline,
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     size: 28,
                   ),
                 ),

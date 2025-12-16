@@ -17,7 +17,7 @@ class BroadcastHeader extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary, // #6EE7B7
+            AppColors.primary, // #10B981
             AppColors.primary.withOpacity(0.8), // Darker variant
           ],
         ),

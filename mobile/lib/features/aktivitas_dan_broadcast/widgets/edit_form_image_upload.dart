@@ -63,7 +63,7 @@ class _EditFormImageUploadState extends State<EditFormImageUpload> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Gambar berhasil ditambahkan'),
-            backgroundColor: Color(0xFF6EE7B7),
+            backgroundColor: Color(0xFF10B981),
           ),
         );
       }
@@ -169,13 +169,13 @@ class _EditFormImageUploadState extends State<EditFormImageUpload> {
                     height: 24,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation(Color(0xFF6EE7B7)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFF10B981)),
                     ),
                   )
                 else
                   const Icon(
                     Icons.cloud_upload_outlined,
-                    color: Color(0xFF6EE7B7),
+                    color: Color(0xFF10B981),
                     size: 24,
                   ),
                 Text(
@@ -184,7 +184,7 @@ class _EditFormImageUploadState extends State<EditFormImageUpload> {
                   style: TextStyle(
                     color: _isUploading
                         ? const Color(0xFFCBD5E1)
-                        : const Color(0xFF6EE7B7),
+                        : const Color(0xFF10B981),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),

@@ -44,7 +44,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -73,7 +73,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6EE7B7),
+              primary: Color(0xFF10B981),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -140,17 +140,14 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          
+
           // Header
           Container(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
             decoration: const BoxDecoration(
               color: Colors.white,
               border: Border(
-                bottom: BorderSide(
-                  width: 1.25,
-                  color: Color(0xFFE2E8F0),
-                ),
+                bottom: BorderSide(width: 1.25, color: Color(0xFFE2E8F0)),
               ),
             ),
             child: Column(
@@ -265,7 +262,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       onTap: () => _selectStartDate(context),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 18),
+                          horizontal: 16,
+                          vertical: 18,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -291,7 +290,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                             const Icon(
                               Icons.calendar_today,
                               size: 20,
-                              color: Color(0xFF6EE7B7),
+                              color: Color(0xFF10B981),
                             ),
                           ],
                         ),
@@ -320,7 +319,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       onTap: () => _selectEndDate(context),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 18),
+                          horizontal: 16,
+                          vertical: 18,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -346,7 +347,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                             const Icon(
                               Icons.calendar_today,
                               size: 20,
-                              color: Color(0xFF6EE7B7),
+                              color: Color(0xFF10B981),
                             ),
                           ],
                         ),
@@ -364,10 +365,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             decoration: const BoxDecoration(
               color: Colors.white,
               border: Border(
-                top: BorderSide(
-                  width: 1.25,
-                  color: Color(0xFFE2E8F0),
-                ),
+                top: BorderSide(width: 1.25, color: Color(0xFFE2E8F0)),
               ),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
             ),
@@ -380,7 +378,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   child: ElevatedButton(
                     onPressed: _apply,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6EE7B7),
+                      backgroundColor: const Color(0xFF10B981),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -409,9 +407,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         child: OutlinedButton(
                           onPressed: _reset,
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF6EE7B7),
+                            foregroundColor: const Color(0xFF10B981),
                             side: const BorderSide(
-                              color: Color(0xFF6EE7B7),
+                              color: Color(0xFF10B981),
                               width: 1.25,
                             ),
                             shape: RoundedRectangleBorder(

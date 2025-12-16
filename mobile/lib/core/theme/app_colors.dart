@@ -5,7 +5,7 @@ class AppColors {
   AppColors._();
 
   // Primary colors
-  static const Color primary = Color(0xFF6EE7B7);
+  static const Color primary = Color(0xFF10B981);
   static const Color primaryDark = Color(0xFF34D399);
 
   // Text colors

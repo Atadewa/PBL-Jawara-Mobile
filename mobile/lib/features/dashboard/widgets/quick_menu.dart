@@ -23,12 +23,12 @@ class QuickMenuWidget extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: ShapeDecoration(
-              color: const Color(0x196EE7B7),
+              color: const Color(0x1910B981),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: Icon(icon, color: const Color(0xFF6EE7B7), size: 28),
+            child: Icon(icon, color: const Color(0xFF10B981), size: 28),
           ),
           const SizedBox(height: 8),
           SizedBox(

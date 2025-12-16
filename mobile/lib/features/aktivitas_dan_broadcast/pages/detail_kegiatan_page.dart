@@ -82,8 +82,8 @@ class _DetailKegiatanPageState extends State<DetailKegiatanPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Event berhasil dihapus'),
-            backgroundColor: Color(0xFF6EE7B7),
+            content: Text('Kegiatan berhasil dihapus'),
+            backgroundColor: Color(0xFF10B981),
             duration: Duration(seconds: 2),
           ),
         );

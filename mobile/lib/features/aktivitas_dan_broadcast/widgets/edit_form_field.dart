@@ -95,7 +95,7 @@ class _EditFormFieldState extends State<EditFormField> {
                   color: widget.errorText != null
                       ? const Color(0xFFFA2B36)
                       : _isFocused
-                      ? const Color(0xFF6EE7B7)
+                      ? const Color(0xFF10B981)
                       : const Color(0xFFE5E7EB),
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -122,7 +122,7 @@ class _EditFormFieldState extends State<EditFormField> {
                         child: Icon(
                           widget.prefixIcon,
                           color: _isFocused
-                              ? const Color(0xFF6EE7B7)
+                              ? const Color(0xFF10B981)
                               : const Color(0xFFCBD5E1),
                           size: 20,
                         ),
