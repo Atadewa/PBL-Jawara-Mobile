@@ -15,6 +15,10 @@ app.get("/health", (req, res) => {
   res.json({ ok: true, message: "Jawara API is running" });
 });
 
+app.get("/health2", (req, res) => {
+  res.json({ ok: true, message: "Jawara API is running 2" });
+});
+
 // test supabase (opsional) - pastikan tabel "roles" ada di Supabase kamu
 app.get("/test-roles", async (req, res) => {
   const { data, error } = await supabase.from("roles").select("*").limit(5);
