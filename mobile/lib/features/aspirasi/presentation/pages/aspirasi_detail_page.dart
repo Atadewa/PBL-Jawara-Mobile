@@ -656,48 +656,85 @@ class _AspirasiDetailPageState extends State<AspirasiDetailPage> {
 
     // Warga-only can edit and delete their own aspirations
     if (isWargaOnly) {
-      return Row(
+      // Check if aspiration is being processed or already resolved
+      final isProcessedOrResolved =
+          aspiration.status == AspirationStatus.inProgress ||
+          aspiration.status == AspirationStatus.resolved;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              key: const Key('aspirasi_delete_button'),
-              icon: const Icon(Icons.delete, color: Colors.white),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
+          if (isProcessedOrResolved)
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.warning.withOpacity(0.3)),
               ),
-              onPressed: _isProcessing ? null : _deleteAspiration,
-              label: const Text(
-                'Hapus',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton.icon(
-              key: const Key('aspirasi_edit_button'),
-              icon: const Icon(Icons.edit, color: Colors.white),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              onPressed: _isProcessing
-                  ? null
-                  : () => _editAspiration(aspiration),
-              label: const Text(
-                'Edit',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: AppColors.warning, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Aspirasi sedang diproses atau sudah selesai, tidak dapat diedit atau dihapus',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  key: const Key('aspirasi_delete_button'),
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: _isProcessing || isProcessedOrResolved
+                      ? null
+                      : _deleteAspiration,
+                  label: const Text(
+                    'Hapus',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  key: const Key('aspirasi_edit_button'),
+                  icon: const Icon(Icons.edit, color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: _isProcessing || isProcessedOrResolved
+                      ? null
+                      : () => _editAspiration(aspiration),
+                  label: const Text(
+                    'Edit',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       );

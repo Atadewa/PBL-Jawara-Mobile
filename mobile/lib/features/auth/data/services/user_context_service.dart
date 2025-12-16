@@ -12,7 +12,10 @@ class UserContextService {
       final response = await _apiClient.get('/auth/me');
 
       if (response.statusCode == 200 && response.data != null) {
-        return UserContextModel.fromJson(response.data as Map<String, dynamic>);
+        final model = UserContextModel.fromJson(
+          response.data as Map<String, dynamic>,
+        );
+        return model;
       } else {
         throw Exception('Failed to fetch user context: ${response.statusCode}');
       }
