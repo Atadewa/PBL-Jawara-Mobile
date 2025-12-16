@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mobile/core/theme/app_colors.dart';
 
 import '../../data/models/aspirasi_model.dart';
-import '../../data/services/aspirasi_service.dart';
+import '../providers/aspiration_provider.dart';
 
 class CreateAspirasiPage extends StatefulWidget {
-  const CreateAspirasiPage({
-    super.key,
-    required this.service,
-    this.initialAspirasi,
-  });
+  const CreateAspirasiPage({super.key, this.initialAspiration});
 
-  final AspirasiService service;
-  final Aspirasi? initialAspirasi;
+  final AspirationModel? initialAspiration;
 
-  bool get isEditing => initialAspirasi != null;
+  bool get isEditing => initialAspiration != null;
 
   @override
   State<CreateAspirasiPage> createState() => _CreateAspirasiPageState();
@@ -24,24 +20,28 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
-  late AspirasiStatus _selectedStatus;
+  late TextEditingController _categoryController;
   bool _isSaving = false;
-  static const String _currentUserId = 'user-1';
 
   @override
   void initState() {
     super.initState();
-    _titleController =
-        TextEditingController(text: widget.initialAspirasi?.title ?? '');
-    _descriptionController =
-        TextEditingController(text: widget.initialAspirasi?.description ?? '');
-    _selectedStatus = widget.initialAspirasi?.status ?? AspirasiStatus.pending;
+    _titleController = TextEditingController(
+      text: widget.initialAspiration?.title ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: widget.initialAspiration?.description ?? '',
+    );
+    _categoryController = TextEditingController(
+      text: widget.initialAspiration?.category ?? '',
+    );
   }
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _categoryController.dispose();
     super.dispose();
   }
 
@@ -50,27 +50,44 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
 
     setState(() => _isSaving = true);
 
-    final input = AspirasiInput(
-      title: _titleController.text.trim(),
-      description: _descriptionController.text.trim(),
-      createdById: _currentUserId,
-      createdBy: widget.initialAspirasi?.createdBy ?? 'Warga',
-      status: _selectedStatus,
-    );
+    final provider = context.read<AspirationProvider>();
 
     try {
-      final result = widget.isEditing
-          ? await widget.service
-              .updateAspirasi(widget.initialAspirasi!.id, input)
-          : await widget.service.createAspirasi(input);
+      if (widget.isEditing) {
+        await provider.updateMyAspiration(
+          id: widget.initialAspiration!.id,
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim(),
+          category: _categoryController.text.trim().isEmpty
+              ? null
+              : _categoryController.text.trim(),
+        );
+      } else {
+        await provider.createAspiration(
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim(),
+          category: _categoryController.text.trim().isEmpty
+              ? null
+              : _categoryController.text.trim(),
+        );
+      }
 
       if (!mounted) return;
-      Navigator.pop(context, result);
+      Navigator.pop(context, true);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menyimpan aspirasi: $e')),
-      );
+
+      // Handle specific errors
+      String errorMessage = 'Gagal menyimpan aspirasi';
+      if (e.toString().contains('403') || e.toString().contains('Forbidden')) {
+        errorMessage = 'Tidak punya akses untuk melakukan aksi ini';
+      } else if (e.toString().contains('401')) {
+        errorMessage = 'Sesi Anda telah berakhir, silakan login kembali';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$errorMessage: $e')));
     } finally {
       if (mounted) {
         setState(() => _isSaving = false);
@@ -82,9 +99,7 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
     _formKey.currentState?.reset();
     _titleController.clear();
     _descriptionController.clear();
-    setState(() {
-      _selectedStatus = AspirasiStatus.pending;
-    });
+    _categoryController.clear();
   }
 
   @override
@@ -124,16 +139,21 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-        _buildTextField(
-          label: 'Judul Aspirasi',
-          hint: 'Masukkan judul aspirasi',
-          controller: _titleController,
-          fieldKey: const Key('aspirasi_form_title'),
-        ),
-        const SizedBox(height: 16),
-        _buildDescriptionField(),
+                        _buildTextField(
+                          label: 'Judul Aspirasi',
+                          hint: 'Masukkan judul aspirasi',
+                          controller: _titleController,
+                          fieldKey: const Key('aspirasi_form_title'),
+                        ),
                         const SizedBox(height: 16),
-                        _buildStatusDropdown(),
+                        _buildDescriptionField(),
+                        const SizedBox(height: 16),
+                        _buildTextField(
+                          label: 'Kategori (Opsional)',
+                          hint: 'Misalnya: Infrastruktur, Kebersihan, dll',
+                          controller: _categoryController,
+                          fieldKey: const Key('aspirasi_form_category'),
+                        ),
                         const SizedBox(height: 24),
                         _buildSubmitButtons(),
                       ],
@@ -215,28 +235,39 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
         TextFormField(
           key: fieldKey,
           controller: controller,
-          validator: (value) =>
-              (value == null || value.trim().isEmpty) ? 'Harus diisi' : null,
+          validator: (value) {
+            // Category is optional
+            if (label.contains('Opsional')) return null;
+            return (value == null || value.trim().isEmpty)
+                ? 'Harus diisi'
+                : null;
+          },
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
             fillColor: AppColors.background,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
+              borderSide: const BorderSide(
+                color: AppColors.borderMuted,
+                width: 1.1,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
+              borderSide: const BorderSide(
+                color: AppColors.borderMuted,
+                width: 1.1,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.4,
+              ),
             ),
-            hintStyle: const TextStyle(
-              color: AppColors.textHint,
-              fontSize: 16,
-            ),
+            hintStyle: const TextStyle(color: AppColors.textHint, fontSize: 16),
           ),
         ),
       ],
@@ -267,83 +298,42 @@ class _CreateAspirasiPageState extends State<CreateAspirasiPage> {
             hintText: 'Jelaskan aspirasi Anda secara detail',
             filled: true,
             fillColor: AppColors.background,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
+              borderSide: const BorderSide(
+                color: AppColors.borderMuted,
+                width: 1.1,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
+              borderSide: const BorderSide(
+                color: AppColors.borderMuted,
+                width: 1.1,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.4,
+              ),
             ),
-            hintStyle: const TextStyle(
-              color: AppColors.textHint,
-              fontSize: 16,
-            ),
+            hintStyle: const TextStyle(color: AppColors.textHint, fontSize: 16),
           ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget _buildStatusDropdown() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Status (Admin)',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<AspirasiStatus>(
-          key: const Key('aspirasi_form_status'),
-          value: _selectedStatus,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.background,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.borderMuted, width: 1.1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
-            ),
-          ),
-          items: AspirasiStatus.values
-              .map(
-                (status) => DropdownMenuItem(
-                  value: status,
-                  child: Text(status.label),
-                ),
-              )
-              .toList(),
-          onChanged: (status) {
-            if (status != null) {
-              setState(() => _selectedStatus = status);
-            }
-          },
         ),
       ],
     );
   }
 
   Widget _buildSubmitButtons() {
-    final saveLabel = widget.isEditing ? 'Perbarui Aspirasi' : 'Simpan Aspirasi';
+    final saveLabel = widget.isEditing
+        ? 'Perbarui Aspirasi'
+        : 'Simpan Aspirasi';
     return Column(
       children: [
         SizedBox(

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
-import '../../../core/auth/dummy_auth_service.dart';
 import '../../../core/auth/auth_session.dart';
 import '../../../core/auth/user_role.dart';
+import '../../../core/auth/app_user.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/providers/user_context_provider.dart';
 import 'register_page.dart';
 
 /// Login page with form validation and API integration
@@ -21,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = DummyAuthService();
+  final _userContextProvider = UserContextProvider();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -41,23 +43,82 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = true);
 
-    final username = _usernameController.text.trim();
+    final email = _usernameController.text.trim();
     final password = _passwordController.text;
 
-    final user = await _authService.login(username, password);
+    try {
+      // Step 1: Sign in with Supabase
+      final authResponse = await Supabase.instance.client.auth
+          .signInWithPassword(email: email, password: password);
 
-    if (!mounted) return;
+      if (authResponse.user == null) {
+        throw Exception('Login gagal');
+      }
 
-    if (user != null) {
-      AuthSession.user.value = user;
-      _showSuccessMessage('Login berhasil sebagai ${user.role.label}');
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
-    } else {
-      _showErrorMessage('Username atau password salah');
+      if (!mounted) return;
+
+      // Step 2: Load user context from backend
+      final success = await _userContextProvider.loadContextAfterLogin();
+
+      if (!mounted) return;
+
+      if (success && _userContextProvider.context != null) {
+        // Successfully loaded context - convert backend role to UserRole enum
+        final backendRole =
+            _userContextProvider.context!.primaryRole ?? 'warga';
+        final userRole = _mapBackendRoleToUserRole(backendRole);
+
+        // Set auth session with user info
+        AuthSession.user.value = AppUser(
+          username: _userContextProvider.context!.name ?? email,
+          role: userRole,
+        );
+
+        _showSuccessMessage('Login berhasil sebagai ${userRole.label}');
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      } else {
+        // Check if waiting for approval
+        if (_userContextProvider.error == 'WAITING_APPROVAL') {
+          Navigator.pushReplacementNamed(context, AppRoutes.verifikasiWarga);
+        } else if (_userContextProvider.error == 'UNAUTHORIZED') {
+          // Token invalid - sign out
+          await Supabase.instance.client.auth.signOut();
+          _showErrorMessage('Token tidak valid. Silakan login ulang.');
+        } else {
+          _showErrorMessage(
+            'Gagal memuat data pengguna: ${_userContextProvider.error}',
+          );
+        }
+      }
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      _showErrorMessage('Login gagal: ${e.message}');
+    } catch (e) {
+      if (!mounted) return;
+      _showErrorMessage('Terjadi kesalahan: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
+  }
 
-    if (mounted) {
-      setState(() => _isLoading = false);
+  /// Map backend role string to UserRole enum
+  UserRole _mapBackendRoleToUserRole(String backendRole) {
+    switch (backendRole.toLowerCase()) {
+      case 'admin':
+        return UserRole.admin;
+      case 'ketua_rw':
+        return UserRole.ketuaRw;
+      case 'ketua_rt':
+        return UserRole.ketuaRt;
+      case 'sekretaris':
+        return UserRole.sekretaris;
+      case 'bendahara':
+        return UserRole.bendahara;
+      case 'warga':
+      default:
+        return UserRole.warga;
     }
   }
 

@@ -36,10 +36,7 @@ class AspirasiCard extends StatelessWidget {
         foregroundDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: const Border(
-            left: BorderSide(
-              width: 4,
-              color: Color(0xFF6EE7B7),
-            ),
+            left: BorderSide(width: 4, color: Color(0xFF6EE7B7)),
           ),
         ),
         child: Column(
@@ -80,7 +77,7 @@ class AspirasiCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Oleh: ${aspirasi.createdBy}',
+                  'Oleh: ${aspirasi.creatorName ?? 'Warga'}',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 12,

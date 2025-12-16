@@ -12,10 +12,7 @@ final List<QuickMenuModel> quickMenus = [
     title: 'Verifikasi User',
     icon: Icons.person_add,
     route: AppRoutes.verifikasiWarga,
-    allowedRoles: {
-      UserRole.admin,
-      UserRole.ketuaRw,
-    },
+    allowedRoles: {UserRole.admin, UserRole.ketuaRw},
   ),
   QuickMenuModel(
     id: 'rumah',
@@ -49,9 +46,7 @@ final List<QuickMenuModel> quickMenus = [
     title: 'Log Aktivitas',
     icon: Icons.history,
     route: AppRoutes.logAktivitas,
-    allowedRoles: {
-      UserRole.admin,
-    },
+    allowedRoles: {UserRole.admin},
   ),
   QuickMenuModel(
     id: 'pengeluaran',
@@ -93,4 +88,32 @@ final List<QuickMenuModel> quickMenus = [
 
 List<QuickMenuModel> getQuickMenusForRole(UserRole role) {
   return quickMenus.where((menu) => menu.allowedRoles.contains(role)).toList();
+}
+
+/// Alternative function to get quick menus by backend role strings
+/// This allows using backend role strings directly without converting to UserRole enum
+List<QuickMenuModel> getQuickMenusForBackendRoles(List<String> backendRoles) {
+  // Map backend role strings to UserRole enums
+  final mappedRoles = backendRoles.map((role) {
+    switch (role.toLowerCase()) {
+      case 'admin':
+        return UserRole.admin;
+      case 'ketua_rw':
+        return UserRole.ketuaRw;
+      case 'ketua_rt':
+        return UserRole.ketuaRt;
+      case 'sekretaris':
+        return UserRole.sekretaris;
+      case 'bendahara':
+        return UserRole.bendahara;
+      case 'warga':
+      default:
+        return UserRole.warga;
+    }
+  }).toList();
+
+  // Get all menus that match any of the user's roles
+  return quickMenus.where((menu) {
+    return mappedRoles.any((role) => menu.allowedRoles.contains(role));
+  }).toList();
 }

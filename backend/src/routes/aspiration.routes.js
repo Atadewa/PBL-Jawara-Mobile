@@ -14,9 +14,7 @@ function canModerate(roleNames) {
 
 async function getResidentIdsByScope(scope) {
   // Ambil residents di wilayah scope rw/rt dengan join houses
-  let q = supabaseAdmin
-    .from("residents")
-    .select("id, houses!inner(rw, rt)");
+  let q = supabaseAdmin.from("residents").select("id, houses!inner(rw, rt)");
 
   if (scope.mode === "rw") {
     q = q.eq("houses.rw", scope.rw);
@@ -39,7 +37,8 @@ async function assertResidentInScope(residentId, scope) {
   if (scope.mode === "all") return { ok: true };
 
   const idNum = Number(residentId);
-  if (!Number.isFinite(idNum)) return { ok: false, message: "resident_id tidak valid" };
+  if (!Number.isFinite(idNum))
+    return { ok: false, message: "resident_id tidak valid" };
 
   let q = supabaseAdmin
     .from("residents")
@@ -55,7 +54,8 @@ async function assertResidentInScope(residentId, scope) {
   }
 
   const { data, error } = await q.single();
-  if (error || !data) return { ok: false, message: "Aspirasi di luar scope RW/RT" };
+  if (error || !data)
+    return { ok: false, message: "Aspirasi di luar scope RW/RT" };
 
   return { ok: true };
 }
@@ -77,7 +77,20 @@ router.get("/", requireAuth, async (req, res) => {
 
       const { data, error } = await supabaseAdmin
         .from("aspirations")
-        .select("*")
+        .select(
+          `
+          *,
+          created_by_resident:residents!created_by_resident_id (
+            id,
+            full_name,
+            houses!residents_house_id_fkey (
+              rw,
+              rt,
+              address
+            )
+          )
+        `
+        )
         .eq("created_by_resident_id", appUser.resident_id)
         .order("created_at", { ascending: false });
 
@@ -85,11 +98,24 @@ router.get("/", requireAuth, async (req, res) => {
       return res.json({ data });
     }
 
-    // admin/pengurus -> sesuai scope
+    // admin/pengurus -> sesuai scope (with creator info)
+    const selectQuery = `
+      *,
+      created_by_resident:residents!created_by_resident_id (
+        id,
+        full_name,
+        houses!residents_house_id_fkey (
+          rw,
+          rt,
+          address
+        )
+      )
+    `;
+
     if (scope.mode === "all") {
       const { data, error } = await supabaseAdmin
         .from("aspirations")
-        .select("*")
+        .select(selectQuery)
         .order("created_at", { ascending: false });
 
       if (error) return res.status(500).json({ message: error.message });
@@ -102,7 +128,7 @@ router.get("/", requireAuth, async (req, res) => {
 
     const { data, error } = await supabaseAdmin
       .from("aspirations")
-      .select("*")
+      .select(selectQuery)
       .in("created_by_resident_id", residentIds)
       .order("created_at", { ascending: false });
 
@@ -114,42 +140,42 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // POST /aspirations
-// - warga: otomatis pakai resident_id milik dia
-// - admin/pengurus: boleh create (kalau resident_id null, wajib kirim created_by_resident_id)
-//   + validasi scope agar pengurus RT/RW tidak bisa buat untuk wilayah lain
+// - ONLY warga-only (warga AND NOT moderator) can create
+// - Moderators CANNOT create aspirations
 router.post("/", requireAuth, async (req, res) => {
   try {
-    const { appUser, roleNames, scope } = req.userContext;
+    const { appUser, roleNames } = req.userContext;
+
+    // ✅ Only warga-only (not moderator) can create
+    if (canModerate(roleNames)) {
+      return res
+        .status(403)
+        .json({ message: "Moderator tidak dapat membuat aspirasi" });
+    }
+
+    if (!roleNames.includes("warga")) {
+      return res
+        .status(403)
+        .json({ message: "Hanya warga yang dapat membuat aspirasi" });
+    }
+
+    if (!appUser.resident_id) {
+      return res.status(403).json({
+        message: "Resident belum terhubung ke user (resident_id null)",
+      });
+    }
 
     const body = req.body ?? {};
     const { title, description, category } = body;
 
     if (!title || !description) {
-      return res.status(400).json({ message: "title dan description wajib diisi" });
+      return res
+        .status(400)
+        .json({ message: "title dan description wajib diisi" });
     }
 
-    // tentukan created_by_resident_id
-    let createdByResidentId = appUser.resident_id;
-
-    // kalau user tidak terhubung resident (mis. admin non-warga), boleh set manual
-    if (!createdByResidentId) {
-      if (!body.created_by_resident_id) {
-        return res.status(400).json({
-          message:
-            "User belum punya resident_id. Kirim created_by_resident_id di body (untuk admin/pengurus).",
-        });
-      }
-      createdByResidentId = body.created_by_resident_id;
-
-      // ✅ validasi scope (kecuali admin all)
-      const check = await assertResidentInScope(createdByResidentId, scope);
-      if (!check.ok) return res.status(403).json({ message: check.message });
-    }
-
-    // warga sebaiknya tidak boleh "impersonate"
-    if (roleNames.includes("warga") && body.created_by_resident_id) {
-      return res.status(403).json({ message: "Warga tidak boleh set created_by_resident_id manual" });
-    }
+    // warga-only: always use their own resident_id
+    const createdByResidentId = appUser.resident_id;
 
     const payload = {
       title,
@@ -173,6 +199,190 @@ router.post("/", requireAuth, async (req, res) => {
   }
 });
 
+// PATCH /aspirations/:id
+// - warga-only can update title/description/category of their own aspiration
+router.patch("/:id", requireAuth, async (req, res) => {
+  try {
+    const { appUser, roleNames } = req.userContext;
+
+    // Only warga-only can update content
+    if (canModerate(roleNames)) {
+      return res
+        .status(403)
+        .json({ message: "Moderator tidak dapat mengubah konten aspirasi" });
+    }
+
+    if (!roleNames.includes("warga")) {
+      return res
+        .status(403)
+        .json({ message: "Hanya warga yang dapat mengubah aspirasi" });
+    }
+
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id))
+      return res.status(400).json({ message: "Invalid id" });
+
+    // Check ownership
+    const { data: asp, error: aspErr } = await supabaseAdmin
+      .from("aspirations")
+      .select("id, created_by_user_id, created_by_resident_id")
+      .eq("id", id)
+      .single();
+
+    if (aspErr || !asp)
+      return res.status(404).json({ message: "Aspirasi tidak ditemukan" });
+
+    // Verify ownership (prefer user_id check)
+    const isOwner =
+      asp.created_by_user_id === appUser.id ||
+      (appUser.resident_id &&
+        asp.created_by_resident_id === appUser.resident_id);
+
+    if (!isOwner) {
+      return res
+        .status(403)
+        .json({ message: "Anda tidak dapat mengubah aspirasi orang lain" });
+    }
+
+    const { title, description, category } = req.body ?? {};
+    const patch = { updated_at: new Date().toISOString() };
+
+    if (title !== undefined) patch.title = title;
+    if (description !== undefined) patch.description = description;
+    if (category !== undefined) patch.category = category;
+
+    const { data, error } = await supabaseAdmin
+      .from("aspirations")
+      .update(patch)
+      .eq("id", id)
+      .select("*")
+      .single();
+
+    if (error) return res.status(500).json({ message: error.message });
+    return res.json({ data });
+  } catch (e) {
+    return res.status(500).json({ message: e.message || "Server error" });
+  }
+});
+
+// DELETE /aspirations/:id
+// - warga-only can delete their own aspiration
+router.delete("/:id", requireAuth, async (req, res) => {
+  try {
+    const { appUser, roleNames } = req.userContext;
+
+    // Only warga-only can delete
+    if (canModerate(roleNames)) {
+      return res
+        .status(403)
+        .json({ message: "Moderator tidak dapat menghapus aspirasi" });
+    }
+
+    if (!roleNames.includes("warga")) {
+      return res
+        .status(403)
+        .json({ message: "Hanya warga yang dapat menghapus aspirasi" });
+    }
+
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id))
+      return res.status(400).json({ message: "Invalid id" });
+
+    // Check ownership
+    const { data: asp, error: aspErr } = await supabaseAdmin
+      .from("aspirations")
+      .select("id, created_by_user_id, created_by_resident_id")
+      .eq("id", id)
+      .single();
+
+    if (aspErr || !asp)
+      return res.status(404).json({ message: "Aspirasi tidak ditemukan" });
+
+    // Verify ownership
+    const isOwner =
+      asp.created_by_user_id === appUser.id ||
+      (appUser.resident_id &&
+        asp.created_by_resident_id === appUser.resident_id);
+
+    if (!isOwner) {
+      return res
+        .status(403)
+        .json({ message: "Anda tidak dapat menghapus aspirasi orang lain" });
+    }
+
+    const { error } = await supabaseAdmin
+      .from("aspirations")
+      .delete()
+      .eq("id", id);
+
+    if (error) return res.status(500).json({ message: error.message });
+    return res.json({ message: "Aspirasi berhasil dihapus" });
+  } catch (e) {
+    return res.status(500).json({ message: e.message || "Server error" });
+  }
+});
+
+// GET /aspirations/:id
+// - warga-only: can read only their own
+// - moderator: can read if inside scope
+router.get("/:id", requireAuth, async (req, res) => {
+  try {
+    const { appUser, roleNames, scope } = req.userContext;
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id))
+      return res.status(400).json({ message: "Invalid id" });
+
+    // Fetch with creator info
+    const { data: asp, error } = await supabaseAdmin
+      .from("aspirations")
+      .select(
+        `
+        *,
+        created_by_resident:residents!created_by_resident_id (
+          id,
+          full_name,
+          houses!residents_house_id_fkey (
+            rw,
+            rt,
+            address
+          )
+        )
+      `
+      )
+      .eq("id", id)
+      .single();
+
+    if (error || !asp)
+      return res.status(404).json({ message: "Aspirasi tidak ditemukan" });
+
+    // warga-only: only their own
+    if (roleNames.includes("warga") && !canModerate(roleNames)) {
+      const isOwner =
+        asp.created_by_user_id === appUser.id ||
+        (appUser.resident_id &&
+          asp.created_by_resident_id === appUser.resident_id);
+
+      if (!isOwner) {
+        return res
+          .status(403)
+          .json({ message: "Anda tidak dapat melihat aspirasi orang lain" });
+      }
+      return res.json({ data: asp });
+    }
+
+    // moderator: check scope
+    const check = await assertResidentInScope(
+      asp.created_by_resident_id,
+      scope
+    );
+    if (!check.ok) return res.status(403).json({ message: check.message });
+
+    return res.json({ data: asp });
+  } catch (e) {
+    return res.status(500).json({ message: e.message || "Server error" });
+  }
+});
+
 // PATCH /aspirations/:id/status
 // - pengurus/admin mengubah status + decision_note (optional)
 // ✅ sekarang ada cek scope RW/RT dulu sebelum update
@@ -185,7 +395,8 @@ router.patch("/:id/status", requireAuth, async (req, res) => {
     }
 
     const id = Number(req.params.id);
-    if (!Number.isFinite(id)) return res.status(400).json({ message: "Invalid id" });
+    if (!Number.isFinite(id))
+      return res.status(400).json({ message: "Invalid id" });
 
     const { status, decision_note } = req.body ?? {};
     if (!ALLOWED_STATUS.includes(status)) {
@@ -199,9 +410,13 @@ router.patch("/:id/status", requireAuth, async (req, res) => {
       .eq("id", id)
       .single();
 
-    if (aspErr || !asp) return res.status(404).json({ message: "Aspirasi tidak ditemukan" });
+    if (aspErr || !asp)
+      return res.status(404).json({ message: "Aspirasi tidak ditemukan" });
 
-    const check = await assertResidentInScope(asp.created_by_resident_id, scope);
+    const check = await assertResidentInScope(
+      asp.created_by_resident_id,
+      scope
+    );
     if (!check.ok) return res.status(403).json({ message: check.message });
 
     const patch = {

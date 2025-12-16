@@ -39,14 +39,16 @@ class AspirasiStatusChip extends StatelessWidget {
   }
 
   Color _backgroundColor(AspirasiStatus status) => switch (status) {
-        AspirasiStatus.pending => AppColors.warningSurface,
-        AspirasiStatus.diterima => AppColors.successSurface,
-        AspirasiStatus.ditolak => AppColors.errorSurface,
-      };
+    AspirasiStatus.pending => AppColors.warningSurface,
+    AspirasiStatus.inProgress => const Color(0xFFE0E7FF),
+    AspirasiStatus.resolved => AppColors.successSurface,
+    AspirasiStatus.rejected => AppColors.errorSurface,
+  };
 
   Color _textColor(AspirasiStatus status) => switch (status) {
-        AspirasiStatus.pending => AppColors.warningDark,
-        AspirasiStatus.diterima => AppColors.successDark,
-        AspirasiStatus.ditolak => AppColors.errorDark,
-      };
+    AspirasiStatus.pending => AppColors.warningDark,
+    AspirasiStatus.inProgress => const Color(0xFF4338CA),
+    AspirasiStatus.resolved => AppColors.successDark,
+    AspirasiStatus.rejected => AppColors.errorDark,
+  };
 }

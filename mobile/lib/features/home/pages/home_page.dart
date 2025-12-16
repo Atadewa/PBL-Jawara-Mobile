@@ -3,6 +3,8 @@ import '../../../core/layouts/main_layout.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/auth/auth_session.dart';
 import '../../../core/auth/user_role.dart';
+import '../../../core/auth/role_helper.dart';
+import '../../../core/providers/user_context_provider.dart';
 import '../widgets/simple_stat_card.dart';
 import '../widgets/dashboard_button.dart';
 import '../widgets/quick_menu_item.dart';
@@ -23,8 +25,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeService _homeService = HomeService();
+  final UserContextProvider _userContextProvider = UserContextProvider();
   bool _isLoading = true;
-  UserInfo? _userInfo;
   HomeStats? _stats;
   String? _errorMessage;
 
@@ -32,6 +34,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
+
+    // Debug: print scope from user context
+    if (_userContextProvider.context != null) {
+      print(
+        '[HomePage] Scope from /auth/me: ${_userContextProvider.context!.scope}',
+      );
+    }
   }
 
   /// Load data dari API
@@ -47,7 +56,6 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
 
       setState(() {
-        _userInfo = data['userInfo'] as UserInfo;
         _stats = data['stats'] as HomeStats;
         _isLoading = false;
       });
@@ -150,6 +158,16 @@ class _HomePageState extends State<HomePage> {
 
   /// Build header section dengan gradient hijau
   Widget _buildHeader(UserRole role) {
+    final sessionUser = AuthSession.user.value;
+    final userContext = _userContextProvider.context;
+    final userName = userContext?.name ?? sessionUser?.username ?? 'User';
+    final userRoleLabel = userContext != null
+        ? getRoleLabel(userContext.roles)
+        : role.label;
+    final scopeText = userContext != null
+        ? getScopeText(userContext.scope)
+        : 'RT 01 / RW 05';
+
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -180,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _userInfo?.role ?? role.label,
+                      userName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -189,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _userInfo?.rtRw ?? 'RT 01 / RW 05',
+                      scopeText,
                       style: const TextStyle(
                         color: Color(0xE5FFFEFE),
                         fontSize: 14,
@@ -198,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Role: ${role.label}',
+                      'Role: $userRoleLabel',
                       style: const TextStyle(
                         color: Color(0xE5FFFEFE),
                         fontSize: 12,
@@ -329,10 +347,7 @@ class _HomePageState extends State<HomePage> {
                     (menu) => QuickMenuItem(
                       label: menu.title,
                       icon: menu.icon,
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        menu.route,
-                      ),
+                      onTap: () => Navigator.pushNamed(context, menu.route),
                     ),
                   )
                   .toList(),

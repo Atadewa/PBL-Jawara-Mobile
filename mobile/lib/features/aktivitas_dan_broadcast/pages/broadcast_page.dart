@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/routes/app_routes.dart';
 import '../models/broadcast.dart';
-import '../services/aktivitas_service.dart';
+import '../services/broadcast_service.dart';
 import '../widgets/broadcast_header.dart';
 import '../widgets/broadcast_card.dart';
 
@@ -28,17 +28,20 @@ class BroadcastPage extends StatefulWidget {
 }
 
 class _BroadcastPageState extends State<BroadcastPage> {
-  final AktivitasService _aktivitasService = AktivitasService();
+  final BroadcastService _broadcastService = BroadcastService();
   late Future<List<Broadcast>> _broadcastsFuture;
 
   @override
   void initState() {
     super.initState();
     _loadBroadcasts();
+
+    // Debug log
+    print('[BroadcastPage] Initialized - loading broadcasts from backend');
   }
 
   void _loadBroadcasts() {
-    _broadcastsFuture = _aktivitasService.getBroadcastList();
+    _broadcastsFuture = _broadcastService.getBroadcastList();
   }
 
   Future<void> _onRefresh() async {
@@ -78,6 +81,10 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
                 // Data loaded successfully
                 final broadcasts = snapshot.data!;
+
+                // Debug log
+                print('[BroadcastPage] Loaded ${broadcasts.length} broadcasts');
+
                 return RefreshIndicator(
                   onRefresh: _onRefresh,
                   color: const Color(0xFF6EE7B7),
@@ -92,9 +99,13 @@ class _BroadcastPageState extends State<BroadcastPage> {
                           broadcast: broadcast,
                           onTap: () {
                             // Navigate to broadcast detail page
+                            // Parse id as int if it's a String
+                            final broadcastId = broadcast.id is int
+                                ? broadcast.id as int
+                                : int.parse(broadcast.id.toString());
                             Navigator.of(context).pushNamed(
                               AppRoutes.broadcastDetail,
-                              arguments: broadcast.id,
+                              arguments: broadcastId,
                             );
                           },
                         ),
