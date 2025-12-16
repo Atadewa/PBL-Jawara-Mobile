@@ -58,7 +58,8 @@ class AppRoutes {
   static const String detailKegiatan = '/aktivitas-dan-broadcast/detail';
   static const String editKegiatan = '/aktivitas-dan-broadcast/edit';
   static const String broadcast = '/aktivitas-dan-broadcast/broadcast';
-  static const String broadcastDetail = '/aktivitas-dan-broadcast/broadcast/detail';
+  static const String broadcastDetail =
+      '/aktivitas-dan-broadcast/broadcast/detail';
   static const String editBroadcast = '/aktivitas-dan-broadcast/broadcast/edit';
   static const String addBroadcast = '/aktivitas-dan-broadcast/broadcast/add';
 
@@ -138,7 +139,7 @@ class AppRoutes {
           builder: (_) => DaftarKeluargaPage(rumah: rumah as dynamic),
         );
       case detailKegiatan:
-        final kegiatanId = settings.arguments as String;
+        final kegiatanId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => DetailKegiatanPage(kegiatanId: kegiatanId),
         );
@@ -152,7 +153,7 @@ class AppRoutes {
       case broadcast:
         return MaterialPageRoute(builder: (_) => const BroadcastPage());
       case broadcastDetail:
-        final broadcastId = settings.arguments as String;
+        final broadcastId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => BroadcastDetailPage(broadcastId: broadcastId),
         );

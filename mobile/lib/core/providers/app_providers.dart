@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'user_context_provider.dart';
 import '../../features/dashboard/services/dashboard_service.dart';
 import '../../features/dashboard/services/finance_service.dart';
 import '../../features/dashboard/services/activity_service.dart';
@@ -12,10 +13,13 @@ import '../../features/dashboard/providers/dashboard_provider.dart';
 import '../../features/dashboard/providers/finance_provider.dart';
 import '../../features/dashboard/providers/activity_provider.dart';
 import '../../features/dashboard/providers/population_provider.dart';
+import '../../features/aspirasi/presentation/providers/aspiration_provider.dart';
 
 /// List of all application providers
 class AppProviders {
   static List<SingleChildWidget> get providers => [
+    // Global User Context Provider
+    ChangeNotifierProvider(create: (_) => UserContextProvider()),
     // Dashboard dependencies
     Provider(create: (_) => DashboardService()),
     ProxyProvider<DashboardService, DashboardRepository>(
@@ -73,5 +77,8 @@ class AppProviders {
       },
       update: (_, repository, __) => PopulationProvider(repository: repository),
     ),
+
+    // Aspiration provider
+    ChangeNotifierProvider(create: (_) => AspirationProvider()),
   ];
 }
