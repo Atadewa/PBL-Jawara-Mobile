@@ -50,49 +50,15 @@ class IncomeItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  SizedBox(width: 15.98),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 140,
-                        child: Text(
-                          income.title,
-                          style: TextStyle(
-                            color: const Color(0xFF0F172A),
-                            fontSize: 16,
-                            fontFamily: 'Arimo',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 2,
-                        ),
-                        decoration: ShapeDecoration(
-                          color: income.categoryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(57092600),
-                          ),
-                        ),
-                        child: Text(
-                          income.category,
-                          style: TextStyle(
-                            color: income.categoryTextColor,
-                            fontSize: 11,
-                            fontFamily: 'Arimo',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        income.amount,
+                ),
+                SizedBox(width: 15.98),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 140,
+                      child: Text(
+                        income.title,
                         style: TextStyle(
                           color: const Color(0xFF0F172A),
                           fontSize: 16,
@@ -117,25 +83,36 @@ class IncomeItem extends StatelessWidget {
                       child: Text(
                         income.category,
                         style: TextStyle(
-                          color: const Color(0xFF94A3B8),
-                          fontSize: 16,
+                          color: income.categoryTextColor,
+                          fontSize: 11,
                           fontFamily: 'Arimo',
                           fontWeight: FontWeight.w400,
                           height: 1.50,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      income.amount,
+                      style: TextStyle(
+                        color: const Color(0xFF0F172A),
+                        fontSize: 16,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.50,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Positioned(
-              right: 20,
-              top: 78,
-              child: Icon(Icons.arrow_forward, size: 23.98),
-            ),
-          ],
-        ),
+          ),
+          Positioned(
+            right: 20,
+            top: 78,
+            child: Icon(Icons.arrow_forward, size: 23.98),
+          ),
+        ],
       ),
     );
   }
