@@ -52,6 +52,12 @@ npm test -- tests/unit/middlewares/requireAuth.test.js
 # Multiple files
 npm test -- tests/unit/routes/auth.routes.test.js tests/unit/routes/income.routes.test.js
 
+# Admin routes test
+npm test -- tests/unit/routes/admin.routes.test.js
+
+# Expense routes test
+npm test -- tests/unit/routes/expense.routes.test.js
+
 # All tests in a folder
 npm test -- tests/unit/middlewares
 npm test -- tests/unit/routes
@@ -216,7 +222,9 @@ tests/
 │   ├── middlewares/
 │   │   └── requireAuth.test.js          # Auth middleware tests
 │   └── routes/
+│       ├── admin.routes.test.js         # Admin routes tests
 │       ├── auth.routes.test.js          # Auth routes tests
+│       ├── expense.routes.test.js       # Expense routes tests
 │       └── income.routes.test.js        # Income routes tests
 └── integration/
     └── api.integration.test.js          # E2E API tests
