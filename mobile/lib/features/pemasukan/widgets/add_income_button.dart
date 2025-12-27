@@ -13,7 +13,7 @@ class AddIncomeButton extends StatelessWidget {
         width: double.infinity,
         height: 55.96,
         decoration: ShapeDecoration(
-          color: const Color(0xFF10B981),
+          color: const Color(0xFF6EE7B7),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

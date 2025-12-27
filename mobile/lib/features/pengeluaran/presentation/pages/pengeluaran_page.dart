@@ -21,7 +21,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
   List<ExpenseItem> _filteredExpenses = [];
   bool _isLoading = true;
   String? _errorMessage;
-
+  
   // Filter state
   List<ExpenseCategory> _selectedCategories = [];
   DateTime? _startDate;
@@ -68,9 +68,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
     // Filter by date range
     if (_startDate != null) {
       filtered = filtered.where((expense) {
-        return expense.date.isAfter(
-          _startDate!.subtract(const Duration(days: 1)),
-        );
+        return expense.date.isAfter(_startDate!.subtract(const Duration(days: 1)));
       }).toList();
     }
 
@@ -82,10 +80,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
 
     setState(() {
       _filteredExpenses = filtered;
-      _isFiltered =
-          _selectedCategories.isNotEmpty ||
-          _startDate != null ||
-          _endDate != null;
+      _isFiltered = _selectedCategories.isNotEmpty || _startDate != null || _endDate != null;
     });
   }
 
@@ -128,7 +123,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         builder: (context) => DetailPengeluaranPage(expenseId: expense.id),
       ),
     );
-
+    
     // Reload jika ada perubahan (edit)
     if (result == true && mounted) {
       _loadExpenses();
@@ -149,7 +144,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                 gradient: LinearGradient(
                   begin: Alignment(0.50, 0.00),
                   end: Alignment(0.50, 1.00),
-                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 ),
               ),
               child: Padding(
@@ -202,9 +197,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                           ),
                           child: IconButton(
                             icon: Icon(
-                              _isFiltered
-                                  ? Icons.filter_alt
-                                  : Icons.filter_list,
+                              _isFiltered ? Icons.filter_alt : Icons.filter_list,
                               color: Colors.white,
                               size: 20,
                             ),
@@ -263,7 +256,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         width: 64,
         height: 64,
         decoration: BoxDecoration(
-          color: const Color(0xFF10B981),
+          color: const Color(0xFF6EE7B7),
           borderRadius: BorderRadius.circular(36410900),
           boxShadow: const [
             BoxShadow(
@@ -275,13 +268,17 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
           ],
         ),
         child: IconButton(
-          icon: const Icon(Icons.add, color: Colors.white, size: 32),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 32,
+          ),
           onPressed: () async {
             final result = await Navigator.pushNamed(
               context,
               AppRoutes.addPengeluaran,
             );
-
+            
             // Reload list if expense was added successfully
             if (result == true) {
               _loadExpenses();
@@ -295,7 +292,9 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
   Widget _buildContent() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF10B981)),
+        child: CircularProgressIndicator(
+          color: Color(0xFF6EE7B7),
+        ),
       );
     }
 
@@ -304,11 +303,18 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: Colors.red,
+            ),
             const SizedBox(height: 16),
             Text(
               'Gagal memuat data',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             Padding(
@@ -323,7 +329,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
             ElevatedButton(
               onPressed: _loadExpenses,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFF6EE7B7),
               ),
               child: const Text('Coba Lagi'),
             ),
@@ -337,11 +343,18 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.receipt_long_outlined, size: 64, color: Colors.grey),
+            Icon(
+              Icons.receipt_long_outlined,
+              size: 64,
+              color: Colors.grey,
+            ),
             SizedBox(height: 16),
             Text(
               'Belum ada pengeluaran',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 8),
             Text(
@@ -361,11 +374,18 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.search_off, size: 64, color: Colors.grey),
+            const Icon(
+              Icons.search_off,
+              size: 64,
+              color: Colors.grey,
+            ),
             const SizedBox(height: 16),
             const Text(
               'Tidak ada hasil',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -376,7 +396,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
             ElevatedButton(
               onPressed: _clearFilters,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFF6EE7B7),
               ),
               child: const Text('Hapus Filter'),
             ),
@@ -428,8 +448,8 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                             _startDate != null && _endDate != null
                                 ? '${_formatDateShort(_startDate!)} - ${_formatDateShort(_endDate!)}'
                                 : _startDate != null
-                                ? 'Dari ${_formatDateShort(_startDate!)}'
-                                : 'Sampai ${_formatDateShort(_endDate!)}',
+                                    ? 'Dari ${_formatDateShort(_startDate!)}'
+                                    : 'Sampai ${_formatDateShort(_endDate!)}',
                           ),
                           backgroundColor: const Color(0xFFE0F2FE),
                           labelStyle: const TextStyle(
@@ -458,7 +478,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                   child: const Text(
                     'Hapus Semua',
                     style: TextStyle(
-                      color: Color(0xFF10B981),
+                      color: Color(0xFF6EE7B7),
                       fontSize: 12,
                       fontFamily: 'Arimo',
                     ),
@@ -471,7 +491,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: _loadExpenses,
-            color: const Color(0xFF10B981),
+            color: const Color(0xFF6EE7B7),
             child: ListView.builder(
               padding: const EdgeInsets.all(24),
               itemCount: displayExpenses.length,
@@ -491,18 +511,8 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
 
   String _formatDateShort(DateTime date) {
     final months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Agu',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
     ];
     return '${date.day} ${months[date.month - 1]}';
   }

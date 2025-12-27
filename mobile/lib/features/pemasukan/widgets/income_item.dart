@@ -4,9 +4,8 @@ import '../models/income_model.dart';
 
 class IncomeItem extends StatelessWidget {
   final Income income;
-  final VoidCallback? onTap;
 
-  const IncomeItem({required this.income, this.onTap});
+  const IncomeItem({required this.income});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,10 @@ class IncomeItem extends StatelessWidget {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 3.40, color: const Color(0xFF10B981)),
+          side: BorderSide(
+            width: 3.40,
+            color: const Color(0xFF6EE7B7),
+          ),
           borderRadius: BorderRadius.circular(16),
         ),
         shadows: [
@@ -45,10 +47,13 @@ class IncomeItem extends StatelessWidget {
                   width: 47.99,
                   height: 47.99,
                   decoration: ShapeDecoration(
-                    color: const Color(0x1910B981),
+                    color: const Color(0x196EE7B7),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
+                  ),
+                  child: Center(
+                    child: Icon(Icons.monetization_on, size: 23.98),
                   ),
                 ),
                 SizedBox(width: 15.98),
@@ -70,10 +75,7 @@ class IncomeItem extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 2,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                       decoration: ShapeDecoration(
                         color: income.categoryColor,
                         shape: RoundedRectangleBorder(
@@ -96,6 +98,17 @@ class IncomeItem extends StatelessWidget {
                       income.amount,
                       style: TextStyle(
                         color: const Color(0xFF0F172A),
+                        fontSize: 16,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.50,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      income.date,
+                      style: TextStyle(
+                        color: const Color(0xFF94A3B8),
                         fontSize: 16,
                         fontFamily: 'Arimo',
                         fontWeight: FontWeight.w400,

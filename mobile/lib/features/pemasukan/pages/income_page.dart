@@ -3,7 +3,6 @@ import '../models/income_model.dart';
 import '../widgets/income_item.dart';
 import '../widgets/add_income_button.dart';
 import 'add_income_page.dart';
-import 'income_details_page.dart';
 
 class IncomePage extends StatefulWidget {
   @override
@@ -19,8 +18,6 @@ class _IncomePageState extends State<IncomePage> {
       date: '15 Agustus 2025',
       categoryColor: Color(0xFFDBEAFE),
       categoryTextColor: Color(0xFF1347E5),
-      description:
-          'Dana bantuan dari pemerintah daerah untuk mendukung pelaksanaan kegiatan peringatan HUT RI ke-80 di lingkungan RT 01 / RW 05. Dana digunakan untuk keperluan dekorasi, doorprize, dan konsumsi.',
     ),
     Income(
       title: 'Sumbangan Warga untuk Renovasi',
@@ -61,7 +58,7 @@ class _IncomePageState extends State<IncomePage> {
               padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 ),
               ),
               child: Row(
@@ -80,11 +77,7 @@ class _IncomePageState extends State<IncomePage> {
                   const SizedBox(width: 12),
                   const Text(
                     'Pemasukan',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -98,11 +91,7 @@ class _IncomePageState extends State<IncomePage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x19000000),
-                      blurRadius: 20,
-                      offset: Offset(0, 10),
-                    ),
+                    BoxShadow(color: Color(0x19000000), blurRadius: 20, offset: Offset(0, 10)),
                   ],
                 ),
                 child: Column(
@@ -129,19 +118,7 @@ class _IncomePageState extends State<IncomePage> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
-                            child: IncomeItem(
-                              income: _incomes[index],
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => IncomeDetailsPage(
-                                      income: _incomes[index],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                            child: IncomeItem(income: _incomes[index]),
                           );
                         },
                       ),

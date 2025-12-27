@@ -16,13 +16,13 @@ class DetailWargaPage extends StatelessWidget {
   Color _getStatusColor() {
     switch (warga['status']) {
       case 'Aktif':
-        return const Color(0xFF10B981);
+        return const Color(0xFF6EE7B7);
       case 'Pindah':
         return const Color(0xFFFFA726);
       case 'Meninggal':
         return const Color(0xFF9E9E9E);
       default:
-        return const Color(0xFF10B981);
+        return const Color(0xFF6EE7B7);
     }
   }
 
@@ -37,7 +37,7 @@ class DetailWargaPage extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -124,12 +124,12 @@ class DetailWargaPage extends StatelessWidget {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withOpacity(0.1),
+                            color: const Color(0xFF6EE7B7).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
                             Icons.person_outline,
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                             size: 40,
                           ),
                         ),
@@ -201,7 +201,7 @@ class DetailWargaPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
+                        backgroundColor: const Color(0xFF6EE7B7),
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(

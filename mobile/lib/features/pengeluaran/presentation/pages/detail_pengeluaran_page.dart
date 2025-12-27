@@ -8,7 +8,10 @@ import '../widgets/expense_category_badge.dart';
 class DetailPengeluaranPage extends StatefulWidget {
   final String expenseId;
 
-  const DetailPengeluaranPage({super.key, required this.expenseId});
+  const DetailPengeluaranPage({
+    super.key,
+    required this.expenseId,
+  });
 
   @override
   State<DetailPengeluaranPage> createState() => _DetailPengeluaranPageState();
@@ -60,7 +63,7 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
                 gradient: LinearGradient(
                   begin: Alignment(0.50, 0.00),
                   end: Alignment(0.50, 1.00),
-                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 ),
               ),
               child: Padding(
@@ -124,12 +127,12 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF10B981),
+                          color: Color(0xFF6EE7B7),
                         ),
                       )
                     : _errorMessage != null
-                    ? _buildErrorState()
-                    : _buildContent(),
+                        ? _buildErrorState()
+                        : _buildContent(),
               ),
             ),
           ],
@@ -145,11 +148,18 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: Colors.red,
+            ),
             const SizedBox(height: 16),
             const Text(
               'Gagal memuat detail',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -161,7 +171,7 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
             ElevatedButton(
               onPressed: _loadExpenseDetail,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFF6EE7B7),
               ),
               child: const Text('Coba Lagi'),
             ),
@@ -183,7 +193,10 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
           decoration: BoxDecoration(
             color: Colors.white,
             border: const Border(
-              left: BorderSide(width: 4, color: Color(0xFF10B981)),
+              left: BorderSide(
+                width: 4,
+                color: Color(0xFF6EE7B7),
+              ),
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: const [
@@ -233,10 +246,7 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: _expense!.category.backgroundColor,
                     borderRadius: BorderRadius.circular(36410900),
@@ -387,14 +397,14 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
                 '/pengeluaran/edit',
                 arguments: widget.expenseId,
               );
-
+              
               // Reload data jika edit berhasil
               if (result == true && mounted) {
                 _loadExpenseDetail();
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: const Color(0xFF6EE7B7),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -404,7 +414,11 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.edit, color: Colors.white, size: 20),
+                Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 SizedBox(width: 8),
                 Text(
                   'Edit Pengeluaran',
@@ -446,8 +460,7 @@ class _DetailPengeluaranPageState extends State<DetailPengeluaranPage> {
         const SizedBox(height: 4),
         Text(
           value,
-          style:
-              valueStyle ??
+          style: valueStyle ??
               const TextStyle(
                 color: Color(0xFF0F172A),
                 fontSize: 16,

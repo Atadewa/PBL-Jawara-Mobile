@@ -1,6 +1,0 @@
-tokens.bat
-.env
-.env.test
-node_modules
-coverage/
-*.log

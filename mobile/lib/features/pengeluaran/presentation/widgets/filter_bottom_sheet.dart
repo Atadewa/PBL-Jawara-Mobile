@@ -42,7 +42,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+              primary: Color(0xFF6EE7B7),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -72,7 +72,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+              primary: Color(0xFF6EE7B7),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -90,18 +90,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Agu',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -143,7 +133,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           const SizedBox(height: 20),
-
+          
           // Header
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -164,7 +154,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   child: const Text(
                     'Reset',
                     style: TextStyle(
-                      color: Color(0xFF10B981),
+                      color: Color(0xFF6EE7B7),
                       fontSize: 16,
                       fontFamily: 'Arimo',
                       fontWeight: FontWeight.w400,
@@ -216,16 +206,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         selectedColor: category.backgroundColor,
                         checkmarkColor: category.textColor,
                         labelStyle: TextStyle(
-                          color: isSelected
-                              ? category.textColor
-                              : const Color(0xFF64748B),
+                          color: isSelected ? category.textColor : const Color(0xFF64748B),
                           fontSize: 14,
                           fontFamily: 'Arimo',
                         ),
                         side: BorderSide(
-                          color: isSelected
-                              ? category.backgroundColor
-                              : const Color(0xFFE1E8F0),
+                          color: isSelected ? category.backgroundColor : const Color(0xFFE1E8F0),
                           width: 1,
                         ),
                         shape: RoundedRectangleBorder(
@@ -248,15 +234,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                   ),
                   const SizedBox(height: 12),
-
+                  
                   // Tanggal Mulai
                   InkWell(
                     onTap: _selectStartDate,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 15,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: const Color(0xFFE1E8F0),
@@ -295,7 +278,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           ),
                           const Icon(
                             Icons.calendar_today,
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                             size: 20,
                           ),
                         ],
@@ -308,10 +291,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   InkWell(
                     onTap: _selectEndDate,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 15,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: const Color(0xFFE1E8F0),
@@ -350,7 +330,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           ),
                           const Icon(
                             Icons.calendar_today,
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                             size: 20,
                           ),
                         ],
@@ -401,7 +381,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     onPressed: _applyFilters,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: const Color(0xFF6EE7B7),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),

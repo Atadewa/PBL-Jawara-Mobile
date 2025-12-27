@@ -17,7 +17,7 @@ class DetailKeluargaPage extends StatelessWidget {
   Color _getStatusColor() {
     switch (keluarga.status) {
       case StatusKeluarga.aktif:
-        return const Color(0xFF10B981);
+        return const Color(0xFF6EE7B7);
       case StatusKeluarga.pindahMasuk:
         return const Color(0xFF7B61FF);
       case StatusKeluarga.tidakAktif:
@@ -36,7 +36,7 @@ class DetailKeluargaPage extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -123,12 +123,12 @@ class DetailKeluargaPage extends StatelessWidget {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withOpacity(0.1),
+                            color: const Color(0xFF6EE7B7).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
                             Icons.people_outline,
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                             size: 40,
                           ),
                         ),
@@ -173,7 +173,7 @@ class DetailKeluargaPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
+                        backgroundColor: const Color(0xFF6EE7B7),
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -212,9 +212,9 @@ class DetailKeluargaPage extends StatelessWidget {
                         );
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF10B981),
+                        foregroundColor: const Color(0xFF6EE7B7),
                         side: const BorderSide(
-                          color: Color(0xFF10B981),
+                          color: Color(0xFF6EE7B7),
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(

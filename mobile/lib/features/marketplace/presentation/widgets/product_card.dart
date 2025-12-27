@@ -37,7 +37,6 @@ class ProductCard extends StatelessWidget {
                 );
               },
           child: Container(
-            key: Key('product_card_${product.id}'),
             decoration: BoxDecoration(
               color: AppColors.background,
               borderRadius: BorderRadius.circular(12),

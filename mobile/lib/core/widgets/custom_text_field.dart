@@ -4,7 +4,6 @@ import '../theme/app_colors.dart';
 
 /// Custom text field widget with consistent styling
 class CustomTextField extends StatelessWidget {
-  final Key? textFieldKey;
   final TextEditingController controller;
   final String label;
   final String hintText;
@@ -20,7 +19,6 @@ class CustomTextField extends StatelessWidget {
 
   const CustomTextField({
     super.key,
-    this.textFieldKey,
     required this.controller,
     required this.label,
     required this.hintText,
@@ -50,7 +48,6 @@ class CustomTextField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          key: textFieldKey,
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,

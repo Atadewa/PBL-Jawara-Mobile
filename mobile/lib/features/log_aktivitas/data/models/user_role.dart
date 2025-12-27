@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 enum UserRole {
-  admin('Admin', Color(0xFF10B981)),
-  ketuaRT('Ketua RT', Color(0xFF10B981)),
-  ketuaRW('Ketua RW', Color(0xFF10B981)),
-  bendahara('Bendahara', Color(0xFF10B981)),
-  sekretaris('Sekretaris', Color(0xFF10B981)),
-  warga('Warga', Color(0xFF10B981));
+  admin('Admin', Color(0xFF6EE7B7)),
+  ketuaRT('Ketua RT', Color(0xFF6EE7B7)),
+  ketuaRW('Ketua RW', Color(0xFF6EE7B7)),
+  bendahara('Bendahara', Color(0xFF6EE7B7)),
+  sekretaris('Sekretaris', Color(0xFF6EE7B7)),
+  warga('Warga', Color(0xFF6EE7B7));
 
   final String displayName;
   final Color color;

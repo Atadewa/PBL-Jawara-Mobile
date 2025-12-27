@@ -44,7 +44,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+              primary: Color(0xFF6EE7B7),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -73,7 +73,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+              primary: Color(0xFF6EE7B7),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -140,14 +140,17 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-
+          
           // Header
           Container(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
             decoration: const BoxDecoration(
               color: Colors.white,
               border: Border(
-                bottom: BorderSide(width: 1.25, color: Color(0xFFE2E8F0)),
+                bottom: BorderSide(
+                  width: 1.25,
+                  color: Color(0xFFE2E8F0),
+                ),
               ),
             ),
             child: Column(
@@ -171,195 +174,187 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
           ),
 
           // Content
-          Flexible(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Aktor Dropdown
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Aktor Dropdown
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Aktor',
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: 16,
-                            fontFamily: 'Arimo',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              width: 1.25,
-                              color: const Color(0xFFE2E8F0),
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<UserRole?>(
-                              value: _selectedAktor,
-                              isExpanded: true,
-                              hint: const Text(
-                                'Semua Aktor',
-                                style: TextStyle(
-                                  color: Color(0xFF0F172A),
-                                  fontSize: 16,
-                                  fontFamily: 'Arimo',
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.50,
-                                ),
-                              ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Color(0xFF94A3B8),
-                              ),
-                              items: [
-                                const DropdownMenuItem<UserRole?>(
-                                  value: null,
-                                  child: Text('Semua Aktor'),
-                                ),
-                                ...UserRole.values.map((role) {
-                                  return DropdownMenuItem<UserRole?>(
-                                    value: role,
-                                    child: Text(role.displayName),
-                                  );
-                                }),
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAktor = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      'Aktor',
+                      style: TextStyle(
+                        color: Color(0xFF0F172A),
+                        fontSize: 16,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.50,
+                      ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // Dari Tanggal
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Dari Tanggal',
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: 16,
-                            fontFamily: 'Arimo',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
-                          ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          width: 1.25,
+                          color: const Color(0xFFE2E8F0),
                         ),
-                        const SizedBox(height: 8),
-                        InkWell(
-                          onTap: () => _selectStartDate(context),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 18,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                width: 1.25,
-                                color: const Color(0xFFE2E8F0),
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _formatDate(_startDate),
-                                  style: TextStyle(
-                                    color: _startDate == null
-                                        ? const Color(0xFF94A3B8)
-                                        : const Color(0xFF0F172A),
-                                    fontSize: 16,
-                                    fontFamily: 'Arimo',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.calendar_today,
-                                  size: 20,
-                                  color: Color(0xFF10B981),
-                                ),
-                              ],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<UserRole?>(
+                          value: _selectedAktor,
+                          isExpanded: true,
+                          hint: const Text(
+                            'Semua Aktor',
+                            style: TextStyle(
+                              color: Color(0xFF0F172A),
+                              fontSize: 16,
+                              fontFamily: 'Arimo',
+                              fontWeight: FontWeight.w400,
+                              height: 1.50,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Sampai Tanggal
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Sampai Tanggal',
-                          style: TextStyle(
-                            color: Color(0xFF0F172A),
-                            fontSize: 16,
-                            fontFamily: 'Arimo',
-                            fontWeight: FontWeight.w400,
-                            height: 1.50,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Color(0xFF94A3B8),
                           ),
+                          items: [
+                            const DropdownMenuItem<UserRole?>(
+                              value: null,
+                              child: Text('Semua Aktor'),
+                            ),
+                            ...UserRole.values.map((role) {
+                              return DropdownMenuItem<UserRole?>(
+                                value: role,
+                                child: Text(role.displayName),
+                              );
+                            }),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAktor = value;
+                            });
+                          },
                         ),
-                        const SizedBox(height: 8),
-                        InkWell(
-                          onTap: () => _selectEndDate(context),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 18,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                width: 1.25,
-                                color: const Color(0xFFE2E8F0),
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _formatDate(_endDate),
-                                  style: TextStyle(
-                                    color: _endDate == null
-                                        ? const Color(0xFF94A3B8)
-                                        : const Color(0xFF0F172A),
-                                    fontSize: 16,
-                                    fontFamily: 'Arimo',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.calendar_today,
-                                  size: 20,
-                                  color: Color(0xFF10B981),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 16),
+
+                // Dari Tanggal
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Dari Tanggal',
+                      style: TextStyle(
+                        color: Color(0xFF0F172A),
+                        fontSize: 16,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.50,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () => _selectStartDate(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            width: 1.25,
+                            color: const Color(0xFFE2E8F0),
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _formatDate(_startDate),
+                              style: TextStyle(
+                                color: _startDate == null
+                                    ? const Color(0xFF94A3B8)
+                                    : const Color(0xFF0F172A),
+                                fontSize: 16,
+                                fontFamily: 'Arimo',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.calendar_today,
+                              size: 20,
+                              color: Color(0xFF6EE7B7),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Sampai Tanggal
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Sampai Tanggal',
+                      style: TextStyle(
+                        color: Color(0xFF0F172A),
+                        fontSize: 16,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.50,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () => _selectEndDate(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            width: 1.25,
+                            color: const Color(0xFFE2E8F0),
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _formatDate(_endDate),
+                              style: TextStyle(
+                                color: _endDate == null
+                                    ? const Color(0xFF94A3B8)
+                                    : const Color(0xFF0F172A),
+                                fontSize: 16,
+                                fontFamily: 'Arimo',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.calendar_today,
+                              size: 20,
+                              color: Color(0xFF6EE7B7),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
 
@@ -369,7 +364,10 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             decoration: const BoxDecoration(
               color: Colors.white,
               border: Border(
-                top: BorderSide(width: 1.25, color: Color(0xFFE2E8F0)),
+                top: BorderSide(
+                  width: 1.25,
+                  color: Color(0xFFE2E8F0),
+                ),
               ),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
             ),
@@ -382,7 +380,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   child: ElevatedButton(
                     onPressed: _apply,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: const Color(0xFF6EE7B7),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -411,9 +409,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         child: OutlinedButton(
                           onPressed: _reset,
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF10B981),
+                            foregroundColor: const Color(0xFF6EE7B7),
                             side: const BorderSide(
-                              color: Color(0xFF10B981),
+                              color: Color(0xFF6EE7B7),
                               width: 1.25,
                             ),
                             shape: RoundedRectangleBorder(

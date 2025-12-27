@@ -222,7 +222,6 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
           // Full Name
           CustomTextField(
-            textFieldKey: const Key('register_full_name_field'),
             controller: _fullNameController,
             label: AppStrings.fullName,
             hintText: AppStrings.enterFullName,
@@ -238,7 +237,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Username
           CustomTextField(
-            textFieldKey: const Key('register_username_field'),
             controller: _usernameController,
             label: AppStrings.username,
             hintText: AppStrings.chooseUsername,
@@ -257,7 +255,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Email
           CustomTextField(
-            textFieldKey: const Key('register_email_field'),
             controller: _emailController,
             label: AppStrings.email,
             hintText: AppStrings.enterEmail,
@@ -277,7 +274,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Phone Number
           CustomTextField(
-            textFieldKey: const Key('register_phone_field'),
             controller: _phoneController,
             label: AppStrings.phoneNumber,
             hintText: AppStrings.enterPhoneNumber,
@@ -306,7 +302,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Password
           CustomTextField(
-            textFieldKey: const Key('register_password_field'),
             controller: _passwordController,
             label: AppStrings.password,
             hintText: AppStrings.minPasswordLength,
@@ -315,7 +310,7 @@ class _RegisterPageState extends State<RegisterPage> {
               if (value == null || value.isEmpty) {
                 return AppStrings.fieldRequired;
               }
-              if (value.length < 2) {
+              if (value.length < 6) {
                 return AppStrings.passwordTooShort;
               }
               return null;
@@ -335,7 +330,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Confirm Password
           CustomTextField(
-            textFieldKey: const Key('register_confirm_password_field'),
             controller: _confirmPasswordController,
             label: AppStrings.confirmPassword,
             hintText: AppStrings.repeatPassword,
@@ -368,7 +362,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
           // Register Button
           CustomButton(
-            key: const Key('register_submit_button'),
             text: AppStrings.register,
             onPressed: _handleRegister,
             isLoading: _isLoading,
@@ -392,7 +385,6 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          key: const Key('register_role_field'),
           value: _selectedRole,
           decoration: InputDecoration(
             hintText: 'Pilih role',

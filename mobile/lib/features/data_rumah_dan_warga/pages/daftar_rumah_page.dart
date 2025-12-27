@@ -55,7 +55,7 @@ class _DaftarRumahPageState extends State<DaftarRumahPage> {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -145,7 +145,7 @@ class _DaftarRumahPageState extends State<DaftarRumahPage> {
             MaterialPageRoute(builder: (context) => const TambahRumahPage()),
           );
         },
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: const Color(0xFF6EE7B7),
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );

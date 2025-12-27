@@ -11,7 +11,7 @@ class DetailRumahPage extends StatelessWidget {
   Color _getStatusColor() {
     switch (rumah.status) {
       case StatusRumah.dihuni:
-        return const Color(0xFF10B981);
+        return const Color(0xFF6EE7B7);
       case StatusRumah.kosong:
         return const Color(0xFF9E9E9E);
       case StatusRumah.dalamRenovasi:
@@ -30,7 +30,7 @@ class DetailRumahPage extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -117,12 +117,12 @@ class DetailRumahPage extends StatelessWidget {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withOpacity(0.1),
+                            color: const Color(0xFF6EE7B7).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
                             Icons.home_outlined,
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                             size: 40,
                           ),
                         ),
@@ -160,7 +160,7 @@ class DetailRumahPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
+                        backgroundColor: const Color(0xFF6EE7B7),
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -199,9 +199,9 @@ class DetailRumahPage extends StatelessWidget {
                         );
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF10B981),
+                        foregroundColor: const Color(0xFF6EE7B7),
                         side: const BorderSide(
-                          color: Color(0xFF10B981),
+                          color: Color(0xFF6EE7B7),
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(

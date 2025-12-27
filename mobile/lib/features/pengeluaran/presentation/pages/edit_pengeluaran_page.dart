@@ -9,7 +9,10 @@ import '../../data/services/expense_service.dart';
 class EditPengeluaranPage extends StatefulWidget {
   final String expenseId;
 
-  const EditPengeluaranPage({super.key, required this.expenseId});
+  const EditPengeluaranPage({
+    super.key,
+    required this.expenseId,
+  });
 
   @override
   State<EditPengeluaranPage> createState() => _EditPengeluaranPageState();
@@ -46,7 +49,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
   Future<void> _loadExpenseData() async {
     try {
       final expense = await _expenseService.fetchExpenseById(widget.expenseId);
-
+      
       if (mounted) {
         setState(() {
           _expense = expense;
@@ -54,19 +57,19 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
           _selectedCategory = expense.category;
           _selectedDate = expense.date;
           _descriptionController.text = expense.description ?? '';
-
+          
           // Format amount untuk display
           final formatted = _formatCurrency(expense.amount.toInt().toString());
           _amountController.text = formatted;
-
+          
           _isLoading = false;
         });
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Gagal memuat data: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memuat data: $e')),
+        );
         Navigator.pop(context);
       }
     }
@@ -82,7 +85,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+              primary: Color(0xFF6EE7B7),
               onPrimary: Colors.white,
               onSurface: Color(0xFF0F172A),
             ),
@@ -103,7 +106,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
     setState(() {
       _uploadedFileName = 'bukti_pengeluaran_updated.jpg';
     });
-
+    
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -122,11 +125,11 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
 
   String _formatCurrency(String value) {
     if (value.isEmpty) return '';
-
+    
     final number = int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
-
+    
     if (number == 0) return '';
-
+    
     final formatted = number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
       (Match m) => '${m[1]}.',
@@ -136,18 +139,8 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
 
   String _formatDateDisplay(DateTime date) {
     final months = [
-      'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember',
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -178,8 +171,8 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
         'category': _selectedCategory!.label,
         'amount': amount,
         'date': _selectedDate!.toIso8601String(),
-        'description': _descriptionController.text.isEmpty
-            ? null
+        'description': _descriptionController.text.isEmpty 
+            ? null 
             : _descriptionController.text,
       };
 
@@ -196,9 +189,9 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Gagal menyimpan: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menyimpan: $e')),
+        );
       }
     } finally {
       if (mounted) {
@@ -223,7 +216,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                 gradient: LinearGradient(
                   begin: Alignment(0.50, 0.00),
                   end: Alignment(0.50, 1.00),
-                  colors: [Color(0xFF10B981), Color(0xFF34D399)],
+                  colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
                 ),
               ),
               child: Padding(
@@ -287,7 +280,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF10B981),
+                          color: Color(0xFF6EE7B7),
                         ),
                       )
                     : _buildForm(),
@@ -357,7 +350,10 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
               decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFFE1E8F0), width: 1.09),
+                border: Border.all(
+                  color: const Color(0xFFE1E8F0),
+                  width: 1.09,
+                ),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -377,7 +373,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                   ),
                   const Icon(
                     Icons.calendar_today,
-                    color: Color(0xFF10B981),
+                    color: Color(0xFF6EE7B7),
                     size: 20,
                   ),
                 ],
@@ -413,36 +409,19 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                   ),
                 ),
               ),
-              prefixIconConstraints: const BoxConstraints(
-                minWidth: 0,
-                minHeight: 0,
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 48,
-                right: 16,
-                top: 12,
-                bottom: 12,
-              ),
+              prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+              contentPadding: const EdgeInsets.only(left: 48, right: 16, top: 12, bottom: 12),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: Color(0xFFE1E8F0),
-                  width: 1.09,
-                ),
+                borderSide: const BorderSide(color: Color(0xFFE1E8F0), width: 1.09),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: Color(0xFFE1E8F0),
-                  width: 1.09,
-                ),
+                borderSide: const BorderSide(color: Color(0xFFE1E8F0), width: 1.09),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(
-                  color: Color(0xFF10B981),
-                  width: 1.09,
-                ),
+                borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1.09),
               ),
             ),
             onChanged: (value) {
@@ -487,9 +466,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                     borderRadius: BorderRadius.circular(16),
                     image: _uploadedFileName != null
                         ? const DecorationImage(
-                            image: NetworkImage(
-                              'https://via.placeholder.com/291x192',
-                            ),
+                            image: NetworkImage('https://via.placeholder.com/291x192'),
                             fit: BoxFit.cover,
                           )
                         : null,
@@ -502,12 +479,12 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
                               width: 64,
                               height: 64,
                               decoration: BoxDecoration(
-                                color: const Color(0x1910B981),
+                                color: const Color(0x196EE7B7),
                                 borderRadius: BorderRadius.circular(36410900),
                               ),
                               child: const Icon(
                                 Icons.cloud_upload_outlined,
-                                color: Color(0xFF10B981),
+                                color: Color(0xFF6EE7B7),
                                 size: 32,
                               ),
                             ),
@@ -580,7 +557,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
             child: ElevatedButton(
               onPressed: _isSaving ? null : _saveChanges,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: const Color(0xFF6EE7B7),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -647,7 +624,7 @@ class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF10B981), width: 1.09),
+        borderSide: const BorderSide(color: Color(0xFF6EE7B7), width: 1.09),
       ),
     );
   }

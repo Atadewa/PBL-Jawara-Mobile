@@ -162,7 +162,7 @@ class _LaporanPageState extends State<LaporanPage> {
             ),
           );
         },
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: const Color(0xFF6EE7B7),
         icon: const Icon(Icons.print, color: Colors.white),
         label: const Text(
           'Cetak Laporan',
@@ -179,7 +179,7 @@ class _LaporanPageState extends State<LaporanPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF10B981), Color(0xFF34D399)],
+          colors: [Color(0xFF6EE7B7), Color(0xFF34D399)],
         ),
       ),
       child: SafeArea(
@@ -387,7 +387,7 @@ class _LaporanPageState extends State<LaporanPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: const BorderSide(
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                           ),
                         ),
                         filled: true,
@@ -446,7 +446,7 @@ class _LaporanPageState extends State<LaporanPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: const BorderSide(
-                            color: Color(0xFF10B981),
+                            color: Color(0xFF6EE7B7),
                           ),
                         ),
                         filled: true,
