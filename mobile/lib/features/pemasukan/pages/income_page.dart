@@ -3,7 +3,7 @@ import '../models/income_model.dart';
 import '../widgets/income_item.dart';
 import '../widgets/add_income_button.dart';
 import 'add_income_page.dart';
-// import 'income_detail_page.dart';
+import 'income_detail_page.dart';
 
 class IncomePage extends StatefulWidget {
   @override
