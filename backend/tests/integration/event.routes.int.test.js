@@ -1,7 +1,7 @@
 const request = require("supertest");
 
-const app = require("../../../src/app");
-const { supabaseAdmin } = require("../../../src/lib/supabaseAdmin");
+const app = require("../../src/app");
+const { supabaseAdmin } = require("../../src/lib/supabaseAdmin");
 
 const token = process.env.TEST_ADMIN_TOKEN;
 const hasEnv = Boolean(
