@@ -18,12 +18,10 @@ import '../../features/data_rumah_dan_warga/pages/edit_rumah_page.dart';
 import '../../features/data_rumah_dan_warga/pages/daftar_keluarga_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/aktivitas_dan_broadcast_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/detail_kegiatan_page.dart';
-import '../../features/aktivitas_dan_broadcast/pages/edit_kegiatan_page.dart';
-import '../../features/aktivitas_dan_broadcast/pages/add_kegiatan_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/event_form_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/broadcast_page.dart';
 import '../../features/aktivitas_dan_broadcast/pages/broadcast_detail_page.dart';
-import '../../features/aktivitas_dan_broadcast/pages/edit_broadcast_page.dart';
-import '../../features/aktivitas_dan_broadcast/pages/add_broadcast_page.dart';
+import '../../features/aktivitas_dan_broadcast/pages/broadcast_form_page.dart';
 import '../../features/marketplace/presentation/pages/marketplace_page.dart';
 import '../../features/marketplace/presentation/pages/my_products_page.dart';
 import '../../features/marketplace/presentation/pages/my_purchases_page.dart';
@@ -144,26 +142,30 @@ class AppRoutes {
           builder: (_) => DetailKegiatanPage(kegiatanId: kegiatanId),
         );
       case editKegiatan:
-        final kegiatanId = settings.arguments as String;
+        final kegiatanId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => EditKegiatanPage(kegiatanId: kegiatanId),
+          builder: (_) => EventFormPage(eventId: kegiatanId),
         );
       case addKegiatan:
-        return MaterialPageRoute(builder: (_) => const AddKegiatanPage());
+        return MaterialPageRoute(builder: (_) => const EventFormPage());
       case broadcast:
         return MaterialPageRoute(builder: (_) => const BroadcastPage());
       case broadcastDetail:
-        final broadcastId = settings.arguments as int;
+        final broadcastId = settings.arguments;
+        // Parse to int
+        final int id = broadcastId is int
+            ? broadcastId
+            : int.parse(broadcastId.toString());
         return MaterialPageRoute(
-          builder: (_) => BroadcastDetailPage(broadcastId: broadcastId),
+          builder: (_) => BroadcastDetailPage(broadcastId: id),
         );
       case editBroadcast:
-        final broadcastId = settings.arguments as String;
+        final broadcastId = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => EditBroadcastPage(broadcastId: broadcastId),
+          builder: (_) => BroadcastFormPage(broadcastId: broadcastId),
         );
       case addBroadcast:
-        return MaterialPageRoute(builder: (_) => const AddBroadcastPage());
+        return MaterialPageRoute(builder: (_) => const BroadcastFormPage());
       default:
         return null;
     }

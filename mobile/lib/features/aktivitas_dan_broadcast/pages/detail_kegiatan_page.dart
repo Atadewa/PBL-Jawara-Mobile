@@ -71,50 +71,15 @@ class _DetailKegiatanPageState extends State<DetailKegiatanPage> {
     );
   }
 
-  /// Delete kegiatan dari API
-  ///
-  /// Implementasi dummy untuk development. Untuk production:
-  /// 1. Pastikan service.deleteKegiatan() sudah terintegrasi dengan API real
-  /// 2. DELETE endpoint: /api/aktivitas/kegiatan/:id
-  /// 3. Tambahkan auth token di header request
-  /// 4. Handle berbagai HTTP status codes (400, 401, 403, 404, 500)
-  /// 5. Refresh list page setelah berhasil delete
+  /// Delete event dari API (real backend)
   Future<void> _deleteKegiatan(String id) async {
     setState(() => _isDeleting = true);
 
     try {
-      // TODO: API Integration Steps (Implementasi Real API)
-      // 1. Service layer sudah memiliki method deleteKegiatan(id)
-      //    Lokasi: lib/features/aktivitas_dan_broadcast/services/aktivitas_service.dart
-      //
-      // 2. Untuk production, uncomment dan setup real HTTP:
-      //    final response = await http.delete(
-      //      Uri.parse('$baseUrl/api/aktivitas/kegiatan/$id'),
-      //      headers: {
-      //        'Authorization': 'Bearer $authToken',
-      //        'Content-Type': 'application/json',
-      //      },
-      //    );
-      //    if (response.statusCode == 200) {
-      //      return true;
-      //    } else if (response.statusCode == 401) {
-      //      throw Exception('Unauthorized - Token expired');
-      //    } else if (response.statusCode == 403) {
-      //      throw Exception('Forbidden - Anda tidak memiliki akses');
-      //    } else if (response.statusCode == 404) {
-      //      throw Exception('Kegiatan tidak ditemukan');
-      //    } else {
-      //      throw Exception('Gagal menghapus: ${response.reasonPhrase}');
-      //    }
-      //
-      // 3. Refresh list page setelah delete berhasil
+      // Call real backend API
+      await _eventService.deleteEvent(int.parse(id));
 
-      // TODO: Implement delete API endpoint
-      // For now, just simulate success
-      await Future.delayed(const Duration(seconds: 1));
-      final success = true;
-
-      if (success && mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Kegiatan berhasil dihapus'),
