@@ -1,3 +1,11 @@
 tokens.bat
 .env
+.env.test
 node_modules
+coverage/
+*.log
+
+# k6 load testing
+k6/.env
+k6/results/*.json
+k6/results/*.html

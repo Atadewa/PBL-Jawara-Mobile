@@ -10,44 +10,47 @@ class IncomeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 271.60,
-      height: 180.44,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 3.40, color: const Color(0xFF10B981)),
-          borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 271.60,
+        height: 180.44,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 3.40, color: const Color(0xFF10B981)),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          shadows: [
+            BoxShadow(
+              color: Color(0x19000000),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+              spreadRadius: -2,
+            ),
+            BoxShadow(
+              color: Color(0x19000000),
+              blurRadius: 6,
+              offset: Offset(0, 4),
+              spreadRadius: -1,
+            ),
+          ],
         ),
-        shadows: [
-          BoxShadow(
-            color: Color(0x19000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: Color(0x19000000),
-            blurRadius: 6,
-            offset: Offset(0, 4),
-            spreadRadius: -1,
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 23.40,
-            top: 19.99,
-            child: Row(
-              children: [
-                Container(
-                  width: 47.99,
-                  height: 47.99,
-                  decoration: ShapeDecoration(
-                    color: const Color(0x1910B981),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 23.40,
+              top: 19.99,
+              child: Row(
+                children: [
+                  Container(
+                    width: 47.99,
+                    height: 47.99,
+                    decoration: ShapeDecoration(
+                      color: const Color(0x1910B981),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                   SizedBox(width: 15.98),
@@ -95,29 +98,6 @@ class IncomeItem extends StatelessWidget {
                         income.amount,
                         style: TextStyle(
                           color: const Color(0xFF0F172A),
-                          fontSize: 16,
-                          fontFamily: 'Arimo',
-                          fontWeight: FontWeight.w400,
-                          height: 1.50,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 2,
-                      ),
-                      decoration: ShapeDecoration(
-                        color: income.categoryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(57092600),
-                        ),
-                      ),
-                      child: Text(
-                        income.category,
-                        style: TextStyle(
-                          color: const Color(0xFF94A3B8),
                           fontSize: 16,
                           fontFamily: 'Arimo',
                           fontWeight: FontWeight.w400,

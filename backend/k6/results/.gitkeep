@@ -1,0 +1,6 @@
+# This directory will store k6 test results
+# Files in this directory are auto-generated and should not be committed to git
+
+*.json
+*.html
+*.txt
