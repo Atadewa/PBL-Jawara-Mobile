@@ -12,8 +12,8 @@ function applyScope(q, scope) {
   return q; // fallback
 }
 
-// GET /incomes
-router.get("/", requireAuth, async (req, res) => {
+// GET /incomes handler
+async function getIncomesHandler(req, res) {
   try {
     const { scope } = req.userContext;
 
@@ -31,15 +31,21 @@ router.get("/", requireAuth, async (req, res) => {
   } catch (e) {
     return res.status(500).json({ message: e.message || "Server error" });
   }
-});
+}
 
-// POST /incomes
-router.post("/", requireAuth, async (req, res) => {
+// POST /incomes handler
+async function postIncomeHandler(req, res) {
   try {
     const { appUser, roleNames, scope } = req.userContext;
 
     // role yang boleh input pemasukan
-    const allowed = ["admin", "bendahara", "sekretaris", "ketua_rw", "ketua_rt"];
+    const allowed = [
+      "admin",
+      "bendahara",
+      "sekretaris",
+      "ketua_rw",
+      "ketua_rt",
+    ];
     const ok = roleNames.some((r) => allowed.includes(r));
     if (!ok) return res.status(403).json({ message: "Forbidden" });
 
@@ -47,7 +53,9 @@ router.post("/", requireAuth, async (req, res) => {
     const { source_name, description, amount, date, payment_method } = body;
 
     if (!source_name || !amount || !date) {
-      return res.status(400).json({ message: "source_name, amount, date wajib diisi" });
+      return res
+        .status(400)
+        .json({ message: "source_name, amount, date wajib diisi" });
     }
 
     // enforce rw/rt by scope (non-admin tidak boleh inject rw/rt)
@@ -62,7 +70,8 @@ router.post("/", requireAuth, async (req, res) => {
       rt = scope.rt;
     } else if (scope.mode === "all") {
       // admin boleh set rw/rt dari body, tapi rw wajib
-      if (rw == null) return res.status(400).json({ message: "rw wajib untuk admin" });
+      if (rw == null)
+        return res.status(400).json({ message: "rw wajib untuk admin" });
     } else {
       return res.status(403).json({ message: "No scope access" });
     }
@@ -89,6 +98,12 @@ router.post("/", requireAuth, async (req, res) => {
   } catch (e) {
     return res.status(500).json({ message: e.message || "Server error" });
   }
-});
+}
+
+// Register routes
+router.get("/", requireAuth, getIncomesHandler);
+router.post("/", requireAuth, postIncomeHandler);
 
 module.exports = router;
+module.exports.applyScope = applyScope;
+module.exports.__test__ = { getIncomesHandler, postIncomeHandler };

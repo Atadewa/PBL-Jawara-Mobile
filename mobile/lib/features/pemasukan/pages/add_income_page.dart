@@ -67,6 +67,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
         date: DateFormat('dd MMMM yyyy').format(_date),
         categoryColor: categoryMap['color'],
         categoryTextColor: categoryMap['textColor'],
+        description: _description.trim().isEmpty ? null : _description.trim(),
       );
       Navigator.pop(context, income);
     }
